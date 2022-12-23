@@ -1,7 +1,8 @@
 CC = gcc
 FLAGS = -Wall -Werror -Wextra -std=c11
 
-all: style power leaks
+# all: style power leaks
+all: power
 
 power: power.o power.h
 	$(CC) $(FLAGS) power.o power.h -o power -lm

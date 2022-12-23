@@ -1,21 +1,16 @@
-#ifndef SRC_POWER_H_
+#ifndef SRC_POWER_H_21_is_inf
 #define SRC_POWER_H_
 
 #include <math.h>
 #include <stdio.h>
 
-#define S21_NAN (__builtin_nansf(""))
-#define S21_INFINITY (__builtin_inff())
-#define s21_is_nan(x) __builtin_isnan(x)
-#define s21_is_inf(x) __builtin_isinf(x)
-#define S21_PI 3.14159265358979323846
+#define NaN (__builtin_nansf(""))
+#define INF (__builtin_inff())
+#define CHECK_NAN(x) __builtin_isnan(x)
+#define CHECK_INF(x) __builtin_isinf(x)
 #define S21_E 2.71828182845904523536
-// MY
-// #define NAN (__builtin_nanf(""))
-// #define INFINITY (__builtin_inff())
-// #define CHECK_NAN(x) __builtin_isnan(x)
-// #define CHECK_INF(x) __builtin_isinf(x)
-//
+#define EPS 1E-15
+#define EPS_for_tests 1E-8
 
 long double s21_pow(double base, double exp);
 long double s21_pow_my(double base, double exp);
@@ -26,33 +21,22 @@ long double s21_log_my(double x);
 long double s21_sqrt(double x);
 long double s21_sqrt_my(double x);
 
-long double s21_pow(double base, double exp) {
-  long double res;
-
-  if (base == 1.0 || exp == 0.0) {
-    res = 1.0;
-  } else if (base < 0.0 && fmod(exp, 1.0) != 0) {
-    res = -S21_NAN;  // возведение отрицательного числа в вещественную степень
-  } else {
-    res = s21_exp(exp * s21_log(fabs(base)));
-  }
-  if (base < 0.0 && fmod(exp, 2.0) != 0.0) {
-    res *= -1;
-  }
-  if (base == 0.0 && exp < 0.0) res = S21_INFINITY;
-  return res;
-}
-
 long double s21_pow_my(double base, double exp) {
   long double res;
 
   if (base == 1.0 || exp == 0.0) {
     res = 1.0;
   } else if (base == 0 && exp < 0.0) {
-    res = S21_INFINITY;
+    res = INF;
+  } else if (base < -1.0 && CHECK_INF(exp) ) {
+    res = INF;
+  } else if (base > 1.0 && CHECK_INF(exp) ) {
+    res = INF;
+  } else if (CHECK_INF(base) && exp > 0) {
+    res = INF;
   } else if (base < 0.0 && fmod(exp, 1.0) != 0) {
     res = (-1) *
-          S21_NAN;  // возведение отрицательного числа в вещественную степень
+          NaN;  // возведение отрицательного числа в вещественную степень
   } else if (base < 0.0 && fmod(exp, 2.0) != 0) {
     res = (-1) * s21_exp(exp * s21_log(fabs(base)));
   } else {
@@ -66,12 +50,12 @@ long double s21_log(double x) {
   double result = 0;
   double compare = 0;
 
-  if (s21_is_inf(x) || s21_is_nan(x)) {
+  if (CHECK_INF(x) || CHECK_NAN(x)) {
     result = x;
   } else if (x == 0.0) {
-    result = -S21_INFINITY;
+    result = -INF;
   } else if (x < 0.0) {
-    result = S21_NAN;
+    result = NAN;
   } else if (x == 1.0) {
     result = 0.0;
   } else {
@@ -85,25 +69,28 @@ long double s21_log(double x) {
 }
 
 long double s21_log_my(double x) {
-  long double y = x / (x - 1);
-  long double sum = 0;
-  long double temp_y = 1;
-
-  for (int i = 1; i < 100; i++) {
-    temp_y *= y;
-    sum += 1 / (temp_y * i);
+  long double result = 0.0;
+  if (CHECK_INF(x))
+    result = INF;
+  else {
+    long double y = x / (x - 1);
+    long double temp_y = 1;
+    for (int i = 1; i < 100; i++) {
+      temp_y *= y;
+      result += 1 / (temp_y * i);
+    }
   }
-  return sum;
+  return result;
   //   int ex_pow = 0;
   //   double result = 0;
   //   double compare = 0;
 
-  //   if (s21_is_inf(x) || s21_is_nan(x)) {
+  //   if (CHECK_INF(x) || CHECK_NAN(x)) {
   //     result = x;
   //   } else if (x == 0.0) {
-  //     result = -S21_INFINITY;
+  //     result = -INF;
   //   } else if (x < 0.0) {
-  //     result = S21_NAN;
+  //     result = NaN;
   //   } else if (x == 1.0) {
   //     result = 0.0;
   //   } else {
@@ -152,11 +139,11 @@ long double s21_exp_my(double x) {
 }
 
 long double s21_sqrt(double x) {
-  if (s21_is_nan(x) || s21_is_inf(x)) {
+  if (CHECK_NAN(x) || CHECK_INF(x)) {
     return x;
   }
   if (x < 0) {
-    return S21_NAN;
+    return NaN;
   }
 
   double start = 0.0, mid, last = x;
@@ -176,11 +163,11 @@ long double s21_sqrt(double x) {
 }
 
 long double s21_sqrt_my(double x) {
-  if (s21_is_nan(x) || s21_is_inf(x)) {
+  if (CHECK_NAN(x) || CHECK_INF(x)) {
     return x;
   }
   if (x < 0) {
-    return S21_NAN;
+    return NaN;
   }
 
   double left = 0.0, mid, right = x;
