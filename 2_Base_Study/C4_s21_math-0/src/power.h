@@ -36,7 +36,7 @@ long double s21_pow_my(double base, double exp) {
     res = INF;
   } else if (base < 0.0 && fmod(exp, 1.0) != 0) {
     res = (-1) *
-          NaN;  // возведение отрицательного числа в вещественную степень
+          NaN;
   } else if (base < 0.0 && fmod(exp, 2.0) != 0) {
     res = (-1) * s21_exp(exp * s21_log(fabs(base)));
   } else {
@@ -45,63 +45,79 @@ long double s21_pow_my(double base, double exp) {
   return res;
 }
 
-long double s21_log(double x) {
-  int ex_pow = 0;
-  double result = 0;
-  double compare = 0;
-
-  if (CHECK_INF(x) || CHECK_NAN(x)) {
-    result = x;
-  } else if (x == 0.0) {
-    result = -INF;
-  } else if (x < 0.0) {
-    result = NAN;
-  } else if (x == 1.0) {
-    result = 0.0;
-  } else {
-    for (; x >= S21_E; x /= S21_E, ex_pow++) continue;
-    for (int i = 0; i < 100; i++) {
-      compare = result;
-      result = compare + 2 * (x - s21_exp(compare)) / (x + s21_exp(compare));
-    }
-  }
-  return (result + ex_pow);
-}
-
 long double s21_log_my(double x) {
   long double result = 0.0;
   if (CHECK_INF(x))
     result = INF;
+  else if (x < 0)
+    result = (-1) * NaN;
   else {
     long double y = x / (x - 1);
-    long double temp_y = 1;
-    for (int i = 1; i < 100; i++) {
+    long double temp_y = 1.0;
+    int i = 1;
+    while (1 / (temp_y * i) > EPS) {
       temp_y *= y;
       result += 1 / (temp_y * i);
+      i++;
     }
   }
   return result;
-  //   int ex_pow = 0;
-  //   double result = 0;
-  //   double compare = 0;
+}
 
-  //   if (CHECK_INF(x) || CHECK_NAN(x)) {
-  //     result = x;
-  //   } else if (x == 0.0) {
-  //     result = -INF;
-  //   } else if (x < 0.0) {
-  //     result = NaN;
-  //   } else if (x == 1.0) {
-  //     result = 0.0;
-  //   } else {
-  //     for (; x >= S21_E; x /= S21_E, ex_pow++) continue;
-  //     for (int i = 0; i < 100; i++) {
-  //       compare = result;
-  //       result = compare + 2 * (x - s21_exp(compare)) / (x +
-  //       s21_exp(compare));
-  //     }
-  //   }
-  //   return (result + ex_pow);
+long double s21_exp_my(double x) {
+  long double result = 1;
+  if (CHECK_INF(x))
+    result = INF;
+  else {
+    long double temp_x = 1;
+    double fact = 1;
+    int i = 1;
+    while ((temp_x / fact) > EPS) {
+      fact *= i;
+      temp_x *= x;
+      result += temp_x / fact;
+      i++;
+    }
+  }
+  return result;
+}
+
+long double s21_sqrt_my(double x) {
+  if (CHECK_NAN(x) || CHECK_INF(x)) {
+    return x;
+  }
+  if (x < 0) {
+    return NaN;
+  }
+
+  double left = 0.0, mid, right = x;
+  right = (x < 1.0) ? 1.0 : x;
+  mid = left + (right - left) / 2;
+  do {
+    if (mid * mid > x)
+      right = mid;
+    else
+      left = mid;
+    mid = left + (right - left) / 2;
+  } while ((right - left) > EPS);
+  return left;
+}
+
+long double s21_pow(double base, double exp) {
+    long double res;
+
+    if (base == 1.0 || exp == 0.0) {
+        res = 1.0;
+    } else if (base < 0.0 && fmod(exp, 1.0) != 0) {
+        res = -NaN;
+    } else {
+        res = s21_exp(exp * s21_log(fabs(base)));
+    }
+    if (base < 0.0 && fmod(exp, 2.0) != 0.0) {
+        res *= -1;
+    }
+    if (base == 0.0 && exp < 0.0) res = INF;
+    return res;
 }
 
 long double s21_exp(double x) {
@@ -122,19 +138,6 @@ long double s21_exp(double x) {
     x2 *= x * x / ((2 * n - 1) * 2 * n);
   } while (n < 100000);
   if (minus) sum = 1 / sum;
-  return sum;
-}
-
-long double s21_exp_my(double x) {
-  long double sum = 1;
-  long double temp_x = 1;
-  double fact = 1;
-
-  for (int i = 1; i < 100; i++) {
-    fact *= i;
-    temp_x *= x;
-    sum += temp_x / fact;
-  }
   return sum;
 }
 
@@ -162,25 +165,27 @@ long double s21_sqrt(double x) {
   return mid;
 }
 
-long double s21_sqrt_my(double x) {
-  if (CHECK_NAN(x) || CHECK_INF(x)) {
-    return x;
-  }
-  if (x < 0) {
-    return NaN;
-  }
+long double s21_log(double x) {
+  int ex_pow = 0;
+  double result = 0;
+  double compare = 0;
 
-  double left = 0.0, mid, right = x;
-  right = (x < 1.0) ? 1.0 : x;
-  mid = left + (right - left) / 2;
-  do {
-    if (mid * mid > x)
-      right = mid;
-    else
-      left = mid;
-    mid = left + (right - left) / 2;
-  } while ((right - left) > 0.00000001);
-  return left;
+  if (CHECK_INF(x) || CHECK_NAN(x)) {
+    result = x;
+  } else if (x == 0.0) {
+    result = -INF;
+  } else if (x < 0.0) {
+    result = NAN;
+  } else if (x == 1.0) {
+    result = 0.0;
+  } else {
+    for (; x >= S21_E; x /= S21_E, ex_pow++) continue;
+    for (int i = 0; i < 100; i++) {
+      compare = result;
+      result = compare + 2 * (x - s21_exp(compare)) / (x + s21_exp(compare));
+    }
+  }
+  return (result + ex_pow);
 }
 
 #endif  //  SRC_POWER_H_
