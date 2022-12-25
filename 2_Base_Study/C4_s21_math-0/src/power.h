@@ -22,8 +22,7 @@ long double s21_sqrt(double x);
 long double s21_sqrt_my(double x);
 
 long double s21_pow_my(double base, double exp) {
-  long double res;
-
+long double res;
   if (base == 1.0 || exp == 0.0) {
     res = 1.0;
   } else if (base == 0 && exp < 0.0) {
@@ -32,8 +31,12 @@ long double s21_pow_my(double base, double exp) {
     res = INF;
   } else if (base > 1.0 && CHECK_INF(exp) ) {
     res = INF;
-  } else if (CHECK_INF(base) && exp > 0) {
+  } else if (CHECK_INF(base) && exp > 1.0) {
     res = INF;
+  } else if (CHECK_INF(base) && exp < 0.0) {
+    res = 0.0;
+  } else if ((base > 0) && (base < 1) && CHECK_INF(exp)) {
+    res = 0.0;
   } else if (base < 0.0 && fmod(exp, 1.0) != 0) {
     res = (-1) *
           NaN;
