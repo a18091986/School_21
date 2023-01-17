@@ -6,8 +6,10 @@ PATH_TO_PROJECT = '/'.join(os.path.abspath(os.path.dirname(sys.argv[0])).split('
 build_stderr = sys.stdout
 build_stdout = sys.stdout
 
+part = sys.argv[1]
 
-def build_static_library(library_dir='src', stage='s21_math.a'):
+
+def build_static_library(library_dir='src', stage='s21_string.a'):
     try:
         build_result = subprocess.run(['make', stage],
                                       stderr=build_stderr, stdout=build_stdout, text=True,
