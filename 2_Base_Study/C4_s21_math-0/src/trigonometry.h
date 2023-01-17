@@ -1,5 +1,0 @@
-#ifndef SRC_TRIGONOMETRY_H_
-#define SRC_TRIGONOMETRY_H_
-
-
-#endif  //  SRC_TRIGONOMETRY_H_
