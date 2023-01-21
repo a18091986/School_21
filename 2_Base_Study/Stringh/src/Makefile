@@ -1,4 +1,4 @@
-FLAGS = #-Wall -Werror -Wextra -std=c11
+FLAGS = -Wall -Werror -Wextra -std=c11
 
 all: main
 
