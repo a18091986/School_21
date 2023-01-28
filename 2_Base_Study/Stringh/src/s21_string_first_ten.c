@@ -96,3 +96,36 @@ int s21_strncmp(const char *str1, const char *str2, s21_size_t n) {
   return (*str1 - *str2) > 0 ? (*str1 - *str2) / (*str1 - *str2) : (*str1 - *str2) == 0 ? 0 : (-1) * (*str1 - *str2) / (*str1 - *str2);
 
 }
+
+void *s21_to_upper(const char *str) {
+  char *res = s21_NULL;
+  if (str) {
+    s21_size_t len = s21_strlen(str);
+    res = (char *)calloc(len, sizeof(char));
+    if (res != s21_NULL)
+      for (s21_size_t i = 0; i < len; i++) {
+        res[i] = (str[i] >= 'a' && str[i] <= 'z') ? (str[i] - 32) : str[i];
+  }
+  return res;
+}
+
+void *s21_to_lower(const char *str) {
+  char *res = s21_NULL;
+  if (str) {
+    s21_size_t len = s21_strlen(str);
+    res = (char *)calloc(len, sizeof(char));
+    if (res != s21_NULL) 
+      for (s21_size_t i = 0; i < len; i++) 
+        res[i] = (str[i] >= 'A' && str[i] <= 'Z') ? (str[i] + 32) : str[i];
+  }
+  return res;
+}
+
+
+size_t s21_strlen(const char *str) {
+  
+  size_t result = 0;
+  for (; str[result] != '\0'; result++);
+  
+  return result;
+}

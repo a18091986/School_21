@@ -18,6 +18,9 @@ char * s21_strncat(char *dest, const char *src, s21_size_t n); // Добавля
 char * s21_strchr(const char *str, int c); // Выполняет поиск первого вхождения символа c (беззнаковый тип) в строке, на которую указывает аргумент str
 int s21_strcmp(const char *str1, const char *str2); // Сравнивает строку, на которую указывает str1, со строкой, на которую указывает str2
 int s21_strncmp(const char *str1, const char *str2, s21_size_t n); // Сравнивает не более первых n байтов str1 и str2
+void *s21_to_upper(const char *str); // Приводит строку к верхнему регистру
+void *s21_to_lower(const char *str); // Приводит строку к нижнему регистру
+size_t s21_strlen(const char *str);
 
 
 

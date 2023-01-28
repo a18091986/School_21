@@ -144,5 +144,19 @@ int main() {
         printf("Built_in: source_1: %s, source_2: %s, n: %lld, res: %d\n", source_strncmp_1, source_strncmp_2, i, result_builtin);
         printf("Built_in: source_1: %s, source_2: %s, n: %lld, res: %d\n", source_strncmp_1, source_strncmp_2, i, result_my);
     }
+
+// --------------------------------------to_upper&to_lower---------------------------------------------------
+    
+    printf("----------------------to_upper&to_lower-------------------------------\n");    
+    char source_string[] = "sTrInGs";
+    char * upper = s21_to_upper(source_string);
+    char * lower = s21_to_lower(source_string);
+    
+    printf("%s\n", source_string);
+    printf("%s\n", lower);
+    printf("%s\n", upper);
+    
+    
+
     return 0;
 }
