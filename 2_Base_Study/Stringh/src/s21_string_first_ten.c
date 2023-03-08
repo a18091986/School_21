@@ -34,18 +34,32 @@ void * s21_memcpy(void *dest, const void *src, s21_size_t n) {
     return destination;
 }
 
-void * s21_memmove(void *dest, const void *src, s21_size_t n) {
-    char *destination = dest;
-    const char *source = src;
-    if (destination > source && destination < source + n) {
-        source += n;
-        destination += n;
-        while (n--) *--destination = *--source;
-    } else {
-        while (n--) *destination++ = *source++;
-    }
-    return destination;
+void* s21_memmove(void *dest, const void *src, s21_size_t n)
+{
+	void * ret = dest;
+	if (dest <= src || (char*)dest >= ((char*)src + n))
+	{
+		while (n--)
+		{
+			*(char*)dest = *(char*)src;
+			dest = (char*)dest + 1;
+			src = (char*)src + 1;
+		}
+	}
+	else
+	{
+		dest = (char*)dest + n - 1;
+		src = (char*)src + n - 1;
+		while (n--)
+		{
+			*(char*)dest = *(char*)src;
+			dest = (char*)dest - 1;
+			src = (char*)src - 1;
+		}
+	}
+	return(ret);
 }
+
 
 void * s21_memset(void *str, int c, s21_size_t n) {
     unsigned char * str_in = str;
@@ -106,7 +120,9 @@ void *s21_to_upper(const char *str) {
       for (s21_size_t i = 0; i < len; i++) {
         res[i] = (str[i] >= 'a' && str[i] <= 'z') ? (str[i] - 32) : str[i];
   }
-  return res;
+  
+}
+return res;
 }
 
 void *s21_to_lower(const char *str) {

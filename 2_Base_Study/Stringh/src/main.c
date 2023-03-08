@@ -43,6 +43,15 @@ int main() {
         printf("My: source: %s, dest: %s, copy size: %lu\n", memcpy_str, memcpy_dst_str, copy_size);
     }
 
+    s21_size_t n1 = 3;
+    char s[1024] = "";
+    char s_[1024] = "";
+    char str_1_2[1024] = "";
+    memcpy(s, str_1_2, n1);
+    s21_memcpy(s_, str_1_2, n1);
+    printf("%s: \n", s);
+    printf("%s: \n", s_);
+
     // --------------------------------------memmmove---------------------------------------------------
     
     printf("----------------------memmove-------------------------------\n");    
@@ -56,6 +65,14 @@ int main() {
         printf("My: source: %s, dest: %s, move size: %lu\n", source_memmove_str, destination_memmove_str, move_size);
     }
 
+    // unsigned char src_2[10]="1234567890";
+    // printf("src_2 old: %s\n",src_2);
+    // s21_memmove (&src_2[4], &src_2[3], 3);
+    // printf ("src_2 new: %s\n",src_2);
+    // unsigned char src_1[10]="1234567890";
+    // printf("src_1 old: %s\n",src_1);
+    // memmove (&src_1[4], &src_1[3], 3);
+    // printf ("src_1 new: %s\n",src_1);
 
 // --------------------------------------memset---------------------------------------------------
     
@@ -144,6 +161,9 @@ int main() {
         printf("Built_in: source_1: %s, source_2: %s, n: %lld, res: %d\n", source_strncmp_1, source_strncmp_2, i, result_builtin);
         printf("Built_in: source_1: %s, source_2: %s, n: %lld, res: %d\n", source_strncmp_1, source_strncmp_2, i, result_my);
     }
+
+
+
 
 // --------------------------------------to_upper&to_lower---------------------------------------------------
     
