@@ -36,7 +36,7 @@ int get_bit_in_position(int x, int bit_position) {
 int main() {
   int number = 93;
   int bit_position = 2;
-  printf("--------------get_bit_function_check--------------------")
+  printf("--------------get_bit_function_check--------------------\n");
   printf("Number %d, in binary view: %s, bit on %d position is %d\n", number, print_number_in_binary_view(number), bit_position, get_bit_in_position(number, bit_position));
   return 0;
 }
