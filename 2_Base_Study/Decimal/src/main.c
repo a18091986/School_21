@@ -36,9 +36,14 @@ void init_decimal_number(s21_decimal * dec_num) {
 
 void get_number_in_binary_view(int x)
 {
+    char * result =(char*) malloc(33*sizeof(char));
     unsigned i;
-    for (i = 1 << 31; i > 0; i = i / 2)
+    int k;
+    for (i = 1 << 31, k=0; i > 0; i = i / 2, k++) {
         (x & i) ? printf("1") : printf("0");
+        result[k] = (char) ((x & i) ? '1' : '0');
+    }
+    printf("\n%s", result);
 }
 
 
@@ -73,7 +78,7 @@ void get_number_in_binary_view(int x)
 int main() {
 
 // ####################################################################################################################################################################################################
-  int number = -2147483648;
+  int number = 2147483646;
 //   int bit_position = 5;
 //   int bit_position_to_set_value = 5;
 //   int zero_bit_value = 0;
