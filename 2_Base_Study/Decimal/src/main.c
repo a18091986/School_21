@@ -17,62 +17,71 @@ void init_decimal_number(s21_decimal * dec_num) {
     }
 }
 
-char * get_number_in_binary_view(int x) {
-    // int mask = 0b10000000000000000000000000000000;
-    char * result =(char*) malloc(33*sizeof(char));
+// char * get_number_in_binary_view(int x) {
+//     // int mask = 0b10000000000000000000000000000000;
+//     char * result =(char*) malloc(33*sizeof(char));
 
-    // for (int i=0; i < 32; i++) {
-    //     result[i] = (char) ((x & mask) ? '1' : '0');
-    //     mask >>= 1;
-    // }
+//     // for (int i=0; i < 32; i++) {
+//     //     result[i] = (char) ((x & mask) ? '1' : '0');
+//     //     mask >>= 1;
+//     // }
+//     unsigned i;
+//     for (i = 1 << 31; i > 0; i = i / 2) {
+//         (x & i) ? printf("1") : printf("0");    
+//         result[i] = 1;
+//     }
+
+//     return result;
+// }
+
+void get_number_in_binary_view(int x)
+{
     unsigned i;
-    for (i = 1 << 31; i > 0; i = i / 2) {
-        (x & i) ? printf("1") : printf("0");    
-        result[i] = 1;
-    }
-
-    return result;
-}
-
-void get_decimal_number_in_binary_view(s21_decimal * dec_num) {
-    for (int i=0; i <=3; i++)
-        printf("%d", dec_num -> bits[i]);
-    printf("\n");
-    for (int i=0; i <=3; i++) {
-        printf("%s ", get_number_in_binary_view(dec_num->bits[i]));
-    }
+    for (i = 1 << 31; i > 0; i = i / 2)
+        (x & i) ? printf("1") : printf("0");
 }
 
 
-int get_bit_in_position(int x, int bit_position) {  // bit_position - счет с 0 от младшего разряда к старшим (справа налево)
-    int mask = 0b00000001 << bit_position;
-    return (int) (x & mask ? 1 : 0);
-}
+// void get_decimal_number_in_binary_view(s21_decimal * dec_num) {
+//     for (int i=0; i <=3; i++)
+//         printf("%d", dec_num -> bits[i]);
+//     printf("\n");
+//     for (int i=0; i <=3; i++) {
+//         printf("%s ", get_number_in_binary_view(dec_num->bits[i]));
+//     }
+// }
 
-int inverse_bit_in_position(int x, int bit_position) {
-    return x ^ (1 << bit_position);
-}
 
-int set_bit_in_position(int x, int bit_value, int bit_position) {
-    int result;
-    if (bit_value)
-            result = x | (1 << bit_position);
-    else 
-        result = x & ~(1 << bit_position);
-    return result;
-}
+// int get_bit_in_position(int x, int bit_position) {  // bit_position - счет с 0 от младшего разряда к старшим (справа налево)
+//     int mask = 0b00000001 << bit_position;
+//     return (int) (x & mask ? 1 : 0);
+// }
+
+// int inverse_bit_in_position(int x, int bit_position) {
+//     return x ^ (1 << bit_position);
+// }
+
+// int set_bit_in_position(int x, int bit_value, int bit_position) {
+//     int result;
+//     if (bit_value)
+//             result = x | (1 << bit_position);
+//     else 
+//         result = x & ~(1 << bit_position);
+//     return result;
+// }
 
 int main() {
 
 // ####################################################################################################################################################################################################
-  int number = 48;
-  int bit_position = 5;
-  int bit_position_to_set_value = 5;
-  int zero_bit_value = 0;
-  int one_bit_value = 1;
+  int number = -2147483648;
+//   int bit_position = 5;
+//   int bit_position_to_set_value = 5;
+//   int zero_bit_value = 0;
+//   int one_bit_value = 1;
 
+get_number_in_binary_view(number);
 
-  printf("Number %d, in binary view: %s\n", number, get_number_in_binary_view(number));  
+//   printf("Number %d, in binary view: %s\n", number, get_number_in_binary_view(number));  
 
 //   printf("%s------------------------------get_bit_function_check-------------------------------------------------%s\n", RED, RESET);
 //   printf("Number %d, in binary view: %s, bit on %d position is %d\n", number, get_number_in_binary_view(number), bit_position, get_bit_in_position(number, bit_position));
