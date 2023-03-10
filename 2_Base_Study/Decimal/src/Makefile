@@ -22,7 +22,7 @@ git:
 		git push
 
 clean-win: 
-		del *.o
+		del *.o *.exe
 
 clean-lin:
 		rm -rf *.o
