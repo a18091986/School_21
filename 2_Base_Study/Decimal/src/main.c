@@ -50,19 +50,19 @@ int get_bit_in_position(int x, int bit_position) {  // bit_position - счет �
 //     return x ^ (1 << bit_position);
 // }
 
-// int set_bit_in_position(int x, int bit_value, int bit_position) {
-//     int result;
-//     if (bit_value)
-//             result = x | (1 << bit_position);
-//     else 
-//         result = x & ~(1 << bit_position);
-//     return result;
-// }
+int set_bit_in_position(int x, int bit_value, int bit_position) {
+    int result;
+    if (bit_value)
+            result = x | (1 << bit_position);
+    else 
+        result = x & ~(1 << bit_position);
+    return result;
+}
 
 int main() {
 
 // ####################################################################################################################################################################################################
-  int number = 256;
+  int number = 258;
   int bit_position = 8;
 //   int bit_position_to_set_value = 5;
 //   int zero_bit_value = 0;
@@ -77,10 +77,10 @@ printf("Number %d, in binary view: %s\n", 2147483647, get_number_in_binary_view(
   printf("%s*****************************************************************************************************%s\n\n", RED, RESET);
 
 
-//   printf("%s------------------------------set_bit_function_check-------------------------------------------------%s\n", RED, RESET);
-//   printf("Set bit in number %d (%s) on position %d on value %d results in:\t", number, get_number_in_binary_view(number), bit_position_to_set_value, one_bit_value);
-//   int number_1 = set_bit_in_position(number, one_bit_value, bit_position_to_set_value);
-//   printf("Number %d (%s)\n", number_1, get_number_in_binary_view(number_1));
+  printf("%s------------------------------set_bit_function_check-------------------------------------------------%s\n", RED, RESET);
+  printf("Set bit in number %d (%s) on position %d on value %d results in:\t", number, get_number_in_binary_view(number), bit_position_to_set_value, one_bit_value);
+  int number_1 = set_bit_in_position(number, one_bit_value, bit_position_to_set_value);
+  printf("Number %d (%s)\n", number_1, get_number_in_binary_view(number_1));
 //   printf("Set bit in number %d (%s) on position %d on value %d results in:\t", number, get_number_in_binary_view(number), bit_position_to_set_value, zero_bit_value);
 //   int number_2 = set_bit_in_position(number, zero_bit_value, bit_position_to_set_value);
 //   printf("Number %d (%s)\n", number_2, get_number_in_binary_view(number_2));
