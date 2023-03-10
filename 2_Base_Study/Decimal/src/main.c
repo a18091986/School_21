@@ -62,10 +62,10 @@ int set_bit_in_position(int x, int bit_value, int bit_position) {
 int main() {
 
 // ####################################################################################################################################################################################################
-  int number = 258;
+  int number = 290;
   int bit_position = 8;
   int bit_position_to_set_value = 5;
-//   int zero_bit_value = 0;
+  int zero_bit_value = 0;
   int one_bit_value = 1;
 
 
@@ -81,10 +81,11 @@ printf("Number %d, in binary view: %s\n", 2147483647, get_number_in_binary_view(
   printf("Set bit in number %d (%s) on position %d on value %d results in:\t", number, get_number_in_binary_view(number), bit_position_to_set_value, one_bit_value);
   int number_1 = set_bit_in_position(number, one_bit_value, bit_position_to_set_value);
   printf("Number %d (%s)\n", number_1, get_number_in_binary_view(number_1));
-//   printf("Set bit in number %d (%s) on position %d on value %d results in:\t", number, get_number_in_binary_view(number), bit_position_to_set_value, zero_bit_value);
-//   int number_2 = set_bit_in_position(number, zero_bit_value, bit_position_to_set_value);
-//   printf("Number %d (%s)\n", number_2, get_number_in_binary_view(number_2));
-//   printf("%s*****************************************************************************************************%s\n\n", RED, RESET);
+
+  printf("Set bit in number %d (%s) on position %d on value %d results in:\t", number, get_number_in_binary_view(number), bit_position_to_set_value, zero_bit_value);
+  int number_2 = set_bit_in_position(number, zero_bit_value, bit_position_to_set_value);
+  printf("Number %d (%s)\n", number_2, get_number_in_binary_view(number_2));
+  printf("%s*****************************************************************************************************%s\n\n", RED, RESET);
 
 // // ####################################################################################################################################################################################################
 
