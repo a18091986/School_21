@@ -18,13 +18,19 @@ void init_decimal_number(s21_decimal * dec_num) {
 }
 
 char * get_number_in_binary_view(int x) {
-    int mask = 0b10000000;
-    char * result =(char*) malloc(10*sizeof(char));
+    // int mask = 0b10000000000000000000000000000000;
+    char * result =(char*) malloc(33*sizeof(char));
 
-    for (int i=0; i < 8; i++) {
-        result[i] = (char) ((x & mask) ? '1' : '0');
-        mask >>= 1;
+    // for (int i=0; i < 32; i++) {
+    //     result[i] = (char) ((x & mask) ? '1' : '0');
+    //     mask >>= 1;
+    // }
+    unsigned i;
+    for (i = 1 << 31; i > 0; i = i / 2) {
+        (x & i) ? printf("1") : printf("0");    
+        result[i] = 1;
     }
+
     return result;
 }
 
@@ -64,6 +70,9 @@ int main() {
   int bit_position_to_set_value = 5;
   int zero_bit_value = 0;
   int one_bit_value = 1;
+
+
+  printf("Number %d, in binary view: %s\n", number, get_number_in_binary_view(number));  
 
   printf("%s------------------------------get_bit_function_check-------------------------------------------------%s\n", RED, RESET);
   printf("Number %d, in binary view: %s, bit on %d position is %d\n", number, get_number_in_binary_view(number), bit_position, get_bit_in_position(number, bit_position));
