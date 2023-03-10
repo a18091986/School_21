@@ -64,9 +64,9 @@ int main() {
 // ####################################################################################################################################################################################################
   int number = 258;
   int bit_position = 8;
-//   int bit_position_to_set_value = 5;
+  int bit_position_to_set_value = 5;
 //   int zero_bit_value = 0;
-//   int one_bit_value = 1;
+  int one_bit_value = 1;
 
 
 printf("Number %d, in binary view: %s\n", 2147483647, get_number_in_binary_view(2147483647));  
