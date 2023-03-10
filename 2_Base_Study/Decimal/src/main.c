@@ -31,14 +31,14 @@ char * get_number_in_binary_view(int x)
 }
 
 
-// void get_decimal_number_in_binary_view(s21_decimal * dec_num) {
-//     for (int i=0; i <=3; i++)
-//         printf("%d", dec_num -> bits[i]);
-//     printf("\n");
-//     for (int i=0; i <=3; i++) {
-//         printf("%s ", get_number_in_binary_view(dec_num->bits[i]));
-//     }
-// }
+void get_decimal_number_in_binary_view(s21_decimal * dec_num) {
+    for (int i=0; i <=3; i++)
+        printf("%d_", dec_num -> bits[i]);
+    printf("\n");
+    for (int i=0; i <=3; i++) {
+        printf("%s", get_number_in_binary_view(dec_num->bits[i]));
+    }
+}
 
 
 int get_bit_in_position(int x, int bit_position) {  // bit_position - счет с 0 от младшего разряда к старшим (справа налево)
@@ -87,13 +87,13 @@ printf("Number %d, in binary view: %s\n", 2147483647, get_number_in_binary_view(
   printf("Number %d (%s)\n", number_2, get_number_in_binary_view(number_2));
   printf("%s*****************************************************************************************************%s\n\n", RED, RESET);
 
-// // ####################################################################################################################################################################################################
+// ####################################################################################################################################################################################################
 
-//   s21_decimal test_decimal = {.bits = {255, 255, 255, 255}};
-// //   init_decimal_number(&test_decimal);
-//   get_decimal_number_in_binary_view(&test_decimal);
+  s21_decimal test_decimal = {.bits = {255, 255, 255, 255}};
+//   init_decimal_number(&test_decimal);
+  get_decimal_number_in_binary_view(&test_decimal);
 
-//   return 0;
+  return 0;
 }
 
 
