@@ -90,8 +90,8 @@ printf("Number %d, in binary view: %s\n", 2147483647, get_number_in_binary_view(
 // ####################################################################################################################################################################################################
 
   s21_decimal test_decimal = {.bits = {255, 255, 255, 255}};
-//   init_decimal_number(&test_decimal);
-  get_decimal_number_in_binary_view(&test_decimal);
+  get_decimal_number_in_binary_view(&test_decimal)
+  printf("\n");
 
   return 0;
 }
