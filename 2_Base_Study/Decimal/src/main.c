@@ -69,8 +69,8 @@ int main() {
 //   int one_bit_value = 1;
 
 
-printf("Number %d, in binary view: %s\n", 2147483647, get_number_in_binary_view(number));  
-printf("Number %d, in binary view: %s\n", -2147483648, get_number_in_binary_view(number));  
+printf("Number %d, in binary view: %s\n", 2147483647, get_number_in_binary_view(2147483647));  
+printf("Number %lld, in binary view: %s\n", -2147483648, get_number_in_binary_view(-2147483648));  
 
 //   printf("%s------------------------------get_bit_function_check-------------------------------------------------%s\n", RED, RESET);
 //   printf("Number %d, in binary view: %s, bit on %d position is %d\n", number, get_number_in_binary_view(number), bit_position, get_bit_in_position(number, bit_position));
