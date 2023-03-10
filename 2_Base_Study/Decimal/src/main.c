@@ -4,20 +4,39 @@
 #define RED "\033[1;31m"
 #define RESET   "\033[0m"
 
+typedef struct 
+{
+    int bits[4];
+} s21_decimal;
+
+
+void init_decimal_number(s21_decimal * dec_num) {
+    for (int i=0; i <=3; i++) {
+        dec_num -> bits[i] = 0;
+        // printf("%d", dec_num -> bits[i]);
+    }
+}
+
 char * get_number_in_binary_view(int x) {
     int mask = 0b10000000;
-    // char * result = "00000000";
-    // printf("%lld", sizeof(result));
     char * result =(char*) malloc(10*sizeof(char));
 
     for (int i=0; i < 8; i++) {
-        // printf("%c", (x & mask) ? '1' : '0');
         result[i] = (char) ((x & mask) ? '1' : '0');
         mask >>= 1;
     }
-    // printf("\n");
     return result;
 }
+
+void get_decimal_number_in_binary_view(s21_decimal * dec_num) {
+    for (int i=0; i <=3; i++)
+        printf("%d", dec_num -> bits[i]);
+    printf("\n");
+    for (int i=0; i <=3; i++) {
+        printf("%s ", get_number_in_binary_view(dec_num->bits[i]));
+    }
+}
+
 
 int get_bit_in_position(int x, int bit_position) {  // bit_position - счет с 0 от младшего разряда к старшим (справа налево)
     int mask = 0b00000001 << bit_position;
@@ -30,20 +49,16 @@ int inverse_bit_in_position(int x, int bit_position) {
 
 int set_bit_in_position(int x, int bit_value, int bit_position) {
     int result;
-    if (bit_value) {
+    if (bit_value)
             result = x | (1 << bit_position);
-            // printf("\n%d | (%d << %d): %d\n", x, bit_value, bit_position, x | (1 << bit_position));
-            // printf("%d & (%d << %d): %d\n", x, bit_value, bit_position, x & (1 << bit_position));
-    }
-    else {
+    else 
         result = x & ~(1 << bit_position);
-        // printf("\n%d & ~(%d << %d): %d\n", x, bit_value, bit_position, x & ~(1 << bit_position));
-        // printf("%d & (%d << %d): %d\n", x, bit_value, bit_position, x & (0 << bit_position));
-    }
     return result;
 }
 
 int main() {
+
+// ####################################################################################################################################################################################################
   int number = 48;
   int bit_position = 5;
   int bit_position_to_set_value = 5;
@@ -63,6 +78,12 @@ int main() {
   int number_2 = set_bit_in_position(number, zero_bit_value, bit_position_to_set_value);
   printf("Number %d (%s)\n", number_2, get_number_in_binary_view(number_2));
   printf("%s*****************************************************************************************************%s\n\n", RED, RESET);
+
+// ####################################################################################################################################################################################################
+
+  s21_decimal test_decimal = {.bits = {255, 255, 255, 255}};
+//   init_decimal_number(&test_decimal);
+  get_decimal_number_in_binary_view(&test_decimal);
 
   return 0;
 }
