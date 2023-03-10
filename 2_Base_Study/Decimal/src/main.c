@@ -62,14 +62,15 @@ char * get_number_in_binary_view(int x)
 int main() {
 
 // ####################################################################################################################################################################################################
-  int number = 2147483647;
+//   int number = 2147483646;
 //   int bit_position = 5;
 //   int bit_position_to_set_value = 5;
 //   int zero_bit_value = 0;
 //   int one_bit_value = 1;
 
 
-printf("Number %d, in binary view: %s\n", number, get_number_in_binary_view(number));  
+printf("Number %d, in binary view: %s\n", 2147483647, get_number_in_binary_view(number));  
+printf("Number %d, in binary view: %s\n", -2147483648, get_number_in_binary_view(number));  
 
 //   printf("%s------------------------------get_bit_function_check-------------------------------------------------%s\n", RED, RESET);
 //   printf("Number %d, in binary view: %s, bit on %d position is %d\n", number, get_number_in_binary_view(number), bit_position, get_bit_in_position(number, bit_position));
