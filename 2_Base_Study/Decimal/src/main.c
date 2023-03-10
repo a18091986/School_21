@@ -42,7 +42,7 @@ char * get_number_in_binary_view(int x)
 
 
 int get_bit_in_position(int x, int bit_position) {  // bit_position - счет с 0 от младшего разряда к старшим (справа налево)
-    int mask = 0b00000001 << bit_position;
+    int mask = 0b1 << bit_position;
     return (int) (x & mask ? 1 : 0);
 }
 
@@ -62,8 +62,8 @@ int get_bit_in_position(int x, int bit_position) {  // bit_position - счет �
 int main() {
 
 // ####################################################################################################################################################################################################
-  int number = 48;
-  int bit_position = 5;
+  int number = 256;
+  int bit_position = 8;
 //   int bit_position_to_set_value = 5;
 //   int zero_bit_value = 0;
 //   int one_bit_value = 1;
