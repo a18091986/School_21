@@ -222,11 +222,242 @@ State - состояние
 0.0.0.0 - Если говорить о серверах, то 0.0.0.0 означает все адреса IPv4 на локальной машине. В случае записи маршрута это означает маршрут по умолчанию.  
 
 ## Part 9. Установка и использование утилит top, htop
+
+![](./14_top.PNG "Вывод команды top")
+
+- По выводу команды top определить и написать в отчёте:
+  - uptime
+
+    uptime 3 days 12:23
+
+  - количество авторизованных пользователей
+
+    2 users
+
+  - общую загрузку системы
+
+    load average: 0.00, 0.00, 0.00
+
+  - общее количество процессов
+
+    Tasks: 103 total, 1 running, 102 sleeping, 0 stopped, 0 zombie
+
+  - загрузку cpu
+
+    0.0 us, 0.3 sy, 0.0 ni, 99.7 id, 0.0 wa, 0.0 hi, 0.0 si, 0.0 st
+
+    us - Time spent in user space  
+    sy - Time spent in kernel space  
+    ni - Time spent running niced user processes (User defined priority)  
+    id - Time spent in idle operations  
+    wa - Time spent on waiting on IO peripherals (eg. disk)  
+    hi - Time spent handling hardware interrupt routines. (Whenever a peripheral unit want attention form the CPU, it literally pulls a line, to signal the CPU to service it)  
+    si - Time spent handling software interrupt routines. (a piece of code, calls an interrupt routine...)  
+    st - Time spent on involuntary waits by virtual cpu while hypervisor is servicing another processor (stolen from a virtual machine)  
+
+  - загрузку памяти
+
+    MiB Mem : - загрузка оперативной памяти, MiB Swap: - загрузка файла подкачки
+
+  - pid процесса занимающего больше всего памяти
+
+    Shift - M - сортировка процессов по задействованной памяти
+
+    ![](./14_top_MEM_SORT.PNG "сортировка процессов по памяти")
+
+    Max memory usage PID: 726
+
+  - pid процесса, занимающего больше всего процессорного времени
+
+    базовая сортировка. PID процесса - 10
+
+- В отчёт вставить скрин с выводом команды htop:
+  - отсортированному по PID, PERCENT_CPU, PERCENT_MEM, TIME
+
+    ![](./15_htop_pid_sort.PNG "htop сортировка по pid")
+
+    сортировка по pid
+
+    ![](./15_htop_pcpu_sort.PNG "htop %CPU sort")
+
+    htop %CPU sort
+
+    ![](./15_htop_pmem_sort.PNG "htop %mem sort")
+
+    htop %mem sort
+
+    ![](./15_htop_time_sort.PNG "htop time sort")
+
+    htop time sort
+
+  - отфильтрованному для процесса sshd
+
+    ![](./15_htop_sshd.PNG "htop sshd filter")
+
+    htop sshd filter
+
+  - с процессом syslog, найденным, используя поиск 
+
+    ![](./15_htop_syslog_find.PNG "htop find syslog")
+
+    htop find syslog
+
+  - с добавленным выводом hostname, clock и uptime  
+
+    ![](./15_htop_new_meters.PNG "htop with hostname clock and uptime")
+    
+    htop with hostname clock and uptime
+
 ## Part 10. Использование утилиты fdisk
+
+- Запустить команду fdisk -l.
+
+    ![](./16_fdisk_l.PNG "Fdisk -l")
+
+    sudo fdisk - l
+
+- В отчёте написать название жесткого диска, его размер и количество секторов, а также размер swap.
+
+    - название: /dev/sda
+    - размер: 25 GiB
+    - количество секторов: 52428800
+    - swap: 2G
+
+    ![](./16_swap.PNG "swap")
+
+    swap show
+
 ## Part 11. Использование утилиты df
+
+##### Запустить команду df.  
+
+![](./17_df_h.PNG "df")
+
+df
+
+- В отчёте написать для корневого раздела (/):
+  - размер раздела - 11758760 в блоках по 1Кбайт
+  - размер занятого пространства - 4831752
+  - размер свободного пространства - 6307900
+  - процент использования - 44
+- Определить и написать в отчёт единицу измерения в выводе:  1 Кбайт
+
+##### Запустить команду df -Th.
+
+![](./17_df_Th.PNG "df -Th")
+
+df -Th
+
+- В отчёте написать для корневого раздела (/):
+    - размер раздела - 12 Gb
+    - размер занятого пространства - 4.7 Gb
+    - размер свободного пространства - 6.1 Gb
+    - процент использования - 44
+- Определить и написать в отчёт тип файловой системы для раздела - ext4
+
 ## Part 12. Использование утилиты du
+
+- Запустить команду du.
+
+![](./18_du.PNG "du")
+
+- Вывести размер папок /home, /var, /var/log (в байтах, в человекочитаемом виде)
+
+![](./18_du_bh_home_var_log_ver2.PNG "du home var var/log ver 1")
+
+    du home var var/log ver 1
+
+![](./18_du_bh_home_var_log.PNG "du home var var/log ver 2")
+
+    du home var var/log ver 2
+
+- Вывести размер всего содержимого в /var/log (не общее, а каждого вложенного элемента, используя *)
+
+![](./18_du_bh_var_log_.PNG "var_log_*")
+
+du /var/log/*
+
+- В отчёт вставить скрины с выводом всех использованных команд.
+
 ## Part 13. Установка и использование утилиты ncdu
+
+- Установить утилиту ncdu.
+
+behappyman@user-2:~$ sudo apt install ncdu
+
+- Вывести размер папок /home, /var, /var/log.
+
+ncdu /
+
+- В отчёт вставить скрины с выводом использованных команд.
+
+![](./19_ncdu_1.PNG "/home")
+
+    home
+
+![](./19_ncdu_2.PNG "/var")
+
+    var
+
+![](./19_ncdu_3.PNG "/var/log")
+
+    /var/log/
+
 ## Part 14. Работа с системными журналами
+
+- Открыть для просмотра:
+- 1. /var/log/dmesg
+- 2. /var/log/syslog
+- 3. /var/log/auth.log  
+
+![](./20_logs_tail.PNG "logs")
+
+tail logs
+
+
+- Написать в отчёте время последней успешной авторизации, имя пользователя и метод входа в систему.
+
+![](./20_logs_last_auth.PNG "last auth")
+
+Mar 12 13:55:21 user-2 sshd
+
+- Перезапустить службу SSHd.
+
+sudo service sshd restart
+
+- Вставить в отчёт скрин с сообщением о рестарте службы (искать в логах).
+
+![](./20_logs_sshd_restart.PNG "sshd restart")
+
+sshd restart into syslog
+
 ## Part 15. Использование планировщика заданий CRON
 
+- Используя планировщик заданий, запустите команду uptime через каждые 2 минуты.
 
+    crontab -e
+
+![](./21_cron_uptime.PNG "cron uptime")
+
+
+![](./21_cron_uptime_process.PNG "cron uptime process")
+
+    cron uptime process
+
+- Найти в системных журналах строчки (минимум две в заданном временном диапазоне) о выполнении.
+
+![](./21_cron_uptime_log.PNG "cron in log")
+
+    cron in log
+
+- Вывести на экран список текущих заданий для CRON.
+
+![](./21_cron_tasks.PNG "cron tasks")
+
+    cron tasks
+
+- Удалите все задания из планировщика заданий.
+
+![](./21_cron_tasks_remove.PNG "cron remove tasks")
+
+    remove tasks
