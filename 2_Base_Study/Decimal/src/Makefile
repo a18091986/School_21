@@ -16,9 +16,9 @@ main.o:
 
 
 git:
-		git add .
-		git commit -am "from make"
-		git push
+	git add .
+	git commit -am "from make"
+	git push
 
 clean:
 		rm -rf *.o
