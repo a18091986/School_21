@@ -3,6 +3,8 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <limits.h>
+#include <math.h>
 
 #define RED "\033[1;31m"
 #define RESET   "\033[0m"
@@ -14,6 +16,38 @@ typedef struct
 } s21_decimal;
 
 
+// usefull functions
+
+int get_bit_in_position(int x, int bit_position) {  // bit_position - счет с 0 от младшего разряда к старшим (справа налево)
+    int mask = 0b1 << bit_position;
+    return (int) (x & mask ? 1 : 0);
+}
+
+int s21_get_bit(s21_decimal dst, int index) {
+  int mask = 1u << (index % 32);
+  return (dst.bits[index / 32] & mask) != 0;
+}
+
+
+int inverse_bit_in_position(int x, int bit_position) {
+    return x ^ (1 << bit_position);
+}
+
+int set_bit_in_position(int x, int bit_value, int bit_position) {
+    int result;
+    if (bit_value)
+            result = x | (1 << bit_position);
+    else 
+        result = x & ~(1 << bit_position);
+    return result;
+}
+
+int s21_get_scale(s21_decimal dst) {
+  int mask = 127 << 16;
+  int scale = (mask & dst.bits[3]) >> 16;
+  return scale;
+}
+
 // ---------------------------general functions---------------------------------
 
 // initialization of zero decimal number
@@ -23,6 +57,26 @@ void init_decimal_number(s21_decimal * dec_num) {
     }
 }
 
+void s21_set_sign(s21_decimal *dst) { 
+    dst->bits[3] = dst->bits[3] | 1u << 31; 
+    }
+
+void show_decimal_binary_view(s21_decimal * dec_num) {
+    for (int i = 2; i >= 0; i--)
+        for (int j = 31; j >= 0; j--)
+            printf("%d", get_bit_in_position(dec_num -> bits[i], j));
+    printf(" ");
+    for (int j = 31; j >= 16; j--)
+        printf("%d", get_bit_in_position(dec_num -> bits[3], j));
+    printf(" ");
+    for (int j = 15; j >= 0; j--)
+        printf("%d", get_bit_in_position(dec_num -> bits[3], j));
+    printf("\n");
+    printf("\n");
+}
+
+
+// convert functions
 
 int s21_from_int_to_decimal(int src, s21_decimal *dst) {
   init_decimal_number(dst);
@@ -38,46 +92,21 @@ int s21_from_int_to_decimal(int src, s21_decimal *dst) {
   return error;
 }
 
-void s21_set_sign(s21_decimal *dst) { dst->bits[3] = dst->bits[3] | 1u << 31; }
-
-void show_decimal_binary_view(s21_decimal * dec_num) {
-    for (int i = 2; i >= 0; i--)
-        for (int j = 31; j >= 0; j--)
-            printf("%d", get_bit_in_position(dec_num -> bits[i], j));
-    printf(" ");
-    for (int j = 31; j >= 16; j--)
-        printf("%d", get_bit_in_position(dec_num -> bits[3], j));
-    printf(" ");
-    for (int j = 15; j >= 0; j--)
-        printf("%d", get_bit_in_position(dec_num -> bits[3], j));
-    printf("\n");
+int s21_from_decimal_to_int(s21_decimal src, int *dst) {
+  int error = 0;
+  int scale = s21_get_scale(src);
+  if (src.bits[1] || src.bits[2]) {
+    error = 1;
+  } else {
+    *dst = src.bits[0];
+    if (scale > 0 && scale <= 28) {
+      *dst /= pow(10, scale);
+    }
+  }
+  if (s21_get_bit(src, 127)) *dst = *dst * (-1);
+//   if (get_bit_in_position(src, 127)) *dst = *dst * (-1);
+  return error;
 }
-
-
-// usefull functions
-
-int get_bit_in_position(int x, int bit_position) {  // bit_position - счет с 0 от младшего разряда к старшим (справа налево)
-    int mask = 0b1 << bit_position;
-    return (int) (x & mask ? 1 : 0);
-}
-
-int inverse_bit_in_position(int x, int bit_position) {
-    return x ^ (1 << bit_position);
-}
-
-int set_bit_in_position(int x, int bit_value, int bit_position) {
-    int result;
-    if (bit_value)
-            result = x | (1 << bit_position);
-    else 
-        result = x & ~(1 << bit_position);
-    return result;
-}
-
-
-// convert functions
-
-
 
 // char * get_number_in_binary_view(int x) {
 //     // int mask = 0b10000000000000000000000000000000;

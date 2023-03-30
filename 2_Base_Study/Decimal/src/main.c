@@ -9,9 +9,14 @@ int main() {
     // int zero_bit_value = 0;
     // int one_bit_value = 1;
 
+    int test_int = 10;
     s21_decimal test;
-    s21_from_int_to_decimal(2147483647, test);
-
+    
+    s21_from_int_to_decimal(test_int, &test);
+    show_decimal_binary_view(&test);
+    
+    s21_from_decimal_to_int(test, &test_int);
+    printf("%d\n", test_int);
     
 //     printf("Number %d, in binary view: %s\n", 2147483647, get_number_in_binary_view(2147483647));  
 //     printf("Number %ld, in binary view: %s\n", -2147483648, get_number_in_binary_view(-2147483648));
