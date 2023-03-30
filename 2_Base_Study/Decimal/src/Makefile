@@ -1,34 +1,28 @@
 FLAGS = -Wall -Werror -Wextra -std=c11
 
-all: main start_lin
+all: main start
 
-start_win: clean-win main
-		./main
-
-start_lin: clean-lin main
+start: clean main
 		clear
 		./main
 		
 
-main: main.o
-		gcc $(FLAGS) main.o -o main
+main: main.o s21_decimal_convert.h
+		gcc $(FLAGS) main.o s21_decimal_convert.h -o main
 
 main.o:
 		gcc -c $(FLAGS) main.c -o main.o
+
+
 
 git:
 		git add .
 		git commit -am "from make"
 		git push
 
-clean-win: 
-		del *.o *.exe
-
-clean-lin:
+clean:
 		rm -rf *.o
 
-rebuild-win: clean-win all
-
-rebuild-lin: clean-lin all
+rebuild: clean all
 
 
