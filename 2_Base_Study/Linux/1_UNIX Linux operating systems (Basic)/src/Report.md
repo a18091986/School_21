@@ -182,7 +182,9 @@ behappyman@user-2:~$ sudo systemctl enable ssh.service
 - Перенастроить службу SSHd на порт 2022.
 
 behappyman@user-2:~$ sudo mcedit /etc/ssh/sshd_config
+
 behappyman@user-2:~$ sudo ufw allow 2022
+
 behappyman@user-2:~$ sudo reboot
 
 ![](./13_ssh_port.PNG "корректировка порта")
