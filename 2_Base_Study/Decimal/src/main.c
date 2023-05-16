@@ -9,14 +9,23 @@ int main() {
     // int zero_bit_value = 0;
     // int one_bit_value = 1;
 
-    int test_int = 10;
+    int test_int = 112312423;
+    float test_float = 11.1234577;
+
     s21_decimal test;
-    
+
     s21_from_int_to_decimal(test_int, &test);
     show_decimal_binary_view(&test);
     
     s21_from_decimal_to_int(test, &test_int);
     printf("%d\n", test_int);
+    
+    s21_from_float_to_decimal(test_float, &test);
+    show_decimal_binary_view(&test);
+
+    s21_from_decimal_to_float(test, &test_float);
+    printf("%lf\n", test_float);
+
     
 //     printf("Number %d, in binary view: %s\n", 2147483647, get_number_in_binary_view(2147483647));  
 //     printf("Number %ld, in binary view: %s\n", -2147483648, get_number_in_binary_view(-2147483648));
