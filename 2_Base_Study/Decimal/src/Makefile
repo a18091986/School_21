@@ -1,15 +1,14 @@
 FLAGS = -Wall -Werror -Wextra -std=c11
 
 all: main
-	./main
-
-main: main.o s21_decimal_convert.h
-	gcc $(FLAGS) main.o s21_decimal_convert.h -o main -lm
-
-main.o:
-	gcc -c $(FLAGS) main.c -o main.o 
 
 
+main: main.o usefull_for_convert
+	gcc $(FLAGS) main.a -o main
+
+main.a:
+	gcc -c $(FLAGS) *.c
+	rm -rf *.o
 
 git:
 	git add .
