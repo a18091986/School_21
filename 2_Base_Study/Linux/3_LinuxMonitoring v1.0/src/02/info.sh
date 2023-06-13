@@ -1,7 +1,7 @@
 #!/bin/bash
 
 echo HOSTNAME = 'hostname'
-echo TIMEZONE = 'cat /etc/timezone'
+echo TIMEZONE = `cat /etc/timezone`
 # TIMEZONE = временная зона в виде: America/New_York UTC -5 (временная зона, должна браться из системы и быть корректной для текущего местоположения)
 # USER = текущий пользователь который запустил скрипт
 # OS = тип и версия операционной системы
