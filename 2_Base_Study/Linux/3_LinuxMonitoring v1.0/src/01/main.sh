@@ -1,6 +1,7 @@
 #!/bin/bash
 
-reg_exp='^[+-]?[0-9]+(.[0-9]+)?$'
+chmod +x reg.sh
+source ./reg.sh
 
 if [[ $# == 1 ]]; then
     if [[ $1 =~ $reg_exp ]]; then
