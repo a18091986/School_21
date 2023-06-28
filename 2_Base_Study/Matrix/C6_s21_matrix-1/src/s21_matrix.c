@@ -1,63 +1,61 @@
 #include "s21_matrix.h"
 
+// int main() {
+//     int rows_A = 3;
+//     int columns_A = 3;
+//     matrix_t A;
 
+//     // int rows_B = 2;
+//     // int columns_B = 3;
+//     // matrix_t B;
 
-int main() {
-    int rows_A = 3;
-    int columns_A = 3;
-    matrix_t A;
-
-    // int rows_B = 2;
-    // int columns_B = 3;
-    // matrix_t B;
-
-    matrix_t result;
+//     matrix_t result;
 
     
-    s21_create_matrix(rows_A, columns_A, &A);
-    scan_matrix_from_terminal(rows_A, columns_A, &A);
-    show_matrix_in_terminal(rows_A, columns_A, &A);
+//     s21_create_matrix(rows_A, columns_A, &A);
+//     scan_matrix_from_terminal(rows_A, columns_A, &A);
+//     show_matrix_in_terminal(rows_A, columns_A, &A);
     
-    // s21_create_matrix(rows_B, columns_B, &B);
-    // scan_matrix_from_terminal(rows_B, columns_B, &B);
-    // show_matrix_in_terminal(rows_B, columns_B, &B);
+//     // s21_create_matrix(rows_B, columns_B, &B);
+//     // scan_matrix_from_terminal(rows_B, columns_B, &B);
+//     // show_matrix_in_terminal(rows_B, columns_B, &B);
 
-    // // --------------- COMPARISON --------------
-    // s21_eq_matrix(&A, &B);
+//     // // --------------- COMPARISON --------------
+//     // s21_eq_matrix(&A, &B);
 
-    // // --------------- SUM --------------  
-    // if (!s21_sum_matrix(&A, &B, &result))
-    //     show_matrix_in_terminal(rows_A, columns_A, &result);
+//     // // --------------- SUM --------------  
+//     // if (!s21_sum_matrix(&A, &B, &result))
+//     //     show_matrix_in_terminal(rows_A, columns_A, &result);
 
-    // // --------------- SUB --------------
-    // if (!s21_sub_matrix(&A, &B, &result))
-    //     show_matrix_in_terminal(rows_A, columns_A, &result);
+//     // // --------------- SUB --------------
+//     // if (!s21_sub_matrix(&A, &B, &result))
+//     //     show_matrix_in_terminal(rows_A, columns_A, &result);
 
-    // // --------------- MULT ON SCALAR --------------
-    // if (!s21_mult_number(&A, 3, &result))
-    //     show_matrix_in_terminal(rows_A, columns_A, &result);
+//     // // --------------- MULT ON SCALAR --------------
+//     // if (!s21_mult_number(&A, 3, &result))
+//     //     show_matrix_in_terminal(rows_A, columns_A, &result);
     
-    // // --------------- MATRIX MULT --------------
-    // if (!s21_mult_matrix(&A, &B, &result))
-    //     show_matrix_in_terminal(rows_A, columns_A, &result);
+//     // // --------------- MATRIX MULT --------------
+//     // if (!s21_mult_matrix(&A, &B, &result))
+//     //     show_matrix_in_terminal(rows_A, columns_A, &result);
 
-    // --------------- MATRIX TRANSPOSE --------------
-    if (!s21_transpose(&A, &result))
-        show_matrix_in_terminal(columns_A, rows_A, &result);
+//     // --------------- MATRIX TRANSPOSE --------------
+//     if (!s21_transpose(&A, &result))
+//         show_matrix_in_terminal(columns_A, rows_A, &result);
 
-    // --------------- MATRIX DETERMINANT --------------
-    double res;
-    if (!s21_determinant(&A, &res))
-        printf("Determinant: %.2f\n", res);
+//     // --------------- MATRIX DETERMINANT --------------
+//     double res;
+//     if (!s21_determinant(&A, &res))
+//         printf("Determinant: %.2f\n", res);
 
-    // --------------- MATRIX COMPLEMENT --------------
-    if (!s21_calc_complements(&A, &result))
-        show_matrix_in_terminal(columns_A, rows_A, &result);
+//     // --------------- MATRIX COMPLEMENT --------------
+//     if (!s21_calc_complements(&A, &result))
+//         show_matrix_in_terminal(columns_A, rows_A, &result);
 
-    // --------------- MATRIX INVERSE --------------
-    if (!s21_inverse_matrix(&A, &result))
-        show_matrix_in_terminal(columns_A, rows_A, &result);
-}
+//     // --------------- MATRIX INVERSE --------------
+//     if (!s21_inverse_matrix(&A, &result))
+//         show_matrix_in_terminal(columns_A, rows_A, &result);
+// }
 
 
 
@@ -81,7 +79,7 @@ int s21_create_matrix(int rows, int columns, matrix_t *result) {
             res = OK;
         }
     }
-    printf("Result from matrix create: %d\n", res);
+    // printf("Result from matrix create: %d\n", res);
     return res;
 }
 
@@ -110,7 +108,7 @@ int s21_eq_matrix(matrix_t *A, matrix_t *B) {
             }
         }
     }
-    printf("Result from matrix equal check: %d\n", res);
+    // printf("Result from matrix equal check: %d\n", res);
     return res;
 }
 
@@ -119,13 +117,13 @@ int s21_eq_matrix(matrix_t *A, matrix_t *B) {
 
 int s21_sum_matrix(matrix_t *A, matrix_t *B, matrix_t *result) {
     int res = sum_sub_matrix(A, B, result, 1);
-    printf("Result from sum_matrix: %d\n", res);        
+    // printf("Result from sum_matrix: %d\n", res);        
     return res;
 }
 
 int s21_sub_matrix(matrix_t *A, matrix_t *B, matrix_t *result) {
     int res = sum_sub_matrix(A, B, result, 0);
-    printf("Result from sub_matrix: %d\n", res);        
+    // printf("Result from sub_matrix: %d\n", res);        
     return res;
 }
 
@@ -160,7 +158,7 @@ int s21_mult_number(matrix_t *A, double number, matrix_t *result) {
             res = OK;
         }
     }
-    printf("Result from matrix_mult_number: %d\n", res); 
+    // printf("Result from matrix_mult_number: %d\n", res); 
     return res;
 }
 
@@ -181,7 +179,7 @@ int s21_mult_matrix(matrix_t *A, matrix_t *B, matrix_t *result) {
         res = OK;
         }
     }
-    printf("Result from matrix_mult: %d\n", res); 
+    // printf("Result from matrix_mult: %d\n", res); 
     return res;
 }
 
@@ -197,7 +195,7 @@ int s21_transpose(matrix_t *A, matrix_t *result) {
             res = OK;
         }
     }
-    printf("Result from matrix_transpose: %d\n", res); 
+    // printf("Result from matrix_transpose: %d\n", res); 
     return res;
 }
 
@@ -324,7 +322,7 @@ int is_matrix_correct_check(matrix_t * M) {
     int res = OK;
     if (!M || !M->matrix || M->rows < 1 || M->columns < 1)
         res = INCORRECT_MATRIX_ERROR;
-    printf("Result from matrix correct check: %d\n", res);
+    // printf("Result from matrix correct check: %d\n", res);
     return res;
 }
 
@@ -332,7 +330,7 @@ int is_matrix_equal_size(matrix_t *A, matrix_t *B) {
     int res = 0;
     if (A->rows != B->rows || A->columns != B->columns) 
         res = 1;
-    printf("Result from matrix matrix_equal_size: %d\n", res);  
+    // printf("Result from matrix matrix_equal_size: %d\n", res);  
     return res;
 }
 
