@@ -1,4 +1,5 @@
 #include <check.h>
+
 #include "s21_matrix.h"
 
 START_TEST(test_s21_create_matrix) {
@@ -16,37 +17,37 @@ START_TEST(test_s21_create_matrix) {
 END_TEST
 
 START_TEST(test_s21_eq_matrix) {
-    matrix_t matrix_1, matrix_2;
-    s21_create_matrix(4, 4, &matrix_1);
-    s21_create_matrix(4, 4, &matrix_2);
-    int ret = s21_eq_matrix(&matrix_1, &matrix_2);
-    ck_assert_int_eq(ret, 1);
-    s21_remove_matrix(&matrix_1);
-    s21_remove_matrix(&matrix_2);
+  matrix_t matrix_1, matrix_2;
+  s21_create_matrix(4, 4, &matrix_1);
+  s21_create_matrix(4, 4, &matrix_2);
+  int ret = s21_eq_matrix(&matrix_1, &matrix_2);
+  ck_assert_int_eq(ret, 1);
+  s21_remove_matrix(&matrix_1);
+  s21_remove_matrix(&matrix_2);
 
-    s21_create_matrix(4, 4, &matrix_1);
-    s21_create_matrix(10, 10, &matrix_2);
-    ret = s21_eq_matrix(&matrix_1, &matrix_2);
-    ck_assert_int_eq(ret, 0);
-    s21_remove_matrix(&matrix_1);
-    s21_remove_matrix(&matrix_2);
+  s21_create_matrix(4, 4, &matrix_1);
+  s21_create_matrix(10, 10, &matrix_2);
+  ret = s21_eq_matrix(&matrix_1, &matrix_2);
+  ck_assert_int_eq(ret, 0);
+  s21_remove_matrix(&matrix_1);
+  s21_remove_matrix(&matrix_2);
 
-    s21_create_matrix(4, 4, &matrix_1);
-    s21_create_matrix(4, 4, &matrix_2);
-    matrix_1.matrix[2][3] = -7;
-    ret = s21_eq_matrix(&matrix_1, &matrix_2);
-    ck_assert_int_eq(ret, 0);
-    s21_remove_matrix(&matrix_1);
-    s21_remove_matrix(&matrix_2);
+  s21_create_matrix(4, 4, &matrix_1);
+  s21_create_matrix(4, 4, &matrix_2);
+  matrix_1.matrix[2][3] = -7;
+  ret = s21_eq_matrix(&matrix_1, &matrix_2);
+  ck_assert_int_eq(ret, 0);
+  s21_remove_matrix(&matrix_1);
+  s21_remove_matrix(&matrix_2);
 
-    s21_create_matrix(4, 4, &matrix_1);
-    s21_create_matrix(4, 4, &matrix_2);
-    matrix_1.matrix[2][3] = -7;
-    matrix_2.matrix[2][3] = -7;
-    ret = s21_eq_matrix(&matrix_1, &matrix_2);
-    ck_assert_int_eq(ret, 1);
-    s21_remove_matrix(&matrix_1);
-    s21_remove_matrix(&matrix_2);
+  s21_create_matrix(4, 4, &matrix_1);
+  s21_create_matrix(4, 4, &matrix_2);
+  matrix_1.matrix[2][3] = -7;
+  matrix_2.matrix[2][3] = -7;
+  ret = s21_eq_matrix(&matrix_1, &matrix_2);
+  ck_assert_int_eq(ret, 1);
+  s21_remove_matrix(&matrix_1);
+  s21_remove_matrix(&matrix_2);
 }
 END_TEST
 

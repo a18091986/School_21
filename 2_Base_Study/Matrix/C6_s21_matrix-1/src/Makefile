@@ -4,7 +4,7 @@ FLAGS=-Wall -Wextra -Werror -std=c11
 OS = $(shell uname)
 
 ifeq ($(OS), Linux)
-	TEST_FLAGS= -lcheck -lgcov -lm -lsubunit -lrt -pthread
+	TEST_FLAGS = -lcheck -lgcov -lm -lsubunit -lrt -pthread
 else
 	TEST_FLAGS = -lcheck -lgcov
 endif
