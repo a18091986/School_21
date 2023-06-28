@@ -286,28 +286,28 @@ int s21_inverse_matrix(matrix_t *A, matrix_t *result) {
 
 // ###################-- вспомогательные функции --###################
 
-void scan_matrix_from_terminal(int rows, int columns, matrix_t *M) {
-  for (int i = 0; i < rows; i++) {
-    for (int j = 0; j < columns; j++) {
-      double num = 0;
-      printf("Введи число (cтрока %d, колонка %d)  ", i, j);
-      scanf("%lf", &num);
-      M->matrix[i][j] = num;
-    }
-  }
-  printf("\n");
-}
+// void scan_matrix_from_terminal(int rows, int columns, matrix_t *M) {
+//   for (int i = 0; i < rows; i++) {
+//     for (int j = 0; j < columns; j++) {
+//       double num = 0;
+//       printf("Введи число (cтрока %d, колонка %d)  ", i, j);
+//       scanf("%lf", &num);
+//       M->matrix[i][j] = num;
+//     }
+//   }
+//   printf("\n");
+// }
 
-void show_matrix_in_terminal(int rows, int columns, matrix_t *M) {
-  printf("MATRIX:\n");
-  for (int i = 0; i < rows; i++) {
-    for (int j = 0; j < columns; j++) {
-      printf("%.2f ", M->matrix[i][j]);
-    }
-    printf("\n");
-  }
-  printf("\n");
-}
+// void show_matrix_in_terminal(int rows, int columns, matrix_t *M) {
+//   printf("MATRIX:\n");
+//   for (int i = 0; i < rows; i++) {
+//     for (int j = 0; j < columns; j++) {
+//       printf("%.2f ", M->matrix[i][j]);
+//     }
+//     printf("\n");
+//   }
+//   printf("\n");
+// }
 
 int is_matrix_correct_check(matrix_t *M) {
   int res = OK;

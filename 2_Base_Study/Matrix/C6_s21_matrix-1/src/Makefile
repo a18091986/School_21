@@ -1,6 +1,6 @@
 CC=gcc
+# FLAGS=-Wall -Wextra -Werror -std=c11 -pedantic -g -fsanitize=address
 FLAGS=-Wall -Wextra -Werror -std=c11
-
 OS = $(shell uname)
 
 ifeq ($(OS), Linux)
@@ -15,13 +15,7 @@ endif
 .PHONY: all clean test gcov_report
 all: test s21_matrix.a gcov_report
 
-# all: s21_matrix.o s21_matrix.h
-# 	$(CC) $(FLAGS) s21_matrix.o -lm
-
-# s21_matrix.o: s21_matrix.c
-# 	$(CC) -c $(FLAGS) s21_matrix.c	
-
-test:CFLAGS += -coverage
+test: CFLAGS += -coverage
 test: s21_test.o s21_matrix.o s21_matrix.h
 	$(CC) $(FLAGS) s21_matrix.o s21_test.o $(TEST_FLAGS) -o test
 	./test
@@ -43,5 +37,9 @@ style:
 	clang-format -style=Google -i *.c
 	clang-format -style=Google -n *.c
 
+
+leaks:
+	valgrind --tool=memcheck --leak-check=yes  ./test 2>&1 | grep -i 'ERROR'
+
 clean: 
-	rm -rf s21_test report test *.o *.info *.a s21_matrix.gcda s21_matrix.gcno *.out
+	rm -rf report test *.o *.info *.a s21_matrix.gcda s21_matrix.gcno *.out
