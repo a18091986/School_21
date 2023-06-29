@@ -17,6 +17,6 @@ RUN apt update  \
     # && chown -R us:us /var/log/nginx/ \
     # && chown -R us:us /var/lib/nginx/
 
-USER user 
+USER us
 
 CMD gcc -o server server.c -lfcgi && spawn-fcgi -p 8080 server && nginx -g 'daemon off;'
