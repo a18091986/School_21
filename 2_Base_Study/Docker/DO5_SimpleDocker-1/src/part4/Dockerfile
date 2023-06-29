@@ -1,12 +1,13 @@
-FROM debian:latest
-WORKDIR /nginx_fastcgi_server
-RUN apt update  \
-    && apt install -y nginx  \
-    && apt install -y gcc  \
-    && apt install -y libfcgi-dev  \
-    && apt install -y spawn-fcgi  \
-    && rm -rf /var/lib/apt/lists
-COPY web_server.c ./server.c
-COPY nginx.conf ../etc/nginx/nginx.conf
-CMD gcc -o fcgi server.c -lfcgi && spawn-fcgi -p 8080 fcgi && nginx -g 'daemon off;'
+FROM nginx
+
+WORKDIR /home/
+
+COPY ./nginx.conf /etc/nginx/nginx.conf
+COPY ./web_server.c /home/server.c
+
+RUN apt-get update && \
+    apt-get install -y gcc spawn-fcgi libfcgi-dev && \
+    gcc web_server.c -lfcgi -o server && \
+    spawn-fcgi -p 8080 ./server && \
+    service nginx start
 
