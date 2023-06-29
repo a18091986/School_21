@@ -465,15 +465,100 @@ dockle check повторно
 
 1) Поднять докер контейнер из Части 5 (он должен работать в локальной сети, т.е. не нужно использовать инструкцию EXPOSE и мапить порты на локальную машину)
 
+<center>
 
+<br>
+
+![pull + images](./imgs/6_old_nginx_without_mapping.PNG)
+
+<br>
+
+nginx from part5 without mapping
+
+</center>
+
+<center>
+
+<br>
+
+![pull + images](./imgs/6_old_nginx_without_mapping_ip.PNG)
+
+<br>
+
+ip 
+
+</center>
 
 2) Поднять докер контейнер с nginx, который будет проксировать все запросы с 8080 порта на 81 порт первого контейнера
 
-Замапить 8080 порт второго контейнера на 80 порт локальной машины
+<center>
 
-Остановить все запущенные контейнеры
+<br>
+
+![pull + images](./imgs/6_new_nginx_conf_ip.PNG)
+
+<br>
+
+clear nginx with proxy by ip
+
+</center>
+
+<center>
+
+<br>
+
+![pull + images](./imgs/6_new_nginx_dockerfile.PNG)
+
+<br>
+
+clear nginx dockerfile
+
+</center>
+
+- Замапить 8080 порт второго контейнера на 80 порт локальной машины
+
+<center>
+
+<br>
+
+![pull + images](./imgs/6_new_nginx_80_8080.PNG)
+
+<br>
+
+clear nginx start with port mapping
+
+</center>
+
+
+
+<center>
+
+<br>
+
+![pull + images](./imgs/6_new_nginx_80_8080_web.PNG)
+
+<br>
+
+localhost web
+
+</center>
+
+- Остановить все запущенные контейнеры
+
+<center>
+
+<br>
+
+![pull + images](./imgs/6_stop.PNG)
+
+<br>
+
+stop
+
+</center>
 
 Собрать и запустить проект с помощью команд docker-compose build и docker-compose up
+
 
 
 Проверить, что в браузере по localhost:80 отдается написанная вами страничка, как и ранее
