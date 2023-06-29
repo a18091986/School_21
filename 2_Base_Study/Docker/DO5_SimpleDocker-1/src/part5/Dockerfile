@@ -15,7 +15,6 @@ RUN apt update  \
     && chown -R us:us /etc/nginx/ \
     && chown -R us:us /server/ \
     && chown -R us:us /var/cache/ \
-    && chown -R us:us /var/lib/nginx/ \
     && chown -R us:us /var/run/
 
 
