@@ -317,37 +317,143 @@ hello world
 4) запускает nginx.
 nginx можно установить внутрь докера самостоятельно, а можно воспользоваться готовым образом с nginx'ом, как базовым.
 
+<center>
 
-Собрать написанный докер образ через docker build при этом указав имя и тег
+<br>
 
+![pull + images](./imgs/4_dockerfile.PNG)
 
+<br>
 
-Проверить через docker images, что все собралось корректно
+dockerfile
 
-Запустить собранный докер образ с маппингом 81 порта на 80 на локальной машине и маппингом папки ./nginx внутрь контейнера по адресу, где лежат конфигурационные файлы nginx'а (см. Часть 2)
+</center>
 
-docker run -it --name container -p 80:81 -v /Users/killedhi/DO5_SimpleDocker-1/src/04/nginx.conf:/etc/nginx/nginx.conf -d killedhi:a1 bash.
+- Собрать написанный докер образ через docker build при этом указав имя и тег
 
-Проверить, что по localhost:80 доступна страничка написанного мини сервера
+<center>
 
-Дописать в ./nginx/nginx.conf проксирование странички /status, по которой надо отдавать статус сервера nginx
+<br>
 
+![pull + images](./imgs/4_build_name_tag.PNG)
 
-Перезапустить докер образ
-Если всё сделано верно, то, после сохранения файла и перезапуска контейнера, конфигурационный файл внутри докер образа должен обновиться самостоятельно без лишних действий
+<br>
 
-Проверить, что теперь по localhost:80/status отдается страничка со статусом nginx
+build
 
+</center>
+
+- Проверить через docker images, что все собралось корректно
+
+<center>
+
+<br>
+
+![pull + images](./imgs/4_docker_images.PNG)
+
+<br>
+
+images
+
+</center>
+
+- Запустить собранный докер образ с маппингом 81 порта на 80 на локальной машине и маппингом папки ./nginx внутрь контейнера по адресу, где лежат конфигурационные файлы nginx'а (см. Часть 2)
+
+<center>
+
+<br>
+
+![pull + images](./imgs/4_docker_run_map.PNG)
+
+<br>
+
+hello world
+
+</center>
+
+- Проверить, что по localhost:80 доступна страничка написанного мини сервера
+
+<center>
+
+<br>
+
+![pull + images](./imgs/4_localhost.PNG)
+
+<br>
+
+hello world
+
+</center>
+
+- Дописать в ./nginx/nginx.conf проксирование странички /status, по которой надо отдавать статус сервера nginx
+
+<center>
+
+<br>
+
+![pull + images](./imgs/4_nginx_conf_status.PNG)
+
+<br>
+
+hello world
+
+</center>
+
+- Перезапустить докер образ. Если всё сделано верно, то, после сохранения файла и перезапуска контейнера, конфигурационный файл внутри докер образа должен обновиться самостоятельно без лишних действий. Проверить, что теперь по localhost:80/status отдается страничка со статусом nginx
+
+<center>
+
+<br>
+
+![pull + images](./imgs/4_status.PNG)
+
+<br>
+
+hello world
+
+</center>
 
 ## Part 5. Dockle
 
-После написания образа никогда не будет лишним проверить его на безопасность.
-== Задание ==
+- Просканировать образ из предыдущего задания через dockle [image_id|repository]
 
-Просканировать образ из предыдущего задания через dockle [image_id|repository]
+<center>
 
+<br>
 
-Исправить образ так, чтобы при проверке через dockle не было ошибок и предупреждений
+![pull + images](./imgs/5_dockle_errors.PNG)
+
+<br>
+
+dockle check
+
+</center>
+
+- Исправить образ так, чтобы при проверке через dockle не было ошибок и предупреждений
+
+<center>
+
+<br>
+
+![pull + images](./imgs/4_status.PNG)
+
+<br>
+
+исправленный конфигурационный файл
+
+</center>
+
+<center>
+
+<br>
+
+![pull + images](./imgs/5_dockle_errors.PNG)
+
+<br>
+
+dockle check повторно
+
+</center>
 
 ## Part 6. Базовый Docker Compose
 
