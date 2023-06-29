@@ -559,6 +559,53 @@ stop
 
 Собрать и запустить проект с помощью команд docker-compose build и docker-compose up
 
+<center>
+
+<br>
+
+![pull + images](./imgs/6_hostname.PNG)
+
+<br>
+
+nginx conf on new server
+
+</center>
+
+<center>
+
+<br>
+
+![pull + images](./imgs/6_compose.PNG)
+
+<br>
+
+docker compose
+
+</center>
+
+<center>
+
+<br>
+
+![pull + images](./imgs/running.PNG)
+
+<br>
+
+running after docker compose
+
+</center>
 
 
-Проверить, что в браузере по localhost:80 отдается написанная вами страничка, как и ранее
+- Проверить, что в браузере по localhost:80 отдается написанная вами страничка, как и ранее
+
+<center>
+
+<br>
+
+![pull + images](./imgs/6_new_nginx_80_8080_web.PNG)
+
+<br>
+
+localhost web
+
+</center>
