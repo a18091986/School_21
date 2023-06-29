@@ -8,6 +8,9 @@ START_TEST(test_s21_create_matrix) {
   ck_assert_int_eq(ret, 0);
   s21_remove_matrix(&my_matrix);
 
+  ret = s21_create_matrix(4, 4, NULL);
+  ck_assert_int_eq(ret, 1);
+
   ret = s21_create_matrix(-4, 4, &my_matrix);
   ck_assert_int_eq(ret, 1);
 

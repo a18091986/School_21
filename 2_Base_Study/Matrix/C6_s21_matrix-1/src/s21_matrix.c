@@ -64,7 +64,7 @@
 
 int s21_create_matrix(int rows, int columns, matrix_t *result) {
   int res = INCORRECT_MATRIX_ERROR;
-  if (rows > 0 && columns > 0) {
+  if (result && rows > 0 && columns > 0) {
     result->rows = rows;
     result->columns = columns;
     result->matrix = calloc(rows, sizeof(double *));
