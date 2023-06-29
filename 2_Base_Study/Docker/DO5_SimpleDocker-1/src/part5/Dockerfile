@@ -11,11 +11,11 @@ RUN apt update  \
     && apt install -y libfcgi-dev  \
     && apt install -y spawn-fcgi \  
     && rm -rf /var/lib/apt/lists \
-    && adduser --disabled-password user \
-    && chown -R user:user /etc/nginx/ \
-    && chown -R user:user /server/ \
-    && chown -R user:user /var/log/nginx/ \
-    && chown -R user:user /var/lib/nginx/
+    && adduser --disabled-password us \
+    && chown -R us:us /etc/nginx/ \
+    && chown -R us:us /server/ 
+    # && chown -R us:us /var/log/nginx/ \
+    # && chown -R us:us /var/lib/nginx/
 
 USER user 
 
