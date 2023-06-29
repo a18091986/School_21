@@ -231,7 +231,7 @@ usefull: https://qna.habr.com/q/240643
 
 <br>
 
-![pull + images](./imgs/2_status_after_restart.PNG
+![pull + images](./imgs/2_status_after_restart.PNG)
 
 <br>
 
