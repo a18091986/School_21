@@ -14,8 +14,10 @@ RUN apt update  \
     && adduser --disabled-password us \
     && chown -R us:us /etc/nginx/ \
     && chown -R us:us /server/ \
-    && chown -R us:us /var/cache/
-    # && chown -R us:us /var/lib/nginx/
+    && chown -R us:us /var/cache/ \
+    && chown -R us:us /var/lib/nginx/ \
+    && chown -R us:us /var/run/
+
 
 USER us
 
