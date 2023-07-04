@@ -25,8 +25,11 @@ source ./validate.sh $ABS_PATH \
 rm -r /home/behappyman/out/*
 
 touch log.txt
+LETTERS_FOR_FILES_NAMES=$(echo "$LETTERS_FOR_FILES" | awk '{split($0,a,"."); print a[1]}')
+echo "$LETTERS_FOR_FILES_NAMES"
+FILE_EXT=$(echo "$LETTERS_FOR_FILES" | awk '{split($0,a,"."); print a[2]}')
+echo "$FILE_EXT"
 letters_for_dirs_count=${#LETTERS_FOR_DIRS}
-
-create_dirs
-    # create_files
+letters_for_files_count=${#LETTERS_FOR_FILES}
+create
 
