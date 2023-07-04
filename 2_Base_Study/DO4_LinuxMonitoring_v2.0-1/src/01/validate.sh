@@ -5,7 +5,7 @@ error_flag=0
 regexp_dir_or_files_number='^[+]?[0-9]+$'
 regexp_file_size='^[0-9]+[.]?[0-9]+$'
 regexp_letters_for_dirs='^[a-z]{1,7}$'
-regexp_letters_for_file='^[a-z]{1,7}.[a-z]{1,3}$'
+regexp_letters_for_file='^[a-z]{1,7}[.]{1}[a-z]{1,3}$'
 
 # проверка существования пути, переданного в первом параметре
 if ! [[ -d $ABS_PATH ]]; then

@@ -15,20 +15,8 @@ function create_dirs {
         DATE_PART=$(date +%D | awk -F / '{print $2$1$3}')   
         dir_name+="_$DATE_PART"
         mkdir $dir_name
-        # echo $path"/"$dir_name --- $(date +'%e.%m.%Y') ---  >> log.txt    
+        echo $ABS_PATH"/"$dir_name "|" $(date +'%e.%m.%Y') "|" >> log.txt    
     done
 }
 
-# function create_dir_with_little_name {
-#     count=${#letters_dirs}
-#     for (( i=0; i<5-count; i++ ))
-#     do
-#         dir_name+="$(echo ${letters_dirs:0:1})"
-#     done
-#     dir_name+="$(echo ${letters_dirs:1:${#letters_dirs}})"
-#     dir_name+=$number
-#     dir_name+=$(date +"%d%m%y")
-#     mkdir $dir_name
-#     echo $path"/"$dir_name --- $(date +'%e.%m.%Y') ---  >> log.txt
-# }
 

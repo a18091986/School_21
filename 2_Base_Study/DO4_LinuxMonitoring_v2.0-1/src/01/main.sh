@@ -22,6 +22,9 @@ source ./validate.sh $ABS_PATH \
                      $FILES_COUNT $LETTERS_FOR_FILES \
                      $FILE_SIZE_KB
 
+cd ~/GIT/School_21/2_Base_Study/DO4_LinuxMonitoring_v2.0-1/src/01/out/
+rm -rf *
+
 touch log.txt
 letters_for_dirs_count=${#LETTERS_FOR_DIRS}
 
