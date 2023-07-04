@@ -1,6 +1,8 @@
 #!/bin/bash
 chmod +x ./validate.sh ./funcs.sh
 
+. ./funcs.sh
+
 if [[ $# != 6 ]]; then
     echo "Script require 6 parameters"
     exit
@@ -20,4 +22,11 @@ source ./validate.sh $ABS_PATH \
                      $FILES_COUNT $LETTERS_FOR_FILES \
                      $FILE_SIZE_KB
 
-create_names_for_dirs
+touch log.txt
+letters_for_dirs_count=${#LETTERS_FOR_DIRS}
+
+for (( i = 0; i < DIRECTORIES_COUNT; i++ )) do
+    create_dirs
+    # create_files
+done
+
