@@ -10,11 +10,14 @@ function create_dirs {
                 dir_name+=${LETTERS_FOR_DIRS:1:letters_for_dirs_count}
             done
         else
-            :
+            dir_name+=${LETTERS_FOR_DIRS}
+            for (( j = 1; j < $n + 2; j++ )) do 
+                dir_name+=${LETTERS_FOR_DIRS:-1:}
+            done
         fi
         DATE_PART=$(date +%D | awk -F / '{print $2$1$3}')   
         dir_name+="_$DATE_PART"
-        mkdir $dir_name
+        mkdir $ABS_PATH/$dir_name
         echo $ABS_PATH"/"$dir_name "|" $(date +'%e.%m.%Y') "|" >> log.txt    
     done
 }
