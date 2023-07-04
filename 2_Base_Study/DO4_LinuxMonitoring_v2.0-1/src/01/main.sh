@@ -22,14 +22,14 @@ source ./validate.sh $ABS_PATH \
                      $FILES_COUNT $LETTERS_FOR_FILES \
                      $FILE_SIZE_KB
 
-rm -r /home/behappyman/out/*
+# rm -r /home/behappyman/out/*
 
 touch log.txt
+
 LETTERS_FOR_FILES_NAMES=$(echo "$LETTERS_FOR_FILES" | awk '{split($0,a,"."); print a[1]}')
-echo "$LETTERS_FOR_FILES_NAMES"
 FILE_EXT=$(echo "$LETTERS_FOR_FILES" | awk '{split($0,a,"."); print a[2]}')
-echo "$FILE_EXT"
 letters_for_dirs_count=${#LETTERS_FOR_DIRS}
-letters_for_files_count=${#LETTERS_FOR_FILES}
+letters_for_files_count=${#LETTERS_FOR_FILES_NAMES}
+
 create
 
