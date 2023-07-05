@@ -1,5 +1,6 @@
 function generate_ip {
     echo "$((RANDOM % 256)).$((RANDOM % 256)).$((RANDOM % 256)).$((RANDOM % 256))"
+    # echo "192.168.2.222"
 }
 
 function get_method {
