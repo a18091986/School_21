@@ -3,7 +3,7 @@
 error_flag=0
 
 regexp_dir_or_files_number='^[+]?[0-9]+$'
-regexp_file_size='^[0-9]+[.]?[0-9]+$'
+regexp_file_size='^[0-9]+(\.[0-9]+)?kb$'
 regexp_letters_for_dirs='^[a-z]{1,7}$'
 regexp_letters_for_file='^[a-z]{1,7}[.]{1}[a-z]{1,3}$'
 
@@ -47,7 +47,8 @@ if ! [[ $FILE_SIZE_KB =~ $regexp_file_size ]]; then
     echo -e "Error in six parameter: $FILE_SIZE_KB \n \
     - it must be positive integer or float number"
     error_flag=1
-else 
+else
+    size=$(echo "$FILE_SIZE_KB" | awk '{split($0,a,"kb"); print a[1]}') 
     if [[ $(echo "${FILE_SIZE_KB} > 100.0"|bc) -eq 1 ]]; then
     echo -e "Error in six parameter: $FILE_SIZE_KB \n \
     - file size must be 100 kb or less"
