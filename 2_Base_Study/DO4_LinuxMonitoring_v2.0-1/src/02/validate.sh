@@ -26,7 +26,7 @@ fi
 # проверка размера файлов 
 if ! [[ $FILE_SIZE_MB =~ $regexp_file_size ]]; then
     echo -e "Error in third parameter: $FILE_SIZE_MB \n \
-    - it must be positive integer or float number"
+    - it must be positive integer or float number with Mb on the end"
     error_flag=1
 else 
     size=$(echo "$FILE_SIZE_MB" | awk '{split($0,a,"Mb"); print a[1]}')

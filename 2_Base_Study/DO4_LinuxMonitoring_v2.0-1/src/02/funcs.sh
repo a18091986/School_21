@@ -84,13 +84,13 @@ function create_files {
             end_nano=$(date +'%s%N')
             end_time=$(date +'%Y-%m-%d %H:%M:%S')
             DIFF=$((( $end_nano - $start_nano ) / 1000000 ))
-            echo "End time: $end_time" > log.txt
-            echo "Script work duration: $DIF" > log.txt
+            echo "End time: $end_time" >> log.txt
+            echo "Script work duration: $DIFF" >> log.txt
 
             echo -e "Start time: $start_time\nEnd time: $end_time\nDuration: $DIFF ms"
             exit
         fi
-        echo $ABS_PATH$dir_name/$file_name "|" $(date +'%e.%m.%Y') "|" >> log.txt    
+        echo $ABS_PATH/$dir_name/$file_name "|" $(date +'%e.%m.%Y') "|" >> log.txt    
     done
 }
 

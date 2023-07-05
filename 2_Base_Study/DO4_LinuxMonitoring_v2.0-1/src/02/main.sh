@@ -34,14 +34,14 @@ DIRECTORIES_COUNT_CREATED=0
 
 start_nano=$(date +'%s%N')
 start_time=$(date +'%Y-%m-%d %H:%M:%S')
-echo "Start time: $start_time" > log.txt
+echo "Start time: $start_time" >> log.txt
 
 create
 
 end_nano=$(date +'%s%N')
 end_time=$(date +'%Y-%m-%d %H:%M:%S')
 DIFF=$((( $end_nano - $start_nano ) / 1000000 ))
-echo "End time: $end_time" > log.txt
-echo "Script work duration: $DIF" > log.txt
+echo "End time: $end_time" >> log.txt
+echo "Script work duration: $DIFF" >> log.txt
 
 echo -e "Start time: $start_time\nEnd time: $end_time\nDuration: $DIFF ms"
