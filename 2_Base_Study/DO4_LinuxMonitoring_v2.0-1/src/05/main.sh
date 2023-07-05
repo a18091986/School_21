@@ -3,6 +3,8 @@ chmod +x ./validate.sh ./funcs.sh
 
 . ./funcs.sh
 
+logs=$(find ../04/logs/ -type f)
+
 if [[ $# != 1 ]]; then
     echo "Script require 1 parameters"
     exit
