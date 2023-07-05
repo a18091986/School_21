@@ -13,7 +13,8 @@ CHOICE=$1
 source ./validate.sh $CHOICE
 
 case "$CHOICE" in
-1 ) clean_by_log;;
-2 ) clean_by_time;;
-3 ) clean_by_mask;;
+1 ) sort_answer_code;;
+2 ) uniq_ip;;
+3 ) errors_requests;;
+4 ) uniq_ip_among_errors_requests;;
 esac
