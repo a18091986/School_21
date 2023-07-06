@@ -47,7 +47,7 @@ iperf server
 <center>
 <br>
 
-![client](./img/5.PNG)
+![client](./img/6.PNG)
 
 iperf client
 
@@ -57,7 +57,7 @@ iperf client
 <center>
 <br>
 
-![graphana_connect](./img/6.PNG)
+![graphana_connect](./img/5.PNG)
 
 graphana dash
 
