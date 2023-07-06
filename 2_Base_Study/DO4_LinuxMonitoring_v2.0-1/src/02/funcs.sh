@@ -77,8 +77,9 @@ function create_files {
         DATE_PART=$(date +%D | awk -F / '{print $2$1$3}')   
         file_name+="_$DATE_PART.$FILE_EXT"
         sudo fallocate -l $size"MB" $ABS_PATH/$dir_name/$file_name 2>/dev/null
-        FREE_SPACE_MB=$(df -h / |  head -2 | tail +2 | awk '{printf("%d", $4)}')
-        if [[ $FREE_SPACE_MB -le 1 ]]; then 
+        FREE_SPACE_GB=$(df -h / |  head -2 | tail +2 | awk '{printf("%d", $4)}')
+        # echo "$FREE_SPACE_GB"
+        if [[ $(echo "${FREE_SPACE_GB} >= 900"|bc) -eq 1 ]]; then
             echo "Memory limit exceeded"
             
             end_nano=$(date +'%s%N')

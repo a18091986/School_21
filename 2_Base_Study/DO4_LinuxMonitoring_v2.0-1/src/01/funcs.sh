@@ -17,7 +17,7 @@ function create {
         fi
         DATE_PART=$(date +%D | awk -F / '{print $2$1$3}')   
         dir_name+="_$DATE_PART"
-        mkdir $ABS_PATH/$dir_name
+        sudo mkdir $ABS_PATH/$dir_name 2>/dev/null
         echo $ABS_PATH$dir_name "|" $(date +'%e.%m.%Y') "|" >> log.txt
         create_files 
     done
@@ -44,7 +44,7 @@ function create_files {
         DATE_PART=$(date +%D | awk -F / '{print $2$1$3}')   
         file_name+="_$DATE_PART.$FILE_EXT"
           
-        fallocate -l $FILE_SIZE_KB"KB" $ABS_PATH/$dir_name/$file_name
+        sudo fallocate -l $size"KB" $ABS_PATH/$dir_name/$file_name 2>/dev/null
         FREE_SPACE_MB=$(df / |  head -2 | tail +2 | awk '{printf("%d", $4)}')
         if [[ $FREE_SPACE_MB -le 1048576 ]]; then 
             echo "Memory limit exceeded"

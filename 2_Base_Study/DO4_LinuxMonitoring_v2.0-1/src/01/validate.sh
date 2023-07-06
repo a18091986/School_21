@@ -49,7 +49,7 @@ if ! [[ $FILE_SIZE_KB =~ $regexp_file_size ]]; then
     error_flag=1
 else
     size=$(echo "$FILE_SIZE_KB" | awk '{split($0,a,"kb"); print a[1]}') 
-    if [[ $(echo "${FILE_SIZE_KB} > 100.0"|bc) -eq 1 ]]; then
+    if [[ $(echo "${size} > 100.0"|bc) -eq 1 ]]; then
     echo -e "Error in six parameter: $FILE_SIZE_KB \n \
     - file size must be 100 kb or less"
     fi

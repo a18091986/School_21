@@ -17,7 +17,7 @@ function clean_by_mask {
     mask=$(echo "$in" | awk -F'_' '{print $1}')
     date=$(echo "$in" | awk -F'_' '{print $2}')
     find_regexp=".*$mask.*$date.*"
-    sudo find / -regex $find_regexp | sudo xargs rm -rf 
+    sudo find / -regex $find_regexp 2>/dev/null | sudo xargs rm -rf 2>/dev/null
 }
 
 function clean_by_time {

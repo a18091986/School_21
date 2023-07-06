@@ -22,7 +22,7 @@ source ./validate.sh $ABS_PATH \
                      $FILES_COUNT $LETTERS_FOR_FILES \
                      $FILE_SIZE_KB
 
-rm -r /home/behappyman/out/*
+# rm -r /home/behappyman/out/*
 
 touch log.txt
 
