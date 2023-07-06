@@ -1,11 +1,11 @@
 <center>
 <br>
 
-![graphana_connect](./img/1.PNG)
+![prometheus](./img/1.PNG)
 
-![graphana_connect](./img/2.PNG)
+![prometheus](./img/2.PNG)
 
-![graphana_connect](./img/3.PNG)
+![prometheus](./img/3.PNG)
 
 CPU, RAM, HDD
 
@@ -17,7 +17,7 @@ CPU, RAM, HDD
 <center>
 <br>
 
-![graphana_connect](./img/3.PNG)
+![prometheus](./img/4.PNG)
 
 HDD
 
@@ -29,7 +29,7 @@ HDD
 <center>
 <br>
 
-![graphana_connect](./img/4.PNG)
+![prometheus](./img/5.PNG)
 
 CPU
 
