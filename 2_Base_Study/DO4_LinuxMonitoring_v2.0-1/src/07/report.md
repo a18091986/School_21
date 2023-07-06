@@ -86,3 +86,29 @@ graphana dash
 
 <br>
 </center>
+
+- При запуске скрипта засорения файловой системы
+
+<center>
+<br>
+
+![graphana_connect](./img/7.PNG)
+
+graphana dash
+
+<br>
+</center>
+
+- При запуске утилиты stress
+
+<center>
+<br>
+
+![graphana_connect](./img/8.PNG)
+
+graphana dash
+
+<br>
+</center>
+
+
