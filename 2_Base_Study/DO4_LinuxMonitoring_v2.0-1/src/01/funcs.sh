@@ -50,7 +50,7 @@ function create_files {
             echo "Memory limit exceeded"
             exit 1
         fi
-        echo $ABS_PATH$dir_name/$file_name "|" $(date +'%e.%m.%Y') "|" >> log.txt    
+        echo $ABS_PATH$dir_name/$file_name "|" $(date +'%e.%m.%Y') "|" $size "kb">> log.txt    
     done
 }
 

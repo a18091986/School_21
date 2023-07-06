@@ -40,7 +40,7 @@ function choose_dir_path {
             if [[ $(echo "$?") == 0 ]]; then 
                 DIRECTORIES_COUNT_CREATED=$(($DIRECTORIES_COUNT_CREATED+1))
                 cd $work_dir
-                echo $DIRECTORIES_COUNT_CREATED "|" $ABS_PATH/$dir_name "|" $(date +'%e.%m.%Y') "|" >> log.txt
+                echo $ABS_PATH/$dir_name "|" $(date +'%e.%m.%Y') "|" >> log.txt
                 create_files
             fi
         fi 
@@ -91,7 +91,7 @@ function create_files {
             echo -e "Start time: $start_time\nEnd time: $end_time\nDuration: $DIFF ms"
             exit
         fi
-        echo $ABS_PATH/$dir_name/$file_name "|" $(date +'%e.%m.%Y') "|" >> log.txt    
+        echo $ABS_PATH/$dir_name/$file_name "|" $(date +'%e.%m.%Y') "|" $size "Mb">> log.txt    
     done
 }
 
