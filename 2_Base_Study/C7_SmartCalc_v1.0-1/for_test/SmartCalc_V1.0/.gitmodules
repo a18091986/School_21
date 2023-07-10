@@ -1,0 +1,3 @@
+[submodule "src/SmartCalcV1/QCP"]
+	path = src/SmartCalcV1/QCP
+	url = https://github.com/legerch/QCustomPlot-library.git

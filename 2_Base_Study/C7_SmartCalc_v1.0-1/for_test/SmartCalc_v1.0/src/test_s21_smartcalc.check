@@ -1,0 +1,685 @@
+#include <math.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+#include "s21_smartcalc.h"
+
+#test input_correct_validation
+/* --------------------------------------input_correct_validation---*/
+    
+    char *string = "2*1";
+    ck_assert_int_eq(input_validation(string), 0);
+
+    string = "0";
+    ck_assert_int_eq(input_validation(string), 0);
+
+    string = "cos(2*1)";
+    ck_assert_int_eq(input_validation(string), 0);
+
+    string = "+2*1*sin(cos(25*x))";
+    ck_assert_int_eq(input_validation(string), 0);
+
+    string = "002*1*sin(cos(25*x))";
+    ck_assert_int_eq(input_validation(string), 0);
+
+    string = "ln(2x*1)";
+    ck_assert_int_eq(input_validation(string), 0);
+
+    string = "sqrt(-2.2x*(-1))";
+    ck_assert_int_eq(input_validation(string), 0);
+
+    string = "0.5+ln(-2x*(-1.9))";
+    ck_assert_int_eq(input_validation(string), 0);
+
+    string = "-2mod3";
+    ck_assert_int_eq(input_validation(string), 0);
+
+    string = "2+cos(sin(25)modsin(cos(3x)))";
+    ck_assert_int_eq(input_validation(string), 0);
+
+    string = "-3^(-2)";
+    ck_assert_int_eq(input_validation(string), 0);
+
+    string = "123x";
+    ck_assert_int_eq(input_validation(string), 0);
+
+#test input_incorrect_validation
+/* --------------------------------------input_incorrect_validation---*/
+    
+    char *string = "2*cot(2*1)";
+    ck_assert_int_eq(input_validation(string), -1);
+
+    string = "";
+    ck_assert_int_eq(input_validation(string), -1);
+
+    string = " 2*1";
+    ck_assert_int_eq(input_validation(string), -1);
+
+    string = "(2*(1+))";
+    ck_assert_int_eq(input_validation(string), -1);
+
+    string = "(/2*(1+1))";
+    ck_assert_int_eq(input_validation(string), -1);
+
+    string = "ln(2x-(*1))";
+    ck_assert_int_eq(input_validation(string), -1);
+
+    string = "ln(2x*-1)";
+    ck_assert_int_eq(input_validation(string), -1);
+
+    string = "2*1-";
+    ck_assert_int_eq(input_validation(string), -1);
+    
+    string = "2*1*cos6";
+    ck_assert_int_eq(input_validation(string), -1);
+
+    string = "2.*1";
+    ck_assert_int_eq(input_validation(string), -1);
+
+    string = "2.*1";
+    ck_assert_int_eq(input_validation(string), -1);
+
+    string = "2*(.1)";
+    ck_assert_int_eq(input_validation(string), -1);
+
+    string = ".2*.1";
+    ck_assert_int_eq(input_validation(string), -1);
+
+    string = "2*1.";
+    ck_assert_int_eq(input_validation(string), -1);
+
+    string = "2*1-2t3+123";
+    ck_assert_int_eq(input_validation(string), -1);
+
+    string = "2*(1+2))-2";
+    ck_assert_int_eq(input_validation(string), -1);
+
+    string = "2*((1+2x5))-2";
+    ck_assert_int_eq(input_validation(string), -1);
+
+    string = "2*1-(3mod)-2";
+    ck_assert_int_eq(input_validation(string), -1);
+
+    string = "2*m*1";
+    ck_assert_int_eq(input_validation(string), -1);
+
+    string = "2+(1-mod)+123";
+    ck_assert_int_eq(input_validation(string), -1);
+
+    string = "-3^-2";
+    ck_assert_int_eq(input_validation(string), -1);
+
+    string = "2cos(0.5)";
+    ck_assert_int_eq(input_validation(string), -1);
+
+    string = "cos(0.5)cos(0.5)";
+    ck_assert_int_eq(input_validation(string), -1);
+
+    string = "cos(0.5)123";
+    ck_assert_int_eq(input_validation(string), -1);    
+
+    string = "cos(0.5)(1-0.5)";
+    ck_assert_int_eq(input_validation(string), -1);
+
+
+#test input_conversion_test
+/* --------------------------------------input_conversion_test---*/
+
+// input_conversion case 1
+
+    char *string_input = "-2+cos(sin(-25)modsin(+cos(66x)))";
+    char *correct_output = "-1*2+c(s(-1*25)ms(1*c(66*x)))";
+
+    char output_string_1[S21_MAX_TKN] = {};
+    s_tokens *output = NULL;
+
+    output = calloc(S21_MAX_TKN, sizeof(s_tokens));
+    if (output) {
+        input_conversion(string_input, output);
+        convertTokensToString(output, output_string_1);
+    } else {
+        printf("out of memory\n");
+    }
+    ck_assert_str_eq(output_string_1, correct_output);
+    free(output);
+   
+// input_conversion case 2
+
+    string_input = "x*sqrt(2*ln(-10)+tan(atan(25)+acos(asin(3x)))-log(123))";
+    correct_output = "x*V(2*l(-1*10)+t(T(25)+C(S(3*x)))-L(123))";
+
+    char output_string_2[S21_MAX_TKN] = {};
+    output = calloc(S21_MAX_TKN, sizeof(s_tokens));
+    if (output) {
+        input_conversion(string_input, output);
+        convertTokensToString(output, output_string_2);
+    } else {
+        printf("out of memory\n");
+    }
+    ck_assert_str_eq(output_string_2, correct_output);
+    free(output);
+
+// input_conversion case 4
+
+    string_input = "1123456789+123456789+123456789+123456789+123456789+123456789+123456789+123456789+123456789+123456789+123456789+123456789+123456789+123456789+123456789+123456789+123456789+123456789+123456789+123456789+123456789+123456789+123456789+123456789+123456789+12345";
+    output = calloc(S21_MAX_TKN, sizeof(s_tokens));
+    ck_assert_int_eq(input_conversion(string_input, output), S21_TOO_MUCH_ARGS);
+
+// input_conversion case 5
+
+    string_input = "(1-1+)";
+    ck_assert_int_eq(input_conversion(string_input, output), S21_INCORRECT_INPUT);
+    free(output);
+
+// input_conversion case 6
+
+    string_input = "123x-x";
+    correct_output = "123*x-x";
+
+    char output_string_6[S21_MAX_TKN] = {};
+    output = NULL;
+
+    output = calloc(S21_MAX_TKN, sizeof(s_tokens));
+    if (output) {
+        ck_assert_int_eq(input_conversion(string_input, output), 0);
+        convertTokensToString(output, output_string_6);
+    } else {
+        printf("out of memory\n");
+    }
+    ck_assert_str_eq(output_string_6, correct_output);
+    free(output);
+
+
+#test infix_to_postfix_conversion
+/* --------------------------------------infix_to_postfix_conversion---*/
+
+// infix_to_postfix case 1
+
+    char *string_input = "2/(3+2)*5";
+    char *correct_output = "232+/5*";
+
+    char *output_string = NULL;
+    s_tokens *infix = NULL;
+    s_tokens *postfix = NULL;
+
+    infix = calloc(S21_MAX_TKN, sizeof(s_tokens));
+    postfix = calloc(S21_MAX_TKN, sizeof(s_tokens));
+    output_string = calloc(S21_MAX_INPUT, sizeof(char));
+
+    if (infix && postfix) {
+        input_conversion(string_input, infix);
+        infix_to_postfix(infix, postfix);
+        convertTokensToString(postfix, output_string);
+    } else {
+        printf("out of memory\n");
+    }
+    ck_assert_str_eq(output_string, correct_output);
+
+    free(output_string);
+    free(infix);
+    free(postfix);
+
+// infix_to_postfix case 2
+
+    string_input = "x*sqrt(cos(2+7)+tan(2+5))";
+    correct_output = "x27+c25+t+V*";
+    
+
+    infix = calloc(S21_MAX_TKN, sizeof(s_tokens));
+    postfix = calloc(S21_MAX_TKN, sizeof(s_tokens));
+    output_string = calloc(S21_MAX_INPUT, sizeof(char));
+
+    if (infix && postfix) {
+        input_conversion(string_input, infix);
+        infix_to_postfix(infix, postfix);
+        convertTokensToString(postfix, output_string);
+    } else {
+        printf("out of memory\n");
+    }
+    ck_assert_str_eq(output_string, correct_output);
+
+    free(infix);
+    free(postfix);
+    free(output_string);
+
+// infix_to_postfix case 3
+
+    string_input = "-2+cos(sin(-25)modsin(+cos(66x)))";
+    correct_output = "-12*-125*s166x*c*smc+";
+
+    char output_string_3[S21_MAX_TKN] = {};
+
+    infix = calloc(S21_MAX_TKN, sizeof(s_tokens));
+    postfix = calloc(S21_MAX_TKN, sizeof(s_tokens));
+
+    if (infix && postfix) {
+        input_conversion(string_input, infix);
+        infix_to_postfix(infix, postfix);
+        convertTokensToString(postfix, output_string_3);
+    } else {
+        printf("out of memory\n");
+    }
+    ck_assert_str_eq(output_string_3, correct_output);
+
+    free(infix);
+    free(postfix);
+
+// infix_to_postfix case 4
+
+    string_input = "2^(2^3)";
+    correct_output = "223^^";
+
+    char output_string_4[S21_MAX_TKN] = {};
+
+    infix = calloc(S21_MAX_TKN, sizeof(s_tokens));
+    postfix = calloc(S21_MAX_TKN, sizeof(s_tokens));
+
+    if (infix && postfix) {
+        input_conversion(string_input, infix);
+        infix_to_postfix(infix, postfix);
+        convertTokensToString(postfix, output_string_4);
+    } else {
+        printf("out of memory\n");
+    }
+    ck_assert_str_eq(output_string_4, correct_output);
+
+    free(infix);
+    free(postfix);
+
+// infix_to_postfix case 5
+
+    string_input = "2^(2^3))";
+    correct_output = "";
+
+    char output_string_5[S21_MAX_TKN] = {};
+
+    infix = calloc(S21_MAX_TKN, sizeof(s_tokens));
+    postfix = calloc(S21_MAX_TKN, sizeof(s_tokens));
+
+    if (infix && postfix) {
+        input_conversion(string_input, infix);
+        infix_to_postfix(infix, postfix);
+        convertTokensToString(postfix, output_string_5);
+    } else {
+        printf("out of memory\n");
+    }
+    ck_assert_str_eq(output_string_5, correct_output);
+
+    free(infix);
+    free(postfix);
+
+#test calculation_test
+/* --------------------------------------calculation---*/
+
+// calculation case 1
+
+    char *string_input = "2/(3+2)*5";
+    char *correct_output = "2";
+    char *output_string = NULL;
+
+    output_string = calloc(S21_MAX_INPUT, sizeof(char));
+
+    if (output_string) {
+        calculation(string_input, NULL, output_string);
+    } else {
+        printf("out of memory\n");
+    }
+    ck_assert_str_eq(output_string, correct_output);
+
+    free(output_string);
+
+// calculation case 2
+
+    string_input = "cos(0.785)+sin(0.785)+tan(0.785)+acos(0.785)+asin(0.785)+atan(0.785)+ln(0.785)+log(0.785)+sqrt(0.785)";
+    correct_output = "5.1885416";
+
+    output_string = calloc(S21_MAX_INPUT, sizeof(char));
+
+    if (output_string) {
+        calculation(string_input, NULL, output_string);
+    } else {
+        printf("out of memory\n");
+    }
+    ck_assert_str_eq(output_string, correct_output);
+
+    free(output_string);
+
+// calculation case 3
+
+    string_input = "-2+cos(sin(-25)modsin(+cos(66)))-(19mod12)^2";
+    correct_output = "-50.2409403";
+
+    output_string = calloc(S21_MAX_INPUT, sizeof(char));
+
+    if (output_string) {
+        calculation(string_input, NULL, output_string);
+    } else {
+        printf("out of memory\n");
+    }
+    ck_assert_str_eq(output_string, correct_output);
+
+    free(output_string);
+
+// calculation case 4
+
+    string_input = "-2/0+123";
+    correct_output = "- INFINITY";
+
+    output_string = calloc(S21_MAX_INPUT, sizeof(char));
+
+    if (output_string) {
+        calculation(string_input, NULL, output_string);
+    } else {
+        printf("out of memory\n");
+    }
+    ck_assert_str_eq(output_string, correct_output);
+
+    free(output_string);
+
+// calculation case 5
+
+    string_input = "2/0";
+    correct_output = "INFINITY";
+
+    output_string = calloc(S21_MAX_INPUT, sizeof(char));
+
+    if (output_string) {
+        calculation(string_input, NULL, output_string);
+    } else {
+        printf("out of memory\n");
+    }
+    ck_assert_str_eq(output_string, correct_output);
+
+    free(output_string);
+
+// calculation case 6
+
+    string_input = "sqrt(cos(2+7)+tan(2+5))";
+    correct_output = "NaN";
+
+    output_string = calloc(S21_MAX_INPUT, sizeof(char));
+
+    if (output_string) {
+        calculation(string_input, NULL, output_string);
+    } else {
+        printf("out of memory\n");
+    }
+    ck_assert_str_eq(output_string, correct_output);
+
+    free(output_string);
+
+// calculation case 7
+
+    // 255 arguments input
+    string_input = "123456789+123456789+123456789+123456789+123456789+123456789+123456789+123456789+123456789+123456789+123456789+123456789+123456789+123456789+123456789+123456789+123456789+123456789+123456789+123456789+123456789+123456789+123456789+123456789+123456789+12345";
+    correct_output = "3086432070";
+
+    output_string = calloc(S21_MAX_INPUT, sizeof(char));
+
+    if (output_string) {
+        calculation(string_input, NULL, output_string);
+    } else {
+        printf("out of memory\n");
+    }
+    ck_assert_str_eq(output_string, correct_output);
+
+    free(output_string);
+
+// calculation case 7
+
+    string_input = "2x+5";
+    correct_output = "ENTER X VALUE";
+
+    output_string = calloc(S21_MAX_INPUT, sizeof(char));
+
+    if (output_string) {
+        calculation(string_input, NULL, output_string);
+    } else {
+        printf("out of memory\n");
+    }
+    ck_assert_str_eq(output_string, correct_output);
+
+    free(output_string);
+
+// calculation case 8
+
+    string_input = "2x+5";
+    double x = 10;
+    correct_output = "25";
+
+    output_string = calloc(S21_MAX_INPUT, sizeof(char));
+
+    if (output_string) {
+        calculation(string_input, &x, output_string);
+    } else {
+        printf("out of memory\n");
+    }
+    ck_assert_str_eq(output_string, correct_output);
+
+    free(output_string);
+
+// calculation case 9
+
+    string_input = "123456*78910111213";
+    correct_output = "9.741926690e+15";
+
+    output_string = calloc(S21_MAX_INPUT, sizeof(char));
+
+    if (output_string) {
+        calculation(string_input, NULL, output_string);
+    } else {
+        printf("out of memory\n");
+    }
+    ck_assert_str_eq(output_string, correct_output);
+
+    free(output_string);
+
+
+// calculation case 10
+
+    string_input = "12cos(3)456*78910111213";
+    correct_output = "INCORRECT INPUT";
+
+    output_string = calloc(S21_MAX_INPUT, sizeof(char));
+
+    if (output_string) {
+        calculation(string_input, NULL, output_string);
+    } else {
+        printf("out of memory\n");
+    }
+    ck_assert_str_eq(output_string, correct_output);
+
+    free(output_string);
+
+// calculation case 11
+
+    string_input = "12x+1";
+    correct_output = "WRONG X VALUE";
+    x = INFINITY;
+
+    output_string = calloc(S21_MAX_INPUT, sizeof(char));
+
+    if (output_string) {
+        calculation(string_input, &x, output_string);
+    } else {
+        printf("out of memory\n");
+    }
+    ck_assert_str_eq(output_string, correct_output);
+
+    free(output_string);
+
+
+#test helpers_test
+/* --------------------------------------helpers---*/
+
+char *input = "1234.4321";
+ck_assert_int_eq(isNotNumberInString(input),0);
+
+input = "-1234.4321";
+ck_assert_int_eq(isNotNumberInString(input),0);
+
+input = "1234.432.1";
+ck_assert_int_eq(isNotNumberInString(input),1);
+
+input = "123w4";
+ck_assert_int_eq(isNotNumberInString(input),1);
+
+input = ".123";
+ck_assert_int_eq(isNotNumberInString(input),1);
+
+
+input = "723232323.19";
+char output[128];
+convertToFinancialOutputNumber(input, output);
+
+input = "523.19";
+convertToFinancialOutputNumber(input, output);
+
+/* --------------------------------------BONUS PART--------------------------------------*/
+
+#test credit_test
+/* --------------------------------------credit---*/
+
+long double loan = 50000;
+long double interestRate = 22.0;
+long double firstPayment = 0;
+long double lastPayment = 0;
+int term = 12;
+ck_assert_double_eq_tol(total_payment(loan, interestRate, term, S21_ANNUITANTS, &firstPayment, &lastPayment), 56156.64, 10e-2);
+ck_assert_double_eq_tol(firstPayment, 4679.72, 10e-2);
+
+ck_assert_double_eq_tol(total_payment(loan, interestRate, term, S21_DIFFERENTIATED, &firstPayment, &lastPayment), 55958.33, 10e-2);
+ck_assert_double_eq_tol(firstPayment, 5083.33, 10e-2);
+ck_assert_double_eq_tol(lastPayment, 4243.06, 10e-2);
+
+ck_assert_double_eq_tol(total_payment(loan, interestRate, term, 5, &firstPayment, &lastPayment), -1, 10e-2);
+ck_assert_double_eq_tol(total_payment(loan, interestRate, 0, 5, &firstPayment, &lastPayment), -1, 10e-2);
+
+#test deposit_test
+
+    s_deposit deposit = {
+        .amount = 1000,
+        .term = 12,
+        .interest_rate = 12,
+        .periodicity = 1,
+        .capitalization = 1,
+    };
+    deposit_calculation(&deposit);
+    ck_assert_double_eq_tol(deposit.accrued_interest, 126.82, 10e-2);
+    ck_assert_double_eq_tol(deposit.tax_amount, 0, 10e-2);
+    ck_assert_double_eq_tol(deposit.amount_by_end, 1126.83, 10e-2);
+
+    deposit = (s_deposit){
+        .amount = 1000,
+        .term = 12,
+        .interest_rate = 12,
+        .periodicity = 1,
+        .capitalization = 0,
+    };
+    deposit_calculation(&deposit);
+    ck_assert_double_eq_tol(deposit.accrued_interest, 120.00, 10e-2);
+    ck_assert_double_eq_tol(deposit.tax_amount, 0, 10e-2);
+    ck_assert_double_eq_tol(deposit.amount_by_end, 1000.00, 10e-2);
+
+    deposit = (s_deposit){
+        .amount = 1000,
+        .term = 12,
+        .interest_rate = 12,
+        .periodicity = 2,
+        .capitalization = 1,
+    };
+    deposit_calculation(&deposit);
+    ck_assert_double_eq_tol(deposit.accrued_interest, 126.16, 10e-2);
+    ck_assert_double_eq_tol(deposit.tax_amount, 0, 10e-2);
+    ck_assert_double_eq_tol(deposit.amount_by_end, 1126.16, 10e-2);
+
+    deposit = (s_deposit){
+        .amount = 1000,
+        .term = 12,
+        .interest_rate = 12,
+        .periodicity = 2,
+        .capitalization = 0,
+        .tax_rate = 50
+    };
+    deposit_calculation(&deposit);
+    ck_assert_double_eq_tol(deposit.accrued_interest, 60, 10e-2);
+    ck_assert_double_eq_tol(deposit.tax_amount, 60, 10e-2);
+    ck_assert_double_eq_tol(deposit.amount_by_end, 1000, 10e-2);
+
+    deposit = (s_deposit){
+        .amount = 1000000,
+        .term = 12,
+        .interest_rate = 12,
+        .periodicity = 1,
+        .capitalization = 0,
+        .tax_rate = 0,
+        .replenishment = 1000,
+	    .freq_of_replen = 2
+    };
+    deposit_calculation(&deposit);
+    ck_assert_double_eq_tol(deposit.accrued_interest, 120300, 10e-2);
+    ck_assert_double_eq_tol(deposit.tax_amount, 0, 10e-2);
+    ck_assert_double_eq_tol(deposit.amount_by_end, 1006000, 10e-2);
+
+    deposit = (s_deposit){
+        .amount = 1000000,
+        .term = 12,
+        .interest_rate = 12,
+        .periodicity = 1,
+        .capitalization = 0,
+        .tax_rate = 0,
+        .withdrawal = 1000,
+	    .freq_of_withd = 1
+    };
+    deposit_calculation(&deposit);
+    ck_assert_double_eq_tol(deposit.accrued_interest, 119340, 10e-2);
+    ck_assert_double_eq_tol(deposit.tax_amount, 0, 10e-2);
+    ck_assert_double_eq_tol(deposit.amount_by_end, 988000, 10e-2);
+    
+    deposit = (s_deposit){
+        .amount = 1000,
+        .term = 12,
+        .interest_rate = 12,
+        .periodicity = 2,
+        .capitalization = 0,
+        .tax_rate = 50,
+        .accrued_interest = 123,
+        .tax_amount = 123,
+        .amount_by_end = 123
+    };
+    deposit_calculation(&deposit);
+    ck_assert_double_eq_tol(deposit.accrued_interest, 60, 10e-2);
+    ck_assert_double_eq_tol(deposit.tax_amount, 60, 10e-2);
+    ck_assert_double_eq_tol(deposit.amount_by_end, 1000, 10e-2);
+
+    deposit = (s_deposit){
+        .amount = 1000000,
+        .term = 12,
+        .interest_rate = 12,
+        .periodicity = 1,
+        .capitalization = 1,
+        .tax_rate = 0,
+        .replenishment = 1000,
+	    .freq_of_replen = 2
+    };
+    deposit_calculation(&deposit);
+    ck_assert_double_eq_tol(deposit.accrued_interest, 127134.73, 10e-2);
+    ck_assert_double_eq_tol(deposit.tax_amount, 0, 10e-2);
+    ck_assert_double_eq_tol(deposit.amount_by_end, 1133134.73, 10e-2);
+
+    deposit = (s_deposit){
+        .amount = 1000000,
+        .term = 12,
+        .interest_rate = 12,
+        .periodicity = 1,
+        .capitalization = 1,
+        .tax_rate = 0,
+        .withdrawal = 1000,
+	    .freq_of_withd = 1
+    };
+    
+    deposit_calculation(&deposit);
+    ck_assert_double_eq_tol(deposit.accrued_interest, 126142.53, 10e-2);
+    ck_assert_double_eq_tol(deposit.tax_amount, 0, 10e-2);
+    ck_assert_double_eq_tol(deposit.amount_by_end, 1114142.53, 10e-2);

@@ -2,3 +2,7 @@
 *.o
 *.idea
 .vscode
+*.txt
+*.log
+whoerconfigs
+whoerconfigs.zip

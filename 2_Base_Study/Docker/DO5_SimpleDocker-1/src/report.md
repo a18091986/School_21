@@ -1,0 +1,611 @@
+## Part 1. Готовый докер
+
+- Взять официальный докер образ с nginx и выкачать его при помощи docker pull. 
+- Проверить наличие докер образа через docker images. 
+
+<center>
+<br>
+
+![pull + images](./imgs/1_docker_pull_images.PNG)
+
+получение образа и проверка его наличия
+
+<br>
+</center>
+
+- Запустить докер образ через docker run -d [image_id|repository]
+- Проверить, что образ запустился через docker ps
+
+<center>
+<br>
+
+![pull + images](./imgs/1_docker_ps_run.PNG)
+
+запуск
+
+<br>
+</center>
+
+- Посмотреть информацию о контейнере через docker inspect [container_id|container_name]
+- По выводу команды определить и поместить в отчёт размер контейнера, список замапленных портов и ip контейнера
+
+<center>
+<br>
+
+![pull + images](./imgs/1_docker_inspect_1.PNG)
+
+<br>
+
+<br>
+
+![pull + images](./imgs/1_docker_inspect_2.PNG)
+
+<br>
+
+<br>
+
+![pull + images](./imgs/1_docker_inspect_3.PNG)
+
+<br>
+
+<br>
+
+![pull + images](./imgs/1_docker_inspect_4.PNG)
+
+<br>
+
+информация о портах, размере, ip
+</center>
+
+- Остановить докер образ через docker stop [container_id|container_name]
+- Проверить, что образ остановился через docker ps
+
+<center>
+
+<br>
+
+![pull + images](./imgs/1_docker_stop_ps.PNG)
+
+<br>
+
+информация о портах, размере, ip
+
+</center>
+
+
+- Запустить докер с портами 80 и 443 в контейнере, замапленными на такие же порты на локальной машине, через команду run
+
+<center>
+
+<br>
+
+![pull + images](./imgs/1_docker_run_ports_mapping.PNG)
+
+<br>
+
+проброс портов
+
+</center>
+
+- Проверить, что в браузере по адресу localhost:80 доступна стартовая страница nginx
+
+<center>
+
+<br>
+
+![pull + images](./imgs/1_docker_nginx_80.PNG)
+
+<br>
+
+стартовая страницы nginx на localhost
+
+</center>
+
+- Перезапустить докер контейнер через docker restart [container_id|container_name]
+- Проверить любым способом, что контейнер запустился
+
+<center>
+
+<br>
+
+![pull + images](./imgs/1_docker_restart.PNG)
+
+<br>
+
+перезапуск контейнера
+
+</center>
+
+## Part 2. Операции с контейнером
+Докер образ и контейнер готовы. Теперь можно покопаться в конфигурации nginx и отобразить статус страницы.
+
+- Прочитать конфигурационный файл nginx.conf внутри докер контейнера через команду exec
+
+<center>
+
+<br>
+
+![pull + images](./imgs/2_1.PNG)
+![pull + images](./imgs/2_1_1.PNG)
+
+<br>
+
+nginx.conf внутри контейнера
+
+</center>
+
+- Создать на локальной машине файл nginx.conf
+- Настроить в нем по пути /status отдачу страницы статуса сервера nginx
+
+<center>
+
+<br>
+
+![pull + images](./imgs/2_create_nginx_conf.PNG)
+
+<br>
+
+создание nginx.conf и настройка страницы статуса
+
+</center>
+
+- Скопировать созданный файл nginx.conf внутрь докер образа через команду docker cp
+- Перезапустить nginx внутри докер образа через команду exec
+
+<center>
+
+<br>
+
+![pull + images](./imgs/2_copy_nginx_conf.PNG)
+
+<br>
+
+копирование конфигурационного файла, перезапуск nginx
+
+</center>
+
+- Проверить, что по адресу localhost:80/status отдается страничка со статусом сервера nginx
+
+<center>
+
+<br>
+
+![pull + images](./imgs/2_status.PNG)
+
+<br>
+
+копирование конфигурационного файла, перезапуск nginx
+
+</center>
+
+- Экспортировать контейнер в файл container.tar через команду export
+- Остановить контейнер
+
+<center>
+
+<br>
+
+![pull + images](./imgs/2_save_stop.PNG)
+
+<br>
+
+экспорт контейнера, остановка
+
+</center>
+
+- Удалить образ через docker rmi [image_id|repository], не удаляя перед этим контейнеры
+- Удалить остановленный контейнер
+
+<center>
+
+<br>
+
+![pull + images](./imgs/2_rm_image_container.PNG)
+
+<br>
+
+удаление образа, контейнера
+
+</center>
+
+- Импортировать контейнер обратно через команду import
+- Запустить импортированный контейнер
+
+<center>
+
+<br>
+
+![pull + images](./imgs/2_import_run.PNG)
+
+<br>
+
+импорт, запуск
+
+</center>
+
+usefull: https://qna.habr.com/q/240643
+
+- Проверить, что по адресу localhost:80/status отдается страничка со статусом сервера nginx
+
+<center>
+
+<br>
+
+![pull + images](./imgs/2_status_after_restart.PNG)
+
+<br>
+
+страница статуса после перезапуска
+
+</center>
+
+## Part 3. Мини веб-сервер
+Настало время немного оторваться от докера, чтобы подготовиться к последнему этапу. Настало время написать свой сервер.
+== Задание ==
+
+- Написать мини сервер на C и FastCgi, который будет возвращать простейшую страничку с надписью Hello World!
+
+<center>
+
+<br>
+
+![pull + images](./imgs/3_server.PNG)
+
+<br>
+
+код сервера
+
+</center>
+
+- Запустить написанный мини сервер через spawn-fcgi на порту 8080
+
+<center>
+
+<br>
+
+![pull + images](./imgs/3_start_server.PNG)
+
+<br>
+
+запуск сервера на порту 8080
+
+</center>
+
+- Написать свой nginx.conf, который будет проксировать все запросы с 81 порта на 127.0.0.1:8080
+
+<center>
+
+<br>
+
+![pull + images](./imgs/3_nginx_conf.PNG)
+
+<br>
+
+nginx.conf
+
+</center>
+
+- Проверить, что в браузере по localhost:81 отдается написанная вами страничка
+
+sudo nginx -s reload
+
+<center>
+
+<br>
+
+![pull + images](./imgs/3_hellow_world.PNG)
+
+<br>
+
+hello world
+
+</center>
+
+- Положить файл nginx.conf по пути ./nginx/nginx.conf (это понадобится позже)
+
+## Part 4. Свой докер
+Теперь всё готово. Можно приступать к написанию докер образа для созданного сервера. При написании докер образа избегайте множественных вызовов команд RUN
+
+- Написать свой докер образ, который:
+
+1) собирает исходники мини сервера на FastCgi из Части 3
+
+2) запускает его на 8080 порту
+
+3) копирует внутрь образа написанный ./nginx/nginx.conf
+
+4) запускает nginx.
+nginx можно установить внутрь докера самостоятельно, а можно воспользоваться готовым образом с nginx'ом, как базовым.
+
+<center>
+
+<br>
+
+![pull + images](./imgs/4_dockerfile.PNG)
+
+<br>
+
+dockerfile
+
+</center>
+
+- Собрать написанный докер образ через docker build при этом указав имя и тег
+
+<center>
+
+<br>
+
+![pull + images](./imgs/4_build_name_tag.PNG)
+
+<br>
+
+build
+
+</center>
+
+- Проверить через docker images, что все собралось корректно
+
+<center>
+
+<br>
+
+![pull + images](./imgs/4_docker_images.PNG)
+
+<br>
+
+images
+
+</center>
+
+- Запустить собранный докер образ с маппингом 81 порта на 80 на локальной машине и маппингом папки ./nginx внутрь контейнера по адресу, где лежат конфигурационные файлы nginx'а (см. Часть 2)
+
+<center>
+
+<br>
+
+![pull + images](./imgs/4_docker_run_map.PNG)
+
+<br>
+
+hello world
+
+</center>
+
+- Проверить, что по localhost:80 доступна страничка написанного мини сервера
+
+<center>
+
+<br>
+
+![pull + images](./imgs/4_localhost.PNG)
+
+<br>
+
+hello world
+
+</center>
+
+- Дописать в ./nginx/nginx.conf проксирование странички /status, по которой надо отдавать статус сервера nginx
+
+<center>
+
+<br>
+
+![pull + images](./imgs/4_nginx_conf_status.PNG)
+
+<br>
+
+hello world
+
+</center>
+
+- Перезапустить докер образ. Если всё сделано верно, то, после сохранения файла и перезапуска контейнера, конфигурационный файл внутри докер образа должен обновиться самостоятельно без лишних действий. Проверить, что теперь по localhost:80/status отдается страничка со статусом nginx
+
+<center>
+
+<br>
+
+![pull + images](./imgs/4_status.PNG)
+
+<br>
+
+hello world
+
+</center>
+
+## Part 5. Dockle
+
+- Просканировать образ из предыдущего задания через dockle [image_id|repository]
+
+<center>
+
+<br>
+
+![pull + images](./imgs/5_dockle_errors.PNG)
+
+<br>
+
+dockle check
+
+</center>
+
+- Исправить образ так, чтобы при проверке через dockle не было ошибок и предупреждений
+
+<center>
+
+<br>
+
+![pull + images](./imgs/5_conf.PNG)
+
+<br>
+
+исправленный докер файл
+
+</center>
+
+<center>
+
+<br>
+
+![pull + images](./imgs/5_dockle_ver2.PNG)
+
+<br>
+
+dockle check повторно
+
+</center>
+
+## Part 6. Базовый Docker Compose
+
+Вот вы и закончили вашу разминку. А хотя погодите...
+Почему бы не поэкспериментировать с развёртыванием проекта, состоящего сразу из нескольких докер образов?
+== Задание ==
+
+- Написать файл docker-compose.yml, с помощью которого:
+
+1) Поднять докер контейнер из Части 5 (он должен работать в локальной сети, т.е. не нужно использовать инструкцию EXPOSE и мапить порты на локальную машину)
+
+<center>
+
+<br>
+
+![pull + images](./imgs/6_old_nginx_without_mapping.PNG)
+
+<br>
+
+nginx from part5 without mapping
+
+</center>
+
+<center>
+
+<br>
+
+![pull + images](./imgs/6_old_nginx_without_mapping_ip.PNG)
+
+<br>
+
+ip 
+
+</center>
+
+2) Поднять докер контейнер с nginx, который будет проксировать все запросы с 8080 порта на 81 порт первого контейнера
+
+<center>
+
+<br>
+
+![pull + images](./imgs/6_new_nginx_conf_ip.PNG)
+
+<br>
+
+clear nginx with proxy by ip
+
+</center>
+
+<center>
+
+<br>
+
+![pull + images](./imgs/6_new_nginx_dockerfile.PNG)
+
+<br>
+
+clear nginx dockerfile
+
+</center>
+
+- Замапить 8080 порт второго контейнера на 80 порт локальной машины
+
+<center>
+
+<br>
+
+![pull + images](./imgs/6_new_nginx_80_8080.PNG)
+
+<br>
+
+clear nginx start with port mapping
+
+</center>
+
+
+
+<center>
+
+<br>
+
+![pull + images](./imgs/6_new_nginx_80_8080_web.PNG)
+
+<br>
+
+localhost web
+
+</center>
+
+- Остановить все запущенные контейнеры
+
+<center>
+
+<br>
+
+![pull + images](./imgs/6_stop.PNG)
+
+<br>
+
+stop
+
+</center>
+
+Собрать и запустить проект с помощью команд docker-compose build и docker-compose up
+
+<center>
+
+<br>
+
+![pull + images](./imgs/6_hostname.PNG)
+
+<br>
+
+nginx conf on new server
+
+</center>
+
+<center>
+
+<br>
+
+![pull + images](./imgs/6_compose.PNG)
+
+<br>
+
+docker compose
+
+</center>
+
+<center>
+
+<br>
+
+![pull + images](./imgs/running.PNG)
+
+<br>
+
+running after docker compose
+
+</center>
+
+
+- Проверить, что в браузере по localhost:80 отдается написанная вами страничка, как и ранее
+
+<center>
+
+<br>
+
+![pull + images](./imgs/6_new_nginx_80_8080_web.PNG)
+
+<br>
+
+localhost web
+
+</center>
