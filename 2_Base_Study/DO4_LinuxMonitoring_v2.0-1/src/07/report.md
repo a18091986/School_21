@@ -61,9 +61,9 @@ graphana connect prometheus
 
 - - disk I/O 
 
-rate(node_disk_reads_completed_total{device="sda", instance="localhost:9100"}[1m])
+rate(node_disk_reads_completed_total{device="sda", instance="localhost:9100"}[1m]) / 100
 
-rate(node_disk_writes_completed_total{device="sda", instance="localhost:9100"}[1m])
+rate(node_disk_writes_completed_total{device="sda", instance="localhost:9100"}[1m]) / 100
 
 - - current mem usage
 

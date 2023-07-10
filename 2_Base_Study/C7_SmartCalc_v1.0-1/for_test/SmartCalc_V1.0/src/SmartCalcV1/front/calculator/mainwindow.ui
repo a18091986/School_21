@@ -1,0 +1,1765 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>888</width>
+    <height>350</height>
+   </rect>
+  </property>
+  <property name="font">
+   <font>
+    <pointsize>4</pointsize>
+   </font>
+  </property>
+  <property name="windowTitle">
+   <string>MainWindow</string>
+  </property>
+  <property name="styleSheet">
+   <string notr="true">QMainWindow{
+	background-color: rgb(42, 43, 44);
+	min-height: 350px;
+	max-height: 350px;
+	min-width: 888px; 
+	max-width: 888px;
+}</string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <widget class="QLabel" name="inputLine_calc">
+    <property name="geometry">
+     <rect>
+      <x>353</x>
+      <y>0</y>
+      <width>541</width>
+      <height>50</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>Helvetica Neue</family>
+      <pointsize>40</pointsize>
+      <italic>false</italic>
+     </font>
+    </property>
+    <property name="layoutDirection">
+     <enum>Qt::LeftToRight</enum>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">QLabel {
+	color: white;
+}</string>
+    </property>
+    <property name="text">
+     <string>0</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+    </property>
+    <property name="margin">
+     <number>0</number>
+    </property>
+    <property name="indent">
+     <number>15</number>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pushButton_AC">
+    <property name="geometry">
+     <rect>
+      <x>603</x>
+      <y>55</y>
+      <width>72</width>
+      <height>50</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>28</pointsize>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">QPushButton {
+    border: 1px solid rgb(42, 42, 42);
+    background-color: rgb(58, 57, 57);
+    min-width: 70px;
+	color: white;
+}
+QPushButton:pressed {
+    background-color: rgb(97, 96, 96);
+}
+
+QPushButton:flat {
+    border: none; /* no border for a flat push button */
+}
+
+QPushButton:default {
+    border-color: navy; /* make the default button prominent */
+}</string>
+    </property>
+    <property name="text">
+     <string>AC</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pushButton_pow">
+    <property name="geometry">
+     <rect>
+      <x>745</x>
+      <y>55</y>
+      <width>72</width>
+      <height>50</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>28</pointsize>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">QPushButton {
+    border: 1px solid rgb(42, 42, 42);
+    background-color: rgb(58, 57, 57);
+    min-width: 70px;
+	color: white;
+}
+QPushButton:pressed {
+    background-color: rgb(97, 96, 96);
+}
+
+QPushButton:flat {
+    border: none; /* no border for a flat push button */
+}
+
+QPushButton:default {
+    border-color: navy; /* make the default button prominent */
+}</string>
+    </property>
+    <property name="text">
+     <string>^</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pushButton_mod">
+    <property name="geometry">
+     <rect>
+      <x>519</x>
+      <y>55</y>
+      <width>85</width>
+      <height>50</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>28</pointsize>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">QPushButton {
+    border: 1px solid rgb(42, 42, 42);
+    background-color: rgb(58, 57, 57);
+    min-width: 70px;
+	color: white;
+}
+QPushButton:pressed {
+    background-color: rgb(97, 96, 96);
+}
+
+QPushButton:flat {
+    border: none; /* no border for a flat push button */
+}
+
+QPushButton:default {
+    border-color: navy; /* make the default button prominent */
+}</string>
+    </property>
+    <property name="text">
+     <string>mod</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pushButton_div">
+    <property name="geometry">
+     <rect>
+      <x>816</x>
+      <y>104</y>
+      <width>72</width>
+      <height>50</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>28</pointsize>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">QPushButton {
+    border: 1px solid rgb(42, 42, 42);
+    background-color: rgb(241, 164, 60);
+    min-width: 70px;
+	color: white;
+}
+
+QPushButton:pressed {
+    background-color: rgb(192, 129, 45);
+}
+
+QPushButton:flat {
+    border: none; /* no border for a flat push button */
+}
+
+QPushButton:default {
+    border-color: navy; /* make the default button prominent */
+}</string>
+    </property>
+    <property name="text">
+     <string>÷</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pushButton_9">
+    <property name="geometry">
+     <rect>
+      <x>745</x>
+      <y>104</y>
+      <width>72</width>
+      <height>50</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>28</pointsize>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">QPushButton {
+    border: 1px solid rgb(42, 42, 42);
+    background-color: rgb(95, 95, 95);
+    min-width: 70px;
+	color: white;
+}
+
+QPushButton:pressed {
+    background-color:  rgb(160, 159, 159);
+}
+
+QPushButton:flat {
+    border: none; /* no border for a flat push button */
+}
+
+QPushButton:default {
+    border-color: navy; /* make the default button prominent */
+}</string>
+    </property>
+    <property name="text">
+     <string>9</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pushButton_7">
+    <property name="geometry">
+     <rect>
+      <x>603</x>
+      <y>104</y>
+      <width>72</width>
+      <height>50</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>28</pointsize>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">QPushButton {
+    border: 1px solid rgb(42, 42, 42);
+    background-color: rgb(95, 95, 95);
+    min-width: 70px;
+	color: white;
+}
+
+QPushButton:pressed {
+    background-color:  rgb(160, 159, 159);
+}
+
+QPushButton:flat {
+    border: none; /* no border for a flat push button */
+}
+
+QPushButton:default {
+    border-color: navy; /* make the default button prominent */
+}</string>
+    </property>
+    <property name="text">
+     <string>7</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pushButton_8">
+    <property name="geometry">
+     <rect>
+      <x>674</x>
+      <y>104</y>
+      <width>72</width>
+      <height>50</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>28</pointsize>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">QPushButton {
+    border: 1px solid rgb(42, 42, 42);
+    background-color: rgb(95, 95, 95);
+    min-width: 70px;
+	color: white;
+}
+
+QPushButton:pressed {
+    background-color:  rgb(160, 159, 159);
+}
+
+QPushButton:flat {
+    border: none; /* no border for a flat push button */
+}
+
+QPushButton:default {
+    border-color: navy; /* make the default button prominent */
+}</string>
+    </property>
+    <property name="text">
+     <string>8</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pushButton_mul">
+    <property name="geometry">
+     <rect>
+      <x>816</x>
+      <y>55</y>
+      <width>72</width>
+      <height>50</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>28</pointsize>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">QPushButton {
+    border: 1px solid rgb(42, 42, 42);
+    background-color: rgb(241, 164, 60);
+    min-width: 70px;
+	color: white;
+}
+
+QPushButton:pressed {
+    background-color: rgb(192, 129, 45);
+}
+
+QPushButton:flat {
+    border: none; /* no border for a flat push button */
+}
+
+QPushButton:default {
+    border-color: navy; /* make the default button prominent */
+}</string>
+    </property>
+    <property name="text">
+     <string>×</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pushButton_6">
+    <property name="geometry">
+     <rect>
+      <x>745</x>
+      <y>153</y>
+      <width>72</width>
+      <height>50</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>28</pointsize>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">QPushButton {
+    border: 1px solid rgb(42, 42, 42);
+    background-color: rgb(95, 95, 95);
+    min-width: 70px;
+	color: white;
+}
+
+QPushButton:pressed {
+    background-color:  rgb(160, 159, 159);
+}
+
+QPushButton:flat {
+    border: none; /* no border for a flat push button */
+}
+
+QPushButton:default {
+    border-color: navy; /* make the default button prominent */
+}</string>
+    </property>
+    <property name="text">
+     <string>6</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pushButton_4">
+    <property name="geometry">
+     <rect>
+      <x>603</x>
+      <y>153</y>
+      <width>72</width>
+      <height>50</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>28</pointsize>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">QPushButton {
+    border: 1px solid rgb(42, 42, 42);
+    background-color: rgb(95, 95, 95);
+    min-width: 70px;
+	color: white;
+}
+
+QPushButton:pressed {
+    background-color:  rgb(160, 159, 159);
+}
+
+QPushButton:flat {
+    border: none; /* no border for a flat push button */
+}
+
+QPushButton:default {
+    border-color: navy; /* make the default button prominent */
+}</string>
+    </property>
+    <property name="text">
+     <string>4</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pushButton_5">
+    <property name="geometry">
+     <rect>
+      <x>674</x>
+      <y>153</y>
+      <width>72</width>
+      <height>50</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>28</pointsize>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">QPushButton {
+    border: 1px solid rgb(42, 42, 42);
+    background-color: rgb(95, 95, 95);
+    min-width: 70px;
+	color: white;
+}
+
+QPushButton:pressed {
+    background-color:  rgb(160, 159, 159);
+}
+
+QPushButton:flat {
+    border: none; /* no border for a flat push button */
+}
+
+QPushButton:default {
+    border-color: navy; /* make the default button prominent */
+}</string>
+    </property>
+    <property name="text">
+     <string>5</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pushButton_minus">
+    <property name="geometry">
+     <rect>
+      <x>816</x>
+      <y>153</y>
+      <width>72</width>
+      <height>50</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>28</pointsize>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">QPushButton {
+    border: 1px solid rgb(42, 42, 42);
+    background-color: rgb(241, 164, 60);
+    min-width: 70px;
+	color: white;
+}
+
+QPushButton:pressed {
+    background-color: rgb(192, 129, 45);
+}
+
+QPushButton:flat {
+    border: none; /* no border for a flat push button */
+}
+
+QPushButton:default {
+    border-color: navy; /* make the default button prominent */
+}</string>
+    </property>
+    <property name="text">
+     <string>-</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pushButton_2">
+    <property name="geometry">
+     <rect>
+      <x>674</x>
+      <y>202</y>
+      <width>72</width>
+      <height>50</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>28</pointsize>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">QPushButton {
+    border: 1px solid rgb(42, 42, 42);
+    background-color: rgb(95, 95, 95);
+    min-width: 70px;
+	color: white;
+}
+
+QPushButton:pressed {
+    background-color:  rgb(160, 159, 159);
+}
+
+QPushButton:flat {
+    border: none; /* no border for a flat push button */
+}
+
+QPushButton:default {
+    border-color: navy; /* make the default button prominent */
+}</string>
+    </property>
+    <property name="text">
+     <string>2</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pushButton_1">
+    <property name="geometry">
+     <rect>
+      <x>603</x>
+      <y>202</y>
+      <width>72</width>
+      <height>50</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>28</pointsize>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">QPushButton {
+    border: 1px solid rgb(42, 42, 42);
+    background-color: rgb(95, 95, 95);
+    min-width: 70px;
+	color: white;
+}
+
+QPushButton:pressed {
+    background-color:  rgb(160, 159, 159);
+}
+
+QPushButton:flat {
+    border: none; /* no border for a flat push button */
+}
+
+QPushButton:default {
+    border-color: navy; /* make the default button prominent */
+}</string>
+    </property>
+    <property name="text">
+     <string>1</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pushButton_3">
+    <property name="geometry">
+     <rect>
+      <x>745</x>
+      <y>202</y>
+      <width>72</width>
+      <height>50</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>28</pointsize>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">QPushButton {
+    border: 1px solid rgb(42, 42, 42);
+    background-color: rgb(95, 95, 95);
+    min-width: 70px;
+	color: white;
+}
+
+QPushButton:pressed {
+    background-color:  rgb(160, 159, 159);
+}
+
+QPushButton:flat {
+    border: none; /* no border for a flat push button */
+}
+
+QPushButton:default {
+    border-color: navy; /* make the default button prominent */
+}</string>
+    </property>
+    <property name="text">
+     <string>3</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pushButton_plus">
+    <property name="geometry">
+     <rect>
+      <x>816</x>
+      <y>202</y>
+      <width>72</width>
+      <height>50</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>28</pointsize>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">QPushButton {
+    border: 1px solid rgb(42, 42, 42);
+    background-color: rgb(241, 164, 60);
+    min-width: 70px;
+	color: white;
+}
+
+QPushButton:pressed {
+    background-color: rgb(192, 129, 45);
+}
+
+QPushButton:flat {
+    border: none; /* no border for a flat push button */
+}
+
+QPushButton:default {
+    border-color: navy; /* make the default button prominent */
+}</string>
+    </property>
+    <property name="text">
+     <string>+</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pushButton_0">
+    <property name="geometry">
+     <rect>
+      <x>603</x>
+      <y>251</y>
+      <width>143</width>
+      <height>50</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>28</pointsize>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">QPushButton {
+    border: 1px solid rgb(42, 42, 42);
+    background-color: rgb(95, 95, 95);
+    min-width: 70px;
+	color: white;
+}
+
+QPushButton:pressed {
+    background-color:  rgb(160, 159, 159);
+}
+
+QPushButton:flat {
+    border: none; /* no border for a flat push button */
+}
+
+QPushButton:default {
+    border-color: navy; /* make the default button prominent */
+}</string>
+    </property>
+    <property name="text">
+     <string>0</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pushButton_dot">
+    <property name="geometry">
+     <rect>
+      <x>745</x>
+      <y>251</y>
+      <width>72</width>
+      <height>50</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>28</pointsize>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">QPushButton {
+    border: 1px solid rgb(42, 42, 42);
+    background-color: rgb(95, 95, 95);
+    min-width: 70px;
+	color: white;
+}
+
+QPushButton:pressed {
+    background-color:  rgb(160, 159, 159);
+}
+
+QPushButton:flat {
+    border: none; /* no border for a flat push button */
+}
+
+QPushButton:default {
+    border-color: navy; /* make the default button prominent */
+}</string>
+    </property>
+    <property name="text">
+     <string>.</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pushButton_equal">
+    <property name="geometry">
+     <rect>
+      <x>816</x>
+      <y>251</y>
+      <width>72</width>
+      <height>50</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>28</pointsize>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">QPushButton {
+    border: 1px solid rgb(42, 42, 42);
+    background-color: rgb(241, 164, 60);
+    min-width: 70px;
+	color: white;
+}
+
+QPushButton:pressed {
+    background-color: rgb(192, 129, 45);
+}
+
+QPushButton:flat {
+    border: none; /* no border for a flat push button */
+}
+
+QPushButton:default {
+    border-color: navy; /* make the default button prominent */
+}</string>
+    </property>
+    <property name="text">
+     <string>=</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pushButton_x">
+    <property name="geometry">
+     <rect>
+      <x>519</x>
+      <y>251</y>
+      <width>85</width>
+      <height>50</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>28</pointsize>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">QPushButton {
+    border: 1px solid rgb(42, 42, 42);
+    background-color: rgb(58, 57, 57);
+    min-width: 70px;
+	color: white;
+}
+QPushButton:pressed {
+    background-color: rgb(97, 96, 96);
+}
+
+QPushButton:flat {
+    border: none; /* no border for a flat push button */
+}
+
+QPushButton:default {
+    border-color: navy; /* make the default button prominent */
+}</string>
+    </property>
+    <property name="text">
+     <string>x</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pushButton_sin">
+    <property name="geometry">
+     <rect>
+      <x>351</x>
+      <y>104</y>
+      <width>85</width>
+      <height>50</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>28</pointsize>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">QPushButton {
+    border: 1px solid rgb(42, 42, 42);
+    background-color: rgb(58, 57, 57);
+    min-width: 70px;
+	color: white;
+}
+QPushButton:pressed {
+    background-color: rgb(97, 96, 96);
+}
+
+QPushButton:flat {
+    border: none; /* no border for a flat push button */
+}
+
+QPushButton:default {
+    border-color: navy; /* make the default button prominent */
+}</string>
+    </property>
+    <property name="text">
+     <string>sin</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pushButton_asin">
+    <property name="geometry">
+     <rect>
+      <x>435</x>
+      <y>104</y>
+      <width>85</width>
+      <height>50</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>28</pointsize>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">QPushButton {
+    border: 1px solid rgb(42, 42, 42);
+    background-color: rgb(58, 57, 57);
+    min-width: 70px;
+	color: white;
+}
+QPushButton:pressed {
+    background-color: rgb(97, 96, 96);
+}
+
+QPushButton:flat {
+    border: none; /* no border for a flat push button */
+}
+
+QPushButton:default {
+    border-color: navy; /* make the default button prominent */
+}</string>
+    </property>
+    <property name="text">
+     <string>asin</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pushButton_sqrt">
+    <property name="geometry">
+     <rect>
+      <x>519</x>
+      <y>104</y>
+      <width>85</width>
+      <height>50</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>28</pointsize>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">QPushButton {
+    border: 1px solid rgb(42, 42, 42);
+    background-color: rgb(58, 57, 57);
+    min-width: 70px;
+	color: white;
+}
+QPushButton:pressed {
+    background-color: rgb(97, 96, 96);
+}
+
+QPushButton:flat {
+    border: none; /* no border for a flat push button */
+}
+
+QPushButton:default {
+    border-color: navy; /* make the default button prominent */
+}</string>
+    </property>
+    <property name="text">
+     <string>sqrt</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pushButton_cos">
+    <property name="geometry">
+     <rect>
+      <x>351</x>
+      <y>153</y>
+      <width>85</width>
+      <height>50</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>28</pointsize>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">QPushButton {
+    border: 1px solid rgb(42, 42, 42);
+    background-color: rgb(58, 57, 57);
+    min-width: 70px;
+	color: white;
+}
+QPushButton:pressed {
+    background-color: rgb(97, 96, 96);
+}
+
+QPushButton:flat {
+    border: none; /* no border for a flat push button */
+}
+
+QPushButton:default {
+    border-color: navy; /* make the default button prominent */
+}</string>
+    </property>
+    <property name="text">
+     <string>cos</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pushButton_ln">
+    <property name="geometry">
+     <rect>
+      <x>519</x>
+      <y>153</y>
+      <width>85</width>
+      <height>50</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>28</pointsize>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">QPushButton {
+    border: 1px solid rgb(42, 42, 42);
+    background-color: rgb(58, 57, 57);
+    min-width: 70px;
+	color: white;
+}
+QPushButton:pressed {
+    background-color: rgb(97, 96, 96);
+}
+
+QPushButton:flat {
+    border: none; /* no border for a flat push button */
+}
+
+QPushButton:default {
+    border-color: navy; /* make the default button prominent */
+}</string>
+    </property>
+    <property name="text">
+     <string>ln</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pushButton_acos">
+    <property name="geometry">
+     <rect>
+      <x>435</x>
+      <y>153</y>
+      <width>85</width>
+      <height>50</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>28</pointsize>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">QPushButton {
+    border: 1px solid rgb(42, 42, 42);
+    background-color: rgb(58, 57, 57);
+    min-width: 70px;
+	color: white;
+}
+QPushButton:pressed {
+    background-color: rgb(97, 96, 96);
+}
+
+QPushButton:flat {
+    border: none; /* no border for a flat push button */
+}
+
+QPushButton:default {
+    border-color: navy; /* make the default button prominent */
+}</string>
+    </property>
+    <property name="text">
+     <string>acos</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pushButton_tan">
+    <property name="geometry">
+     <rect>
+      <x>351</x>
+      <y>202</y>
+      <width>85</width>
+      <height>50</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>28</pointsize>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">QPushButton {
+    border: 1px solid rgb(42, 42, 42);
+    background-color: rgb(58, 57, 57);
+    min-width: 70px;
+	color: white;
+}
+QPushButton:pressed {
+    background-color: rgb(97, 96, 96);
+}
+
+QPushButton:flat {
+    border: none; /* no border for a flat push button */
+}
+
+QPushButton:default {
+    border-color: navy; /* make the default button prominent */
+}</string>
+    </property>
+    <property name="text">
+     <string>tan</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pushButton_atan">
+    <property name="geometry">
+     <rect>
+      <x>435</x>
+      <y>202</y>
+      <width>85</width>
+      <height>50</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>28</pointsize>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">QPushButton {
+    border: 1px solid rgb(42, 42, 42);
+    background-color: rgb(58, 57, 57);
+    min-width: 70px;
+	color: white;
+}
+QPushButton:pressed {
+    background-color: rgb(97, 96, 96);
+}
+
+QPushButton:flat {
+    border: none; /* no border for a flat push button */
+}
+
+QPushButton:default {
+    border-color: navy; /* make the default button prominent */
+}</string>
+    </property>
+    <property name="text">
+     <string>atan</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pushButton_log">
+    <property name="geometry">
+     <rect>
+      <x>519</x>
+      <y>202</y>
+      <width>85</width>
+      <height>50</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>28</pointsize>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">QPushButton {
+    border: 1px solid rgb(42, 42, 42);
+    background-color: rgb(58, 57, 57);
+    min-width: 70px;
+	color: white;
+}
+QPushButton:pressed {
+    background-color: rgb(97, 96, 96);
+}
+
+QPushButton:flat {
+    border: none; /* no border for a flat push button */
+}
+
+QPushButton:default {
+    border-color: navy; /* make the default button prominent */
+}</string>
+    </property>
+    <property name="text">
+     <string>log</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pushButton_right_bracket">
+    <property name="geometry">
+     <rect>
+      <x>435</x>
+      <y>55</y>
+      <width>85</width>
+      <height>50</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>28</pointsize>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">QPushButton {
+    border: 1px solid rgb(42, 42, 42);
+    background-color: rgb(58, 57, 57);
+    min-width: 70px;
+	color: white;
+}
+QPushButton:pressed {
+    background-color: rgb(97, 96, 96);
+}
+
+QPushButton:flat {
+    border: none; /* no border for a flat push button */
+}
+
+QPushButton:default {
+    border-color: navy; /* make the default button prominent */
+}</string>
+    </property>
+    <property name="text">
+     <string>)</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pushButton_left_bracket">
+    <property name="geometry">
+     <rect>
+      <x>351</x>
+      <y>55</y>
+      <width>85</width>
+      <height>50</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>28</pointsize>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">QPushButton {
+    border: 1px solid rgb(42, 42, 42);
+    background-color: rgb(58, 57, 57);
+    min-width: 70px;
+	color: white;
+}
+QPushButton:pressed {
+    background-color: rgb(97, 96, 96);
+}
+
+QPushButton:flat {
+    border: none; /* no border for a flat push button */
+}
+
+QPushButton:default {
+    border-color: navy; /* make the default button prominent */
+}</string>
+    </property>
+    <property name="text">
+     <string>(</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pushButton_e">
+    <property name="geometry">
+     <rect>
+      <x>435</x>
+      <y>251</y>
+      <width>85</width>
+      <height>50</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>28</pointsize>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">QPushButton {
+    border: 1px solid rgb(42, 42, 42);
+    background-color: rgb(58, 57, 57);
+    min-width: 70px;
+	color: white;
+}
+QPushButton:pressed {
+    background-color: rgb(97, 96, 96);
+}
+
+QPushButton:flat {
+    border: none; /* no border for a flat push button */
+}
+
+QPushButton:default {
+    border-color: navy; /* make the default button prominent */
+}</string>
+    </property>
+    <property name="text">
+     <string>e</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pushButton_pi">
+    <property name="geometry">
+     <rect>
+      <x>351</x>
+      <y>251</y>
+      <width>85</width>
+      <height>50</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>28</pointsize>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">QPushButton {
+    border: 1px solid rgb(42, 42, 42);
+    background-color: rgb(58, 57, 57);
+    min-width: 70px;
+	color: white;
+}
+QPushButton:pressed {
+    background-color: rgb(97, 96, 96);
+}
+
+QPushButton:flat {
+    border: none; /* no border for a flat push button */
+}
+
+QPushButton:default {
+    border-color: navy; /* make the default button prominent */
+}</string>
+    </property>
+    <property name="text">
+     <string>π</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pushButton_backspace">
+    <property name="geometry">
+     <rect>
+      <x>674</x>
+      <y>55</y>
+      <width>72</width>
+      <height>50</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>28</pointsize>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">QPushButton {
+    border: 1px solid rgb(42, 42, 42);
+    background-color: rgb(58, 57, 57);
+    min-width: 70px;
+	color: white;
+}
+QPushButton:pressed {
+    background-color: rgb(97, 96, 96);
+}
+
+QPushButton:flat {
+    border: none; /* no border for a flat push button */
+}
+
+QPushButton:default {
+    border-color: navy; /* make the default button prominent */
+}</string>
+    </property>
+    <property name="text">
+     <string>⌫</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pushButton_switch">
+    <property name="geometry">
+     <rect>
+      <x>435</x>
+      <y>300</y>
+      <width>169</width>
+      <height>50</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>28</pointsize>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">QPushButton {
+    border: 1px solid rgb(42, 42, 42);
+    background-color: rgb(241, 164, 60);
+    min-width: 70px;
+	color: white;
+}
+
+QPushButton:pressed {
+    background-color: rgb(192, 129, 45);
+}
+
+QPushButton:flat {
+    border: none; /* no border for a flat push button */
+}
+
+QPushButton:default {
+    border-color: navy; /* make the default button prominent */
+}</string>
+    </property>
+    <property name="text">
+     <string>Input X</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="inputLine_inputX">
+    <property name="geometry">
+     <rect>
+      <x>675</x>
+      <y>300</y>
+      <width>213</width>
+      <height>50</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>Helvetica Neue</family>
+      <pointsize>40</pointsize>
+      <italic>false</italic>
+     </font>
+    </property>
+    <property name="layoutDirection">
+     <enum>Qt::LeftToRight</enum>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">QLabel {
+	color: white;
+}</string>
+    </property>
+    <property name="text">
+     <string>0</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+    </property>
+    <property name="margin">
+     <number>0</number>
+    </property>
+    <property name="indent">
+     <number>15</number>
+    </property>
+   </widget>
+   <widget class="QLabel" name="inputLine_labelX">
+    <property name="geometry">
+     <rect>
+      <x>604</x>
+      <y>300</y>
+      <width>71</width>
+      <height>41</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>Helvetica Neue</family>
+      <pointsize>40</pointsize>
+      <italic>false</italic>
+     </font>
+    </property>
+    <property name="layoutDirection">
+     <enum>Qt::LeftToRight</enum>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">QLabel {
+	color: white;
+}</string>
+    </property>
+    <property name="text">
+     <string>x =</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+    </property>
+    <property name="margin">
+     <number>0</number>
+    </property>
+    <property name="indent">
+     <number>15</number>
+    </property>
+   </widget>
+   <widget class="QCustomPlot" name="plotWindow" native="true">
+    <property name="geometry">
+     <rect>
+      <x>0</x>
+      <y>0</y>
+      <width>351</width>
+      <height>301</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">QWidget {
+	background-color: rgb(95, 95, 95);
+}</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pushButton_plot">
+    <property name="geometry">
+     <rect>
+      <x>351</x>
+      <y>300</y>
+      <width>85</width>
+      <height>50</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>28</pointsize>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">QPushButton {
+	image: url(:/misc/plot.png);
+    	border: 1px solid rgb(42, 42, 42);
+    	background-color: rgb(241, 164, 60);
+    	min-width: 70px;
+}
+
+QPushButton:pressed {
+    background-color: rgb(192, 129, 45);
+}
+
+QPushButton:flat {
+    border: none; /* no border for a flat push button */
+}
+
+QPushButton:default {
+    border-color: navy; /* make the default button prominent */
+}</string>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+   </widget>
+   <widget class="QSpinBox" name="spinBox_xMax">
+    <property name="geometry">
+     <rect>
+      <x>232</x>
+      <y>310</y>
+      <width>109</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>-1</pointsize>
+      <bold>false</bold>
+     </font>
+    </property>
+    <property name="toolTip">
+     <string>Сумма займа/кредита</string>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">QSpinBox {
+	font-size: 16px;
+	background-color: rgb(42, 43, 44);
+    	border: 1px solid #ccc; /* Set border for QSpinBox */
+    	border-radius: 8px; /* Set border radius for QSpinBox */
+    	padding-right: 5px; /* Add some padding to the QSpinBox */
+	color: white;
+}
+
+
+QSpinBox::up-button {
+    	background-color: rgb(242, 165, 60);
+    	subcontrol-origin: border;
+    	subcontrol-position: right center;
+	top: -6px;	
+	right: 5px;
+    	border-radius: 3px;
+    	width: 20px;
+    	height: 10px;
+}
+
+QSpinBox::down-button {
+    	background-color: rgb(242, 165, 60);
+    	subcontrol-origin: border;
+    	subcontrol-position: right center;
+	bottom: -6px;
+	right: 5px;
+    	border-radius: 3px;
+    	width: 20px;
+    	height: 10px;
+}
+
+QSpinBox::up-button:hover, QSpinBox::down-button:hover {
+    background-color: #e6e6e6; /* Set hover background color for button */
+}
+QSpinBox::up-arrow, QSpinBox::down-arrow {
+	image: url(:/misc/arrow_up.png);
+    width: 10px; /* Set width of arrow */
+    height: 10px; /* Set height of arrow */
+}
+
+QSpinBox::down-arrow {
+    image: url(:/misc/arrow_down.png);
+    width: 10px; /* Set width of arrow */
+
+}
+</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+    </property>
+    <property name="buttonSymbols">
+     <enum>QAbstractSpinBox::UpDownArrows</enum>
+    </property>
+    <property name="minimum">
+     <number>-1000000</number>
+    </property>
+    <property name="maximum">
+     <number>1000000</number>
+    </property>
+    <property name="singleStep">
+     <number>1</number>
+    </property>
+    <property name="value">
+     <number>5</number>
+    </property>
+   </widget>
+   <widget class="QLabel" name="inputLine_xMin">
+    <property name="geometry">
+     <rect>
+      <x>0</x>
+      <y>304</y>
+      <width>60</width>
+      <height>41</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>Helvetica Neue</family>
+      <pointsize>18</pointsize>
+      <italic>false</italic>
+     </font>
+    </property>
+    <property name="layoutDirection">
+     <enum>Qt::LeftToRight</enum>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">QLabel {
+	color: white;
+}</string>
+    </property>
+    <property name="text">
+     <string>x min</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+    </property>
+    <property name="margin">
+     <number>0</number>
+    </property>
+    <property name="indent">
+     <number>10</number>
+    </property>
+   </widget>
+   <widget class="QSpinBox" name="spinBox_xMin">
+    <property name="geometry">
+     <rect>
+      <x>60</x>
+      <y>310</y>
+      <width>109</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>-1</pointsize>
+      <bold>false</bold>
+     </font>
+    </property>
+    <property name="toolTip">
+     <string>Сумма займа/кредита</string>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">QSpinBox {
+	font-size: 16px;
+	background-color: rgb(42, 43, 44);
+    	border: 1px solid #ccc; /* Set border for QSpinBox */
+    	border-radius: 8px; /* Set border radius for QSpinBox */
+    	padding-right: 5px; /* Add some padding to the QSpinBox */
+	color: white;
+}
+
+
+QSpinBox::up-button {
+    	background-color: rgb(242, 165, 60);
+    	subcontrol-origin: border;
+    	subcontrol-position: right center;
+	top: -6px;	
+	right: 5px;
+    	border-radius: 3px;
+    	width: 20px;
+    	height: 10px;
+}
+
+QSpinBox::down-button {
+    	background-color: rgb(242, 165, 60);
+    	subcontrol-origin: border;
+    	subcontrol-position: right center;
+	bottom: -6px;
+	right: 5px;
+    	border-radius: 3px;
+    	width: 20px;
+    	height: 10px;
+}
+
+QSpinBox::up-button:hover, QSpinBox::down-button:hover {
+    background-color: #e6e6e6; /* Set hover background color for button */
+}
+QSpinBox::up-arrow, QSpinBox::down-arrow {
+	image: url(:/misc/arrow_up.png);
+    width: 10px; /* Set width of arrow */
+    height: 10px; /* Set height of arrow */
+}
+
+QSpinBox::down-arrow {
+    image: url(:/misc/arrow_down.png);
+    width: 10px; /* Set width of arrow */
+
+}
+</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+    </property>
+    <property name="buttonSymbols">
+     <enum>QAbstractSpinBox::UpDownArrows</enum>
+    </property>
+    <property name="minimum">
+     <number>-1000000</number>
+    </property>
+    <property name="maximum">
+     <number>1000000</number>
+    </property>
+    <property name="singleStep">
+     <number>1</number>
+    </property>
+    <property name="value">
+     <number>0</number>
+    </property>
+   </widget>
+   <widget class="QLabel" name="inputLine_xMax">
+    <property name="geometry">
+     <rect>
+      <x>167</x>
+      <y>304</y>
+      <width>65</width>
+      <height>41</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>Helvetica Neue</family>
+      <pointsize>18</pointsize>
+      <italic>false</italic>
+     </font>
+    </property>
+    <property name="layoutDirection">
+     <enum>Qt::LeftToRight</enum>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">QLabel {
+	color: white;
+}</string>
+    </property>
+    <property name="text">
+     <string>x max</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+    </property>
+    <property name="margin">
+     <number>0</number>
+    </property>
+    <property name="indent">
+     <number>10</number>
+    </property>
+   </widget>
+  </widget>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>QCustomPlot</class>
+   <extends>QWidget</extends>
+   <header>qcustomplot.h</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
+ <resources/>
+ <connections/>
+</ui>

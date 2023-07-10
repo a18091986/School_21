@@ -1,0 +1,1061 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>CreditCalc</class>
+ <widget class="QMainWindow" name="CreditCalc">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>700</width>
+    <height>310</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>MainWindow</string>
+  </property>
+  <property name="styleSheet">
+   <string notr="true">QMainWindow{
+	background-color: rgb(42, 43, 44);
+    	min-height: 310px; 
+	min-width: 700px; 
+	max-height: 310px; 
+	max-width: 700px;
+}</string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <widget class="QPushButton" name="pushButton_getResult">
+    <property name="geometry">
+     <rect>
+      <x>470</x>
+      <y>90</y>
+      <width>221</width>
+      <height>111</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>28</pointsize>
+      <bold>true</bold>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">QPushButton {
+    border: 1px solid rgb(42, 42, 42);
+	border-radius: 55px;
+    background-color: rgb(241, 164, 60);
+    min-width: 70px;
+	color: white;
+}
+
+QPushButton:pressed {
+    background-color: rgb(192, 129, 45);
+}
+
+QPushButton:flat {
+    border: none; /* no border for a flat push button */
+}
+
+QPushButton:default {
+    border-color: navy; /* make the default button prominent */
+}</string>
+    </property>
+    <property name="text">
+     <string>Рассчитать</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_totalCredit">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>10</y>
+      <width>221</width>
+      <height>71</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>13</pointsize>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">QLabel {
+	border: 1px solid rgb(242, 165, 60);
+	background: rgb(58, 57, 57);
+	border-radius: 8px;
+	color: white;
+}</string>
+    </property>
+    <property name="text">
+     <string>Сумма кредита/займа</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
+    </property>
+    <property name="margin">
+     <number>8</number>
+    </property>
+    <property name="indent">
+     <number>0</number>
+    </property>
+   </widget>
+   <widget class="QComboBox" name="comboBox_yearMonth">
+    <property name="geometry">
+     <rect>
+      <x>564</x>
+      <y>40</y>
+      <width>117</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>16</pointsize>
+     </font>
+    </property>
+    <property name="toolTip">
+     <string>Формат срока</string>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">QComboBox {
+	background-color: rgb(42, 43, 44);
+	border: 1px solid #ccc; /* Set border for QSpinBox */
+   	border-radius: 8px;
+	color: white;
+}
+
+QComboBox:editable {
+     background: rgb(95, 95, 95);
+}
+
+
+QComboBox::drop-down {
+    subcontrol-origin: padding;
+    width: 15px;
+    border-left-width: 1px;
+    border-left-color:  rgb(242, 165, 60);
+    border-left-style: solid; /* just a single line */
+    border-top-right-radius: 8px; /* same radius as the QComboBox */
+    border-bottom-right-radius: 8px;
+	
+}
+
+QComboBox::down-arrow
+{   
+    image: url(:/misc/arrow_down.png);
+    height:8px;
+    width:8px;
+}
+
+QComboBox QAbstractItemView {
+    border-bottom-right-radius: 10px;
+    border-bottom-left-radius: 10px;
+    padding: 4px 4px 4px 4px
+}
+
+QComboBox::item:selected {
+    background-color: rgb(242, 165, 60);
+}
+
+</string>
+    </property>
+    <item>
+     <property name="text">
+      <string>Года</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Месяца</string>
+     </property>
+    </item>
+   </widget>
+   <widget class="QComboBox" name="comboBox_payType">
+    <property name="geometry">
+     <rect>
+      <x>160</x>
+      <y>160</y>
+      <width>291</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>20</pointsize>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">QComboBox {
+	background-color: rgb(42, 43, 44);
+	border: 1px solid #ccc; /* Set border for QSpinBox */
+   	border-radius: 8px;
+	color: white;
+}
+
+QComboBox:editable {
+     background: rgb(95, 95, 95);
+}
+
+
+QComboBox::drop-down {
+    subcontrol-origin: padding;
+    width: 15px;
+    border-left-width: 1px;
+    border-left-color:  rgb(242, 165, 60);
+    border-left-style: solid; /* just a single line */
+    border-top-right-radius: 8px; /* same radius as the QComboBox */
+    border-bottom-right-radius: 8px;
+	
+}
+
+QComboBox::down-arrow
+{   
+    image: url(:/misc/arrow_down.png);
+    height:8px;
+    width:8px;
+}
+
+QComboBox QAbstractItemView {
+    border-bottom-right-radius: 10px;
+    border-bottom-left-radius: 10px;
+    padding: 4px 4px 4px 4px
+}
+
+QComboBox::item:selected {
+    background-color: rgb(242, 165, 60);
+}
+
+</string>
+    </property>
+    <item>
+     <property name="text">
+      <string>Аннуитетный</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Дифференцированный</string>
+     </property>
+    </item>
+   </widget>
+   <widget class="QLabel" name="label_interest">
+    <property name="geometry">
+     <rect>
+      <x>240</x>
+      <y>10</y>
+      <width>221</width>
+      <height>71</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>12</pointsize>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">QLabel {
+	border: 1px solid rgb(242, 165, 60);
+	background: rgb(58, 57, 57);
+	border-radius: 8px;
+	color: white;
+}</string>
+    </property>
+    <property name="text">
+     <string>Процентная ставка, в % годовых</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
+    </property>
+    <property name="margin">
+     <number>8</number>
+    </property>
+    <property name="indent">
+     <number>0</number>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_term">
+    <property name="geometry">
+     <rect>
+      <x>470</x>
+      <y>10</y>
+      <width>221</width>
+      <height>71</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>13</pointsize>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">QLabel {
+	border: 1px solid rgb(242, 165, 60);
+	background: rgb(58, 57, 57);
+	border-radius: 8px;
+	color: white;
+}</string>
+    </property>
+    <property name="text">
+     <string>Срок кредита</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
+    </property>
+    <property name="margin">
+     <number>8</number>
+    </property>
+    <property name="indent">
+     <number>0</number>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_payType">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>150</y>
+      <width>451</width>
+      <height>51</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>13</pointsize>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">QLabel {
+	border: 1px solid rgb(242, 165, 60);
+	background: rgb(58, 57, 57);
+	border-radius: 8px;
+	color: white;
+}</string>
+    </property>
+    <property name="text">
+     <string>Порядок погашения</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
+    </property>
+    <property name="margin">
+     <number>8</number>
+    </property>
+    <property name="indent">
+     <number>0</number>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_startDate">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>90</y>
+      <width>451</width>
+      <height>51</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>13</pointsize>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">QLabel {
+	border: 1px solid rgb(242, 165, 60);
+	background: rgb(58, 57, 57);
+	border-radius: 8px;
+	color: white;
+}</string>
+    </property>
+    <property name="text">
+     <string>Дата выдачи</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
+    </property>
+    <property name="margin">
+     <number>8</number>
+    </property>
+    <property name="indent">
+     <number>0</number>
+    </property>
+   </widget>
+   <widget class="QComboBox" name="comboBox_months">
+    <property name="geometry">
+     <rect>
+      <x>160</x>
+      <y>100</y>
+      <width>161</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>20</pointsize>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">QComboBox {
+	background-color: rgb(42, 43, 44);
+	border: 1px solid #ccc; /* Set border for QSpinBox */
+   	border-radius: 8px;
+	color: white;
+}
+
+QComboBox:editable {
+     background: rgb(95, 95, 95);
+}
+
+
+QComboBox::drop-down {
+    subcontrol-origin: padding;
+    width: 15px;
+    border-left-width: 1px;
+    border-left-color:  rgb(242, 165, 60);
+    border-left-style: solid; /* just a single line */
+    border-top-right-radius: 8px; /* same radius as the QComboBox */
+    border-bottom-right-radius: 8px;
+	
+}
+
+QComboBox::down-arrow
+{   
+    image: url(:/misc/arrow_down.png);
+    height:8px;
+    width:8px;
+}
+
+QComboBox QAbstractItemView {
+    border-bottom-right-radius: 10px;
+    border-bottom-left-radius: 10px;
+    padding: 4px 4px 4px 4px
+}
+
+QComboBox::item:selected {
+    background-color: rgb(242, 165, 60);
+}
+
+</string>
+    </property>
+    <property name="currentText">
+     <string>Январь</string>
+    </property>
+    <item>
+     <property name="text">
+      <string>Январь</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Февраль</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Март</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Апрель</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Май</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Июнь</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Июль</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Август</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Сентябрь</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Октябрь</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Ноябрь</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Декабрь</string>
+     </property>
+    </item>
+   </widget>
+   <widget class="QDoubleSpinBox" name="doubleSpinBox_interest">
+    <property name="geometry">
+     <rect>
+      <x>250</x>
+      <y>40</y>
+      <width>201</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="toolTip">
+     <string>Ставка в % годовых</string>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">QDoubleSpinBox {
+	font-size: 20px;
+	background-color: rgb(42, 43, 44);
+    	border: 1px solid #ccc; /* Set border for QSpinBox */
+    	border-radius: 8px; /* Set border radius for QSpinBox */
+    	padding-left: 10px; /* Add some padding to the QSpinBox */
+	color: white;
+}
+
+
+QDoubleSpinBox::up-button {
+    	background-color: rgb(242, 165, 60);
+    	subcontrol-origin: border;
+    	subcontrol-position: right center;
+	top: -6px;	
+	right: 5px;
+    	border-radius: 3px;
+    	width: 20px;
+    	height: 10px;
+}
+
+QDoubleSpinBox::down-button {
+    	background-color: rgb(242, 165, 60);
+    	subcontrol-origin: border;
+    	subcontrol-position: right center;
+	bottom: -6px;
+	right: 5px;
+    	border-radius: 3px;
+    	width: 20px;
+    	height: 10px;
+}
+
+QDoubleSpinBox::up-button:hover, QDoubleSpinBox::down-button:hover {
+    background-color: #e6e6e6; /* Set hover background color for button */
+}
+QDoubleSpinBox::up-arrow, QDoubleSpinBox::down-arrow {
+	image: url(:/misc/arrow_up.png);
+    width: 10px; /* Set width of arrow */
+    height: 10px; /* Set height of arrow */
+}
+
+QDoubleSpinBox::down-arrow {
+    image: url(:/misc/arrow_down.png);
+    width: 10px; /* Set width of arrow */
+
+}
+</string>
+    </property>
+    <property name="suffix">
+     <string>%</string>
+    </property>
+    <property name="minimum">
+     <double>0.010000000000000</double>
+    </property>
+    <property name="maximum">
+     <double>365.000000000000000</double>
+    </property>
+    <property name="value">
+     <double>5.350000000000000</double>
+    </property>
+   </widget>
+   <widget class="QSpinBox" name="spinBox_year">
+    <property name="geometry">
+     <rect>
+      <x>330</x>
+      <y>100</y>
+      <width>121</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">QSpinBox {
+	font-size: 20px;
+	background-color: rgb(42, 43, 44);
+    	border: 1px solid #ccc; /* Set border for QSpinBox */
+    	border-radius: 8px; /* Set border radius for QSpinBox */
+    	padding-left: 10px; /* Add some padding to the QSpinBox */
+	color: white;
+}
+
+
+QSpinBox::up-button {
+    	background-color: rgb(242, 165, 60);
+    	subcontrol-origin: border;
+    	subcontrol-position: right center;
+	top: -6px;	
+	right: 5px;
+    	border-radius: 3px;
+    	width: 20px;
+    	height: 10px;
+}
+
+QSpinBox::down-button {
+    	background-color: rgb(242, 165, 60);
+    	subcontrol-origin: border;
+    	subcontrol-position: right center;
+	bottom: -6px;
+	right: 5px;
+    	border-radius: 3px;
+    	width: 20px;
+    	height: 10px;
+}
+
+QSpinBox::up-button:hover, QSpinBox::down-button:hover {
+    background-color: #e6e6e6; /* Set hover background color for button */
+}
+QSpinBox::up-arrow, QSpinBox::down-arrow {
+	image: url(:/misc/arrow_up.png);
+    width: 10px; /* Set width of arrow */
+    height: 10px; /* Set height of arrow */
+}
+
+QSpinBox::down-arrow {
+    image: url(:/misc/arrow_down.png);
+    width: 10px; /* Set width of arrow */
+}
+</string>
+    </property>
+    <property name="minimum">
+     <number>1900</number>
+    </property>
+    <property name="maximum">
+     <number>2200</number>
+    </property>
+    <property name="value">
+     <number>2023</number>
+    </property>
+   </widget>
+   <widget class="QSpinBox" name="spinBox_term">
+    <property name="geometry">
+     <rect>
+      <x>480</x>
+      <y>40</y>
+      <width>79</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>-1</pointsize>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">QSpinBox {
+	font-size: 16px;
+	background-color: rgb(42, 43, 44);
+    	border: 1px solid #ccc; /* Set border for QSpinBox */
+    	border-radius: 8px; /* Set border radius for QSpinBox */
+    	padding-left: 7px; /* Add some padding to the QSpinBox */
+	color: white;
+}
+
+
+QSpinBox::up-button {
+    	background-color: rgb(242, 165, 60);
+    	subcontrol-origin: border;
+    	subcontrol-position: right center;
+	top: -6px;	
+	right: 5px;
+    	border-radius: 3px;
+    	width: 20px;
+    	height: 10px;
+}
+
+QSpinBox::down-button {
+    	background-color: rgb(242, 165, 60);
+    	subcontrol-origin: border;
+    	subcontrol-position: right center;
+	bottom: -6px;
+	right: 5px;
+    	border-radius: 3px;
+    	width: 20px;
+    	height: 10px;
+}
+
+QSpinBox::up-button:hover, QSpinBox::down-button:hover {
+    background-color: #e6e6e6; /* Set hover background color for button */
+}
+QSpinBox::up-arrow, QSpinBox::down-arrow {
+	image: url(:/misc/arrow_up.png);
+    width: 10px; /* Set width of arrow */
+    height: 10px; /* Set height of arrow */
+}
+
+QSpinBox::down-arrow {
+    image: url(:/misc/arrow_down.png);
+    width: 10px; /* Set width of arrow */
+
+}
+</string>
+    </property>
+    <property name="minimum">
+     <number>1</number>
+    </property>
+    <property name="maximum">
+     <number>3600</number>
+    </property>
+   </widget>
+   <widget class="QSpinBox" name="spinBox_total">
+    <property name="geometry">
+     <rect>
+      <x>20</x>
+      <y>40</y>
+      <width>201</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>-1</pointsize>
+      <bold>false</bold>
+     </font>
+    </property>
+    <property name="toolTip">
+     <string>Сумма займа/кредита</string>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">QSpinBox {
+	font-size: 20px;
+	background-color: rgb(42, 43, 44);
+    	border: 1px solid #ccc; /* Set border for QSpinBox */
+    	border-radius: 8px; /* Set border radius for QSpinBox */
+    	padding-left: 10px; /* Add some padding to the QSpinBox */
+	color: white;
+}
+
+
+QSpinBox::up-button {
+    	background-color: rgb(242, 165, 60);
+    	subcontrol-origin: border;
+    	subcontrol-position: right center;
+	top: -6px;	
+	right: 5px;
+    	border-radius: 3px;
+    	width: 20px;
+    	height: 10px;
+}
+
+QSpinBox::down-button {
+    	background-color: rgb(242, 165, 60);
+    	subcontrol-origin: border;
+    	subcontrol-position: right center;
+	bottom: -6px;
+	right: 5px;
+    	border-radius: 3px;
+    	width: 20px;
+    	height: 10px;
+}
+
+QSpinBox::up-button:hover, QSpinBox::down-button:hover {
+    background-color: #e6e6e6; /* Set hover background color for button */
+}
+QSpinBox::up-arrow, QSpinBox::down-arrow {
+	image: url(:/misc/arrow_up.png);
+    width: 10px; /* Set width of arrow */
+    height: 10px; /* Set height of arrow */
+}
+
+QSpinBox::down-arrow {
+    image: url(:/misc/arrow_down.png);
+    width: 10px; /* Set width of arrow */
+
+}
+</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+    </property>
+    <property name="buttonSymbols">
+     <enum>QAbstractSpinBox::UpDownArrows</enum>
+    </property>
+    <property name="minimum">
+     <number>10000</number>
+    </property>
+    <property name="maximum">
+     <number>999999999</number>
+    </property>
+    <property name="singleStep">
+     <number>10000</number>
+    </property>
+    <property name="value">
+     <number>10000</number>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_monthlyPayment">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>240</y>
+      <width>221</width>
+      <height>61</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>13</pointsize>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">QLabel {
+	border: 1px solid rgb(242, 165, 60);
+	background: rgb(58, 57, 57);
+	border-radius: 8px;
+	color: white;
+}</string>
+    </property>
+    <property name="text">
+     <string>Ежемесячный платеж</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
+    </property>
+    <property name="margin">
+     <number>8</number>
+    </property>
+    <property name="indent">
+     <number>0</number>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_overpay">
+    <property name="geometry">
+     <rect>
+      <x>240</x>
+      <y>240</y>
+      <width>221</width>
+      <height>61</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>13</pointsize>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">QLabel {
+	border: 1px solid rgb(242, 165, 60);
+	background: rgb(58, 57, 57);
+	border-radius: 8px;
+	color: white;
+}</string>
+    </property>
+    <property name="text">
+     <string>Переплата по кредиту</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
+    </property>
+    <property name="margin">
+     <number>8</number>
+    </property>
+    <property name="indent">
+     <number>0</number>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_totalPay">
+    <property name="geometry">
+     <rect>
+      <x>470</x>
+      <y>240</y>
+      <width>221</width>
+      <height>61</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>13</pointsize>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">QLabel {
+	border: 1px solid rgb(242, 165, 60);
+	background: rgb(58, 57, 57);
+	border-radius: 8px;
+	color: white;
+}</string>
+    </property>
+    <property name="text">
+     <string>Общая выплата</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
+    </property>
+    <property name="margin">
+     <number>8</number>
+    </property>
+    <property name="indent">
+     <number>0</number>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_resMonthly">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>270</y>
+      <width>221</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>20</pointsize>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">QLabel{
+	color: white;
+}</string>
+    </property>
+    <property name="text">
+     <string>0</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+    </property>
+    <property name="indent">
+     <number>10</number>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_resOverpay">
+    <property name="geometry">
+     <rect>
+      <x>240</x>
+      <y>270</y>
+      <width>221</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>20</pointsize>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">QLabel{
+	color: white;
+}</string>
+    </property>
+    <property name="text">
+     <string>0</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+    </property>
+    <property name="indent">
+     <number>10</number>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_resTotal">
+    <property name="geometry">
+     <rect>
+      <x>470</x>
+      <y>270</y>
+      <width>221</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>20</pointsize>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">QLabel{
+	color: white;
+}</string>
+    </property>
+    <property name="text">
+     <string>0</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+    </property>
+    <property name="indent">
+     <number>10</number>
+    </property>
+   </widget>
+   <widget class="QLabel" name="line1">
+    <property name="geometry">
+     <rect>
+      <x>0</x>
+      <y>210</y>
+      <width>701</width>
+      <height>7</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>17</pointsize>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">QLabel {
+    background-color: rgb(241, 164, 60);
+}</string>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+   </widget>
+   <widget class="QLabel" name="line2">
+    <property name="geometry">
+     <rect>
+      <x>0</x>
+      <y>220</y>
+      <width>701</width>
+      <height>7</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>17</pointsize>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">QLabel {
+    background-color: rgb(241, 164, 60);
+}</string>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+   </widget>
+   <zorder>label_monthlyPayment</zorder>
+   <zorder>pushButton_getResult</zorder>
+   <zorder>label_totalCredit</zorder>
+   <zorder>label_interest</zorder>
+   <zorder>label_term</zorder>
+   <zorder>label_payType</zorder>
+   <zorder>label_startDate</zorder>
+   <zorder>comboBox_months</zorder>
+   <zorder>spinBox_year</zorder>
+   <zorder>spinBox_term</zorder>
+   <zorder>label_overpay</zorder>
+   <zorder>label_totalPay</zorder>
+   <zorder>label_resMonthly</zorder>
+   <zorder>label_resOverpay</zorder>
+   <zorder>label_resTotal</zorder>
+   <zorder>spinBox_total</zorder>
+   <zorder>comboBox_payType</zorder>
+   <zorder>doubleSpinBox_interest</zorder>
+   <zorder>comboBox_yearMonth</zorder>
+   <zorder>line1</zorder>
+   <zorder>line2</zorder>
+  </widget>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
