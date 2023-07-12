@@ -1,12 +1,45 @@
-#include "stack.h"
+#include "stack.h" 
+#include "queue.h"
+#include "input_to_queue.h"
 
 typedef struct Test {
     float x,y,z;
 } Test;
 
 int main() {
+    
+// --------------------------------INPUT_TO_QUEUE--------------------------------
+
+char input_string[256] = {0};
+queue q;
+double x = 1.1;
+
+init_queue(&q);
+
+fgets(input_string, 255, stdin);
+from_input_to_queue(input_string, q, x);
 
 
+queue_head(&q);
+char t[17];
+while (get_from_queue(&q, t))
+    printf("val: %s\n", t);
+
+
+
+// ------------------------------------QUEUE--------------------------------------
+
+    // queue q1;
+    // init_queue(&q1);
+    
+    // insert_queue(&q1, 15);
+    // insert_queue(&q1, 31);
+    // insert_queue(&q1, 45);
+
+    // int t;
+
+    // while (get_from_queue(&q1, &t))
+    //     printf("val: %d\n", t);
 
 
 // ------------------------------------STACK---------------------------------------
