@@ -1,6 +1,7 @@
 TARGET = main
 CC = gcc 
-FLAGS = -Wall -Wextra -Werror -std=c11
+# FLAGS = -Wall -Wextra -Werror -std=c11
+FLAGS = -Wextra -Werror -std=c11
 
 SRC = $(wildcard *.c) # имена всех исходных файлов
 OBJ = $(patsubst %.c, %.o, $(SRC)) # имена всех объектных файлов

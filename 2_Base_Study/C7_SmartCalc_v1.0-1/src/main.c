@@ -9,7 +9,7 @@ typedef struct Test {
 int main() {
     
 // --------------------------------INPUT_TO_QUEUE--------------------------------
-
+int error = 0;
 char input_string[256] = {0};
 queue q;
 double x = 1.1;
@@ -17,13 +17,14 @@ double x = 1.1;
 init_queue(&q);
 
 fgets(input_string, 255, stdin);
-from_input_to_queue(input_string, q, x);
-
-
-queue_head(&q);
-char t[17];
-while (get_from_queue(&q, t))
-    printf("val: %s\n", t);
+if (from_input_to_queue(input_string, &q, x)) {
+    char t[17];
+    int is_unar;
+    while (get_from_queue(&q, t, &is_unar))
+        printf("val: %s is_unar: %d\n", t, is_unar);
+} else {
+    printf("Error!!!\n");
+}
 
 
 

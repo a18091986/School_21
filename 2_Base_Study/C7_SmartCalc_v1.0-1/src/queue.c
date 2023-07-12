@@ -12,7 +12,7 @@ void queue_head(queue *q) {
     else printf("NULL\n");
 }
 
-int insert_queue (queue * q, char value[17]) {
+int insert_queue (queue * q, char value[17], int is_unar) {
     int result = 1;
     
     // создание нового элемента списка
@@ -20,7 +20,7 @@ int insert_queue (queue * q, char value[17]) {
     if (!newnode) result = 0;
 
     strcpy(newnode->value, value);
-    // strnewnode->value = value;
+    newnode->is_unar = is_unar;
     newnode->next = NULL;
 
     // проверка, если очередь не пуста, то новый элемент становится её концом,
@@ -37,13 +37,14 @@ int insert_queue (queue * q, char value[17]) {
     return result;
 }
 
-int get_from_queue (queue * q, char *result) {
+int get_from_queue (queue * q, char *result, int * is_unar) {
     int res = 1;
     if (q->head == NULL) 
         res = 0;
     else {
         node * tmp = q->head;
         strcpy(result, tmp->value);
+        *is_unar = tmp->is_unar;
 
         q->head = q->head->next;
 
