@@ -1,30 +1,42 @@
 #include "stack.h" 
 #include "queue.h"
-#include "input_to_queue.h"
-
-typedef struct Test {
-    float x,y,z;
-} Test;
+#include "string_to_queue.h"
+#include "polish.h"
+#include "calc.h"
 
 int main() {
     
 // --------------------------------INPUT_TO_QUEUE--------------------------------
 int error = 0;
-char input_string[256] = {0};
-queue q;
+char input_string[256] = {'\0'};
+char polish_string[256] = {'\0'};
+
+queue q_in;
+queue q_polish;
+
+StackElement * s_in = NULL;
+StackElement * s_pol = NULL;
+
 double x = 1.1;
 
-init_queue(&q);
+init_queue(&q_in);
+init_queue(&q_polish);
 
 fgets(input_string, 255, stdin);
-if (from_input_to_queue(input_string, &q, x)) {
-    char t[17];
-    int is_unar;
-    while (get_from_queue(&q, t, &is_unar))
-        printf("val: %s is_unar: %d\n", t, is_unar);
+if (from_string_to_queue(input_string, &q_in, x)) {
+    form_polish_string(&q_in, s_in, polish_string);
 } else {
-    printf("Error!!!\n");
+    printf("Error while read input string\n");
 }
+
+from_string_to_queue(polish_string, &q_polish, x);
+node test;
+// while (get_from_queue (&q_polish, test.value, test.type))
+//     printf("value: %s, type: %s\n", test.value, test.type);
+
+int code_error;
+
+calc(&q_polish, s_pol, x, &code_error);
 
 
 

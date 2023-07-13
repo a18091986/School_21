@@ -1,13 +1,15 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include "queue.h"
 
 #ifndef STACK_H
 #define STACK_H
 
 typedef struct StackElement {
     char * name;
-    void * data;
+    node * data;
+    double value;
     struct StackElement * next;
 } StackElement;
 
@@ -17,8 +19,9 @@ StackElement * findStackElement(StackElement * top, char * name);
 
 void freeStack(StackElement * top);
 void setStackElementName(StackElement * top, char * name);
+// void setStackElementValue(StackElement * top, double value);
 void setStackElementData(StackElement * top, void * data, unsigned int datasize);
-
+void show_stack(StackElement * top);
 
 #endif
 

@@ -43,6 +43,7 @@ void setStackElementName(StackElement * top, char * name) {
     strcpy(top->name, name);
 }
 
+
 void setStackElementData(StackElement * top, void * data, unsigned int datasize) {
     // установка данных элемента стека
     if (top->data)
@@ -62,4 +63,12 @@ StackElement * findStackElement(StackElement * top, char * name) {
         top = top->next;
     };
     return result;
+}
+
+void show_stack(StackElement * top) {
+    printf("Current Stack:\n");
+    while (top) {
+        printf("Elemement: %s, value: %s\n", top->name, top->data->value);
+        top = top -> next;
+    }
 }
