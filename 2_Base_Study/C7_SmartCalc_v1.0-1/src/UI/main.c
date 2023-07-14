@@ -1,10 +1,11 @@
 //Подключаем заголовочные файлы gtk
 #include <gtk/gtk.h>
 #include <string.h>
-char input_string[256];
-int j = 0;
 
-
+typedef struct input_string {
+    char data[256];
+    int position;
+} input_string;
 
 // Слот выхода из программы
 G_MODULE_EXPORT void onExit(GtkWidget * w) {
@@ -18,47 +19,42 @@ G_MODULE_EXPORT void onBtnClicked(GtkButton * btn, gpointer data) {
     printf("from btn_clicked\n");
 }
 
-// G_MODULE_EXPORT void onOneClicked(GtkButton * btn, gpointer data, int * j) {
-void onOneClicked(GtkButton * btn, int * j) {
-    //Просто меняем надпись на кнопке
-    // gtk_button_set_label(GTK_BUTTON(btn), "Woof");
-    // strcpy(input_string[j], "1 ");
-    // (*j)+=2;
-    // printf("j: %s\n", (char *)data);
-    printf("j: %d\n", *j);
-    (*j)++;
-    printf("from one_clicked\n");
+G_MODULE_EXPORT void onOneClicked(GtkButton * btn, input_string * is) {   
+    strcpy(&is->data[is->position], "1 ");
+    is->position += 2;
+    // printf("string: %s\n", is->data);
+    // printf("from one_clicked\n");
 }
 
-// G_MODULE_EXPORT void onTwoClicked(GtkButton * btn, gpointer data, char * input_string, int * j) {
-//     //Просто меняем надпись на кнопке
-//     // gtk_button_set_label(GTK_BUTTON(btn), "Woof");
-//     strcpy(input_string[j], "2 ");
-//     *j += 2;
-//     printf("from two_clicked\n");
-// }
+void onTwoClicked(GtkButton * btn, input_string * is) {   
+    strcpy(&is->data[is->position], "2 ");
+    is->position += 2;
+    // printf("string: %s\n", is->data);
+    printf("from two_clicked\n");
+}
 
-// G_MODULE_EXPORT void onThreeClicked(GtkButton * btn, gpointer data, char input_string[256], int * j) {
-//     //Просто меняем надпись на кнопке
-//     // gtk_button_set_label(GTK_BUTTON(btn), "Woof");
-//     strcpy(input_string[&j], "3 ");
-//     *j += 2;
-//     printf("from three_clicked\n");
-// }
+void onThreeClicked(GtkButton * btn, input_string * is) {   
+    strcpy(&is->data[is->position], "3 ");
+    is->position += 2;
+    // printf("string: %s\n", is->data);
+    // printf("from one_clicked\n");
+}
 
-// G_MODULE_EXPORT void onEqualClicked(GtkButton * btn, gpointer data, char * input_string, int * j) {
-//     //Просто меняем надпись на кнопке
-//     // gtk_button_set_label(GTK_BUTTON(btn), "Woof");
-//     printf("Input_string: %s\n", input_string);
-//     printf("from btn_clicked\n");
-// }
+void onEqClicked(GtkButton * btn, input_string * is) {   
+    // strcpy(&is->data[is->position], "1 ");
+    // is->position += 2;
+    printf("string: %s\n", is->data);
+    // printf("from one_clicked\n");
+}
 
 //Главная функция
 int main(int argc, char * argv[]) {
     //Инициализация gtk
-    // char input_string[256];
-    int j = 0;
-
+    char in_string[256]={'\0'};
+    // int j = 0;
+    input_string is;
+    strcpy(is.data, in_string);
+    is.position = 0;
 
     printf("from main\n");
     gtk_init(&argc, &argv);
@@ -82,12 +78,17 @@ int main(int argc, char * argv[]) {
     // Помните мы указывали ID? Вот по нему мы и ищем нужный
     // В данном случае ищем виджет окна
     GtkWidget * window = GTK_WIDGET(gtk_builder_get_object(ui_builder, "main_window"));
-    // GtkWidget * one_btn = GTK_WIDGET(gtk_builder_get_object(ui_builder, "onOneClicked"));
+
     GtkButton * one_btn = GTK_BUTTON(gtk_builder_get_object(ui_builder, "one_btn"));
+    GtkButton * two_btn = GTK_BUTTON(gtk_builder_get_object(ui_builder, "two_btn"));
+    GtkButton * three_btn = GTK_BUTTON(gtk_builder_get_object(ui_builder, "three_btn"));
+    GtkButton * eq_btn = GTK_BUTTON(gtk_builder_get_object(ui_builder, "eq_btn"));
     
-    // g_signal_connect(GTK_BUTTON(one_btn), "clicked", G_CALLBACK(onOneClicked), &j);
-    // g_signal_connect(G_OBJECT(one_btn), "clicked", G_CALLBACK(onOneClicked), &j);
-    g_signal_connect(G_OBJECT(one_btn), "clicked", G_CALLBACK(onOneClicked), &j);
+    g_signal_connect(G_OBJECT(one_btn), "clicked", G_CALLBACK(onOneClicked), &is);
+    g_signal_connect(G_OBJECT(two_btn), "clicked", G_CALLBACK(onTwoClicked), &is);
+    g_signal_connect(G_OBJECT(three_btn), "clicked", G_CALLBACK(onThreeClicked), &is);
+    g_signal_connect(G_OBJECT(eq_btn), "clicked", G_CALLBACK(onEqClicked), &is);
+
 
     //Таким же образом можно получить и другие виджеты
     // но нам они не понадобятся
