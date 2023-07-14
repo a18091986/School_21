@@ -68,7 +68,8 @@ StackElement * findStackElement(StackElement * top, char * name) {
 void show_stack(StackElement * top) {
     printf("Current Stack:\n");
     while (top) {
-        printf("Elemement: %s, value: %s\n", top->name, top->data->value);
+        printf("Elemement_name: %s, value: %lf, data_value: %s\n", 
+        top->name, top->value, top->data->value);
         top = top -> next;
     }
 }

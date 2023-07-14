@@ -1,3 +1,4 @@
+#include <math.h>
 #include "stack.h"
 #include "queue.h"
 
