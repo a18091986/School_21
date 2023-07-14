@@ -39,7 +39,7 @@ style:
 
 
 leaks:
-	valgrind --tool=memcheck --leak-check=yes  ./test 2>&1 | grep -i 'ERROR'
+	valgrind --tool=memcheck --leak-check=yes  ./test 2>&1 
 
 clean: 
 	rm -rf report test *.o *.info *.a s21_matrix.gcda s21_matrix.gcno *.out

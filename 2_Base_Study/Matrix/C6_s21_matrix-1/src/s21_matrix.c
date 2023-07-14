@@ -83,8 +83,11 @@ int s21_create_matrix(int rows, int columns, matrix_t *result) {
 
 void s21_remove_matrix(matrix_t *A) {
   if (A) {
-    for (int i = 0; i < A->rows; i++) free(A->matrix[i]);
-    free(A->matrix);
+    if (A->matrix) {
+      free(A->matrix);
+      A->columns = 0;
+      A->rows = 0;
+    }
   }
 }
 
@@ -160,9 +163,9 @@ int s21_mult_matrix(matrix_t *A, matrix_t *B, matrix_t *result) {
   if (!is_matrix_correct_check(A) && !is_matrix_correct_check(B)) {
     if (A->columns != B->rows) {
       res = CALCULATION_ERROR;
-    } else if (!s21_create_matrix(A->rows, A->columns, result)) {
+    } else if (!s21_create_matrix(A->rows, B->columns, result)) {
       for (int i = 0; i < A->rows; i++)
-        for (int j = 0; j < A->columns; j++) {
+        for (int j = 0; j < B->columns; j++) {
           result->matrix[i][j] = 0;
           for (int n = 0; n < A->columns; n++)
             result->matrix[i][j] += A->matrix[i][n] * B->matrix[n][j];
@@ -261,19 +264,18 @@ int complements_calculation(matrix_t *A, matrix_t *result) {
 
 int s21_inverse_matrix(matrix_t *A, matrix_t *result) {
   int res = INCORRECT_MATRIX_ERROR;
-
   if (!is_matrix_correct_check(A)) {
     res = CALCULATION_ERROR;
     double determinant;
     s21_determinant(A, &determinant);
-    if (fabs(determinant - 0) > PRECISION) {
+    if (fabs(determinant) > PRECISION) {
       matrix_t m_calc;
       res = s21_calc_complements(A, &m_calc);
       if (!res) {
         matrix_t m_transpose;
         res = s21_transpose(&m_calc, &m_transpose);
         if (!res) {
-          int num = 1 / determinant;
+          double num = 1 / determinant;
           s21_mult_number(&m_transpose, num, result);
         }
         s21_remove_matrix(&m_transpose);
