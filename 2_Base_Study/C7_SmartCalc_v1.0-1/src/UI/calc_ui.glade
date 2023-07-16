@@ -618,40 +618,4 @@
       </object>
     </child>
   </object>
-  <object class="GtkWindow">
-    <property name="can-focus">False</property>
-    <property name="default-width">320</property>
-    <property name="default-height">640</property>
-    <property name="attached-to">graph</property>
-    <child>
-      <!-- n-columns=3 n-rows=6 -->
-      <object class="GtkGrid">
-        <property name="visible">True</property>
-        <property name="can-focus">False</property>
-        <property name="row-homogeneous">True</property>
-        <property name="column-homogeneous">True</property>
-        <child>
-          <object class="GtkDrawingArea">
-            <property name="visible">True</property>
-            <property name="can-focus">False</property>
-          </object>
-          <packing>
-            <property name="left-attach">0</property>
-            <property name="top-attach">0</property>
-            <property name="width">3</property>
-            <property name="height">5</property>
-          </packing>
-        </child>
-        <child>
-          <placeholder/>
-        </child>
-        <child>
-          <placeholder/>
-        </child>
-        <child>
-          <placeholder/>
-        </child>
-      </object>
-    </child>
-  </object>
 </interface>

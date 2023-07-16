@@ -7,7 +7,7 @@ CC = gcc
 # OBJ = $(patsubst %.c, %.o, $(SRC)) # имена всех объектных файлов
 
 $(TARGET) :
-	$(CC) main.c -o app `pkg-config --cflags --libs gtk+-3.0` -Wl,-export-dynamic -lm -ldl
+	$(CC) main.c main.h -o app `pkg-config --cflags --libs gtk+-3.0` -Wl,-export-dynamic -lm -ldl
 
 # %.o : %.c # получение объектных файлов из всех, присутствующих в директории файлов исходных кодов
 # 	$(CC) $(FLAGS) -c $< -o $@ 

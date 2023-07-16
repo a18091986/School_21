@@ -34,7 +34,7 @@
                     <property name="visible">True</property>
                     <property name="can-focus">True</property>
                     <property name="receives-default">True</property>
-                    <signal name="clicked" handler="function_button_clicked" swapped="no"/>
+                    <signal name="clicked" handler="funcbtnClicked" swapped="no"/>
                   </object>
                   <packing>
                     <property name="left-attach">0</property>
@@ -47,7 +47,7 @@
                     <property name="visible">True</property>
                     <property name="can-focus">True</property>
                     <property name="receives-default">True</property>
-                    <signal name="clicked" handler="function_button_clicked" swapped="no"/>
+                    <signal name="clicked" handler="funcbtnClicked" swapped="no"/>
                   </object>
                   <packing>
                     <property name="left-attach">1</property>
@@ -60,7 +60,7 @@
                     <property name="visible">True</property>
                     <property name="can-focus">True</property>
                     <property name="receives-default">True</property>
-                    <signal name="clicked" handler="function_button_clicked" swapped="no"/>
+                    <signal name="clicked" handler="funcbtnClicked" swapped="no"/>
                   </object>
                   <packing>
                     <property name="left-attach">2</property>
@@ -73,7 +73,7 @@
                     <property name="visible">True</property>
                     <property name="can-focus">True</property>
                     <property name="receives-default">True</property>
-                    <signal name="clicked" handler="function_button_clicked" swapped="no"/>
+                    <signal name="clicked" handler="funcbtnClicked" swapped="no"/>
                   </object>
                   <packing>
                     <property name="left-attach">3</property>
@@ -86,7 +86,7 @@
                     <property name="visible">True</property>
                     <property name="can-focus">True</property>
                     <property name="receives-default">True</property>
-                    <signal name="clicked" handler="function_button_clicked" swapped="no"/>
+                    <signal name="clicked" handler="funcbtnClicked" swapped="no"/>
                   </object>
                   <packing>
                     <property name="left-attach">4</property>
@@ -99,7 +99,7 @@
                     <property name="visible">True</property>
                     <property name="can-focus">True</property>
                     <property name="receives-default">True</property>
-                    <signal name="clicked" handler="function_button_clicked" swapped="no"/>
+                    <signal name="clicked" handler="funcbtnClicked" swapped="no"/>
                   </object>
                   <packing>
                     <property name="left-attach">5</property>
@@ -308,7 +308,7 @@
                     <property name="visible">True</property>
                     <property name="can-focus">True</property>
                     <property name="receives-default">True</property>
-                    <signal name="clicked" handler="function_button_clicked" swapped="no"/>
+                    <signal name="clicked" handler="funcbtnClicked" swapped="no"/>
                   </object>
                   <packing>
                     <property name="left-attach">4</property>
@@ -321,7 +321,7 @@
                     <property name="visible">True</property>
                     <property name="can-focus">True</property>
                     <property name="receives-default">True</property>
-                    <signal name="clicked" handler="function_button_clicked" swapped="no"/>
+                    <signal name="clicked" handler="funcbtnClicked" swapped="no"/>
                   </object>
                   <packing>
                     <property name="left-attach">4</property>
@@ -334,7 +334,7 @@
                     <property name="visible">True</property>
                     <property name="can-focus">True</property>
                     <property name="receives-default">True</property>
-                    <signal name="clicked" handler="function_button_clicked" swapped="no"/>
+                    <signal name="clicked" handler="funcbtnClicked" swapped="no"/>
                   </object>
                   <packing>
                     <property name="left-attach">5</property>
@@ -347,7 +347,7 @@
                     <property name="visible">True</property>
                     <property name="can-focus">True</property>
                     <property name="receives-default">True</property>
-                    <signal name="clicked" handler="function_button_clicked" swapped="no"/>
+                    <signal name="clicked" handler="funcbtnClicked" swapped="no"/>
                   </object>
                   <packing>
                     <property name="left-attach">5</property>
@@ -362,7 +362,7 @@
                   <packing>
                     <property name="left-attach">6</property>
                     <property name="top-attach">4</property>
-                    <property name="width">4</property>
+                    <property name="width">2</property>
                   </packing>
                 </child>
                 <child>
@@ -371,7 +371,7 @@
                     <property name="visible">True</property>
                     <property name="can-focus">True</property>
                     <property name="receives-default">True</property>
-                    <signal name="clicked" handler="function_button_clicked" swapped="no"/>
+                    <signal name="clicked" handler="funcbtnClicked" swapped="no"/>
                   </object>
                   <packing>
                     <property name="left-attach">5</property>
@@ -402,7 +402,7 @@
                   <packing>
                     <property name="left-attach">6</property>
                     <property name="top-attach">3</property>
-                    <property name="width">4</property>
+                    <property name="width">2</property>
                   </packing>
                 </child>
                 <child>
@@ -440,7 +440,7 @@
                     <property name="visible">True</property>
                     <property name="can-focus">True</property>
                     <property name="receives-default">True</property>
-                    <signal name="clicked" handler="function_button_clicked" swapped="no"/>
+                    <signal name="clicked" handler="funcbtnClicked" swapped="no"/>
                   </object>
                   <packing>
                     <property name="left-attach">6</property>
@@ -453,7 +453,7 @@
                     <property name="visible">True</property>
                     <property name="can-focus">True</property>
                     <property name="receives-default">True</property>
-                    <signal name="clicked" handler="function_button_clicked" swapped="no"/>
+                    <signal name="clicked" handler="funcbtnClicked" swapped="no"/>
                   </object>
                   <packing>
                     <property name="left-attach">7</property>
@@ -482,6 +482,32 @@
                     <property name="left-attach">0</property>
                     <property name="top-attach">0</property>
                     <property name="width">10</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkButton" id="plus">
+                    <property name="label" translatable="yes">+</property>
+                    <property name="visible">True</property>
+                    <property name="can-focus">True</property>
+                    <property name="receives-default">True</property>
+                  </object>
+                  <packing>
+                    <property name="left-attach">8</property>
+                    <property name="top-attach">3</property>
+                    <property name="width">2</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkButton" id="minus">
+                    <property name="label" translatable="yes">-</property>
+                    <property name="visible">True</property>
+                    <property name="can-focus">True</property>
+                    <property name="receives-default">True</property>
+                  </object>
+                  <packing>
+                    <property name="left-attach">8</property>
+                    <property name="top-attach">4</property>
+                    <property name="width">2</property>
                   </packing>
                 </child>
               </object>
@@ -588,42 +614,6 @@
             <property name="top-attach">5</property>
             <property name="width">10</property>
           </packing>
-        </child>
-      </object>
-    </child>
-  </object>
-  <object class="GtkWindow">
-    <property name="can-focus">False</property>
-    <property name="default-width">320</property>
-    <property name="default-height">640</property>
-    <property name="attached-to">graph</property>
-    <child>
-      <!-- n-columns=3 n-rows=6 -->
-      <object class="GtkGrid">
-        <property name="visible">True</property>
-        <property name="can-focus">False</property>
-        <property name="row-homogeneous">True</property>
-        <property name="column-homogeneous">True</property>
-        <child>
-          <object class="GtkDrawingArea">
-            <property name="visible">True</property>
-            <property name="can-focus">False</property>
-          </object>
-          <packing>
-            <property name="left-attach">0</property>
-            <property name="top-attach">0</property>
-            <property name="width">3</property>
-            <property name="height">5</property>
-          </packing>
-        </child>
-        <child>
-          <placeholder/>
-        </child>
-        <child>
-          <placeholder/>
-        </child>
-        <child>
-          <placeholder/>
         </child>
       </object>
     </child>
