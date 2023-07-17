@@ -1,22 +1,23 @@
 //Подключаем заголовочные файлы gtk
 
-#include <gtk/gtk.h>
-#include <string.h>
-#include <math.h>
-#include <cairo.h>
 #include "main.h"
 
-#define WIDTH   640
-#define HEIGHT  480
+#include <cairo.h>
+#include <gtk/gtk.h>
+#include <math.h>
+#include <string.h>
 
-#define ZOOM_X  100.0
-#define ZOOM_Y  100.0
+#define WIDTH 640
+#define HEIGHT 480
+
+#define ZOOM_X 100.0
+#define ZOOM_Y 100.0
 
 GtkEntry *input_expression;
 GtkEntry *input_x;
 GtkWidget *label_result;
 
-char in_string[256]={'\0'};
+char in_string[256] = {'\0'};
 double x_value = NAN;
 
 #define DA_WIDTH 600
@@ -34,13 +35,12 @@ GtkWidget *codomain_min_spin;
 int max_is_eq_to_min = 0;
 int dom_is_eq_to_codom = 0;
 
-
 // Слот выхода из программы
 // G_MODULE_EXPORT void onExit(GtkWidget * w) {
 //     gtk_main_quit();
 // }
 
-// G_MODULE_EXPORT void onOneClicked(GtkButton * btn, input_string * is) {   
+// G_MODULE_EXPORT void onOneClicked(GtkButton * btn, input_string * is) {
 //     strcpy(&is->data[is->position], "1 ");
 //     is->position += 2;
 //     // printf("string: %s\n", is->data);
@@ -65,36 +65,36 @@ int dom_is_eq_to_codom = 0;
 //             &da.width,
 //             &da.height);
 //     /* Draw on a black background */
-    // cairo_set_source_rgb (cr, 0.0, 0.0, 0.0);
-    // cairo_paint (cr);
-    // /* Change the transformation matrix */
-    // cairo_translate (cr, da.width / 2, da.height / 2);
-    // cairo_scale (cr, ZOOM_X, -ZOOM_Y);
-    // /* Determine the data points to calculate (ie. those in the clipping zone */
-    // cairo_device_to_user_distance (cr, &dx, &dy);
-    // cairo_clip_extents (cr, &clip_x1, &clip_y1, &clip_x2, &clip_y2);
-    // cairo_set_line_width (cr, dx);
-    // /* Draws x and y axis */
-    // cairo_set_source_rgb (cr, 0.0, 1.0, 0.0);
-    // cairo_move_to (cr, clip_x1, 0.0);
-    // cairo_line_to (cr, clip_x2, 0.0);
-    // cairo_move_to (cr, 0.0, clip_y1);
-    // cairo_line_to (cr, 0.0, clip_y2);
-    // cairo_stroke (cr);
-    // /* Link each data point */
-    // for (i = clip_x1; i < clip_x2; i += dx)
-    //     cairo_line_to (cr, i, f (i));
-    // /* Draw the curve */
-    // cairo_set_source_rgba (cr, 1, 0.2, 0.2, 0.6);
-    // cairo_stroke (cr);
-    ////////////////////////////////////////////////////////////////////////////
+// cairo_set_source_rgb (cr, 0.0, 0.0, 0.0);
+// cairo_paint (cr);
+// /* Change the transformation matrix */
+// cairo_translate (cr, da.width / 2, da.height / 2);
+// cairo_scale (cr, ZOOM_X, -ZOOM_Y);
+// /* Determine the data points to calculate (ie. those in the clipping zone */
+// cairo_device_to_user_distance (cr, &dx, &dy);
+// cairo_clip_extents (cr, &clip_x1, &clip_y1, &clip_x2, &clip_y2);
+// cairo_set_line_width (cr, dx);
+// /* Draws x and y axis */
+// cairo_set_source_rgb (cr, 0.0, 1.0, 0.0);
+// cairo_move_to (cr, clip_x1, 0.0);
+// cairo_line_to (cr, clip_x2, 0.0);
+// cairo_move_to (cr, 0.0, clip_y1);
+// cairo_line_to (cr, 0.0, clip_y2);
+// cairo_stroke (cr);
+// /* Link each data point */
+// for (i = clip_x1; i < clip_x2; i += dx)
+//     cairo_line_to (cr, i, f (i));
+// /* Draw the curve */
+// cairo_set_source_rgba (cr, 1, 0.2, 0.2, 0.6);
+// cairo_stroke (cr);
+////////////////////////////////////////////////////////////////////////////
 //     int width = 640;
 //     int height = 480;
 //     cairo_text_extents_t te;
 //     cairo_set_source_rgb(cr, 0.0, 0.0, 0.0);
 //     cairo_move_to (cr, width/2, 0);
 //     cairo_line_to (cr, width/2, height);
-//     cairo_move_to (cr, 0, height/2); 
+//     cairo_move_to (cr, 0, height/2);
 //     cairo_line_to (cr, width, height / 2);
 //   	cairo_set_line_width (cr, 2);
 //   	cairo_stroke (cr);
@@ -111,7 +111,8 @@ int dom_is_eq_to_codom = 0;
 //     return FALSE;
 // }
 
-// static gboolean on_draw_grid (GtkWidget *widget, cairo_t *cr, gpointer user_data)
+// static gboolean on_draw_grid (GtkWidget *widget, cairo_t *cr, gpointer
+// user_data)
 // {
 //     GdkRectangle da;            /* GtkDrawingArea size */
 //     gdouble dx = 5.0, dy = 5.0; /* Pixels between each point */
@@ -177,11 +178,12 @@ int dom_is_eq_to_codom = 0;
 //                     (emax_tmp - emin_tmp) * hscale);
 // 	cairo_stroke(cr_src);
 // 	cairo_surface_destroy(surface);
-// 	cairo_destroy(cr);    
+// 	cairo_destroy(cr);
 //     return FALSE;
 // }
 
-// static gboolean on_draw_x (GtkWidget *widget, cairo_t *cr, gpointer user_data) 
+// static gboolean on_draw_x (GtkWidget *widget, cairo_t *cr, gpointer
+// user_data)
 // {
 //     int width = 640;
 //     int height = 480;
@@ -235,7 +237,8 @@ int dom_is_eq_to_codom = 0;
 //     return FALSE;
 // }
 
-// static gboolean on_draw_y (GtkWidget *widget, cairo_t *cr, gpointer user_data) 
+// static gboolean on_draw_y (GtkWidget *widget, cairo_t *cr, gpointer
+// user_data)
 // {
 //     int width = 640;
 //     int height = 480;
@@ -272,7 +275,7 @@ int dom_is_eq_to_codom = 0;
 // 		cairo_text_extents (cr, str, &te);
 // 		cairo_move_to(cr, width/2 - te.width - 2, source);
 // 		cairo_show_text (cr, str);
-// 	} 
+// 	}
 //     return FALSE;
 // }
 
@@ -289,8 +292,8 @@ int dom_is_eq_to_codom = 0;
 //   cairo_set_line_width(cr, 2 * dx);
 //   cairo_move_to(cr, 0, 0);
 //   cairo_line_to(cr, 1, 1);
-   // int width = 640;
-    // int height = 480;
+// int width = 640;
+// int height = 480;
 //   cairo_surface_t *surface;
 //   surface = cairo_image_surface_create(CAIRO_FORMAT_ARGB32,
 //                                         width, height);
@@ -343,8 +346,8 @@ void deleteClicked() {
 }
 
 void calculateClicked() {
-    printf("%s", in_string);
-    gtk_label_set_text(GTK_LABEL(label_result), in_string);
+  printf("%s", in_string);
+  gtk_label_set_text(GTK_LABEL(label_result), in_string);
 }
 
 void numbtnClicked(GtkButton *button) {
@@ -360,18 +363,17 @@ void funcbtnClicked(GtkButton *button) {
 }
 
 int button_draw_graph_clicked_cb() {
+  GtkWidget *window_graph;
 
-    GtkWidget * window_graph;
-    
-    GtkWidget *da;
-    GtkBuilder *builder;
-    GtkWidget *close_button;
-    GtkWidget *draw_button;
-    GtkEntry *graph_entry;
-    GtkWidget *graph_window;
+  GtkWidget *da;
+  GtkBuilder *builder;
+  GtkWidget *close_button;
+  GtkWidget *draw_button;
+  GtkEntry *graph_entry;
+  GtkWidget *graph_window;
 
-    char input [] = {'1', '2'};
-    // expression = input;
+  char input[] = {'1', '2'};
+  // expression = input;
 
   builder = gtk_builder_new_from_file("graph_gui.glade");
   gtk_builder_connect_signals(builder, NULL);
@@ -379,20 +381,29 @@ int button_draw_graph_clicked_cb() {
   graph_window = GTK_WIDGET(gtk_builder_get_object(builder, "graph_window"));
   drawing_area = GTK_WIDGET(gtk_builder_get_object(builder, "graph_da"));
   close_button = GTK_WIDGET(gtk_builder_get_object(builder, "graph_close"));
-  draw_button = GTK_WIDGET(gtk_builder_get_object(builder, "graph_draw_button"));
+  draw_button =
+      GTK_WIDGET(gtk_builder_get_object(builder, "graph_draw_button"));
 
-  graph_error_label = GTK_WIDGET(gtk_builder_get_object(builder, "graph_error_label"));
-  domain_max_spin = GTK_WIDGET(gtk_builder_get_object(builder, "graph_spin_domain_max"));
-  codomain_max_spin = GTK_WIDGET(gtk_builder_get_object(builder, "graph_spin_codomain_max"));
-  domain_min_spin = GTK_WIDGET(gtk_builder_get_object(builder, "graph_spin_domain_min"));
-  codomain_min_spin = GTK_WIDGET(gtk_builder_get_object(builder, "graph_spin_codomain_min"));
+  graph_error_label =
+      GTK_WIDGET(gtk_builder_get_object(builder, "graph_error_label"));
+  domain_max_spin =
+      GTK_WIDGET(gtk_builder_get_object(builder, "graph_spin_domain_max"));
+  codomain_max_spin =
+      GTK_WIDGET(gtk_builder_get_object(builder, "graph_spin_codomain_max"));
+  domain_min_spin =
+      GTK_WIDGET(gtk_builder_get_object(builder, "graph_spin_domain_min"));
+  codomain_min_spin =
+      GTK_WIDGET(gtk_builder_get_object(builder, "graph_spin_codomain_min"));
 
   gtk_entry_set_text(graph_entry, (const gchar *)input);
-  gtk_widget_set_size_request(drawing_area, DA_WIDTH, DA_HEIGHT);  // size in pixels
+  gtk_widget_set_size_request(drawing_area, DA_WIDTH,
+                              DA_HEIGHT);  // size in pixels
 
   g_signal_connect(G_OBJECT(drawing_area), "draw", G_CALLBACK(on_draw), NULL);
-  g_signal_connect(G_OBJECT(draw_button), "clicked", G_CALLBACK(button_draw_clicked), G_OBJECT(graph_entry));
-  g_signal_connect(G_OBJECT(close_button), "clicked", G_CALLBACK(close_window), G_OBJECT(graph_window));
+  g_signal_connect(G_OBJECT(draw_button), "clicked",
+                   G_CALLBACK(button_draw_clicked), G_OBJECT(graph_entry));
+  g_signal_connect(G_OBJECT(close_button), "clicked", G_CALLBACK(close_window),
+                   G_OBJECT(graph_window));
 
   g_object_unref(builder);
   gtk_window_set_position(GTK_WINDOW(graph_window), GTK_WIN_POS_CENTER);
@@ -418,26 +429,25 @@ static gboolean on_draw(GtkWidget *widget, cairo_t *cairo) {
   cairo_device_to_user_distance(gp.cr, &gp.dx, &gp.dy);
 
   /* max value is always positive, min value is always negative */
-//   gp.max_x = gtk_spin_button_get_value(GTK_SPIN_BUTTON(domain_max_spin));
-//   gp.max_y = gtk_spin_button_get_value(GTK_SPIN_BUTTON(codomain_max_spin));
-//   gp.min_x = gtk_spin_button_get_value(GTK_SPIN_BUTTON(domain_min_spin));
-//   gp.min_y = gtk_spin_button_get_value(GTK_SPIN_BUTTON(codomain_min_spin));
+  //   gp.max_x = gtk_spin_button_get_value(GTK_SPIN_BUTTON(domain_max_spin));
+  //   gp.max_y = gtk_spin_button_get_value(GTK_SPIN_BUTTON(codomain_max_spin));
+  //   gp.min_x = gtk_spin_button_get_value(GTK_SPIN_BUTTON(domain_min_spin));
+  //   gp.min_y = gtk_spin_button_get_value(GTK_SPIN_BUTTON(codomain_min_spin));
 
   gp.max_x = 10;
   gp.max_y = 100;
   gp.min_x = -10;
   gp.min_y = -1;
 
+  //   if (dom_is_eq_to_codom) {
+  //     gp.max_y = gp.max_x;
+  //     gp.min_y = gp.min_x;
+  //   }
 
-//   if (dom_is_eq_to_codom) {
-//     gp.max_y = gp.max_x;
-//     gp.min_y = gp.min_x;
-//   }
-
-//   if (max_is_eq_to_min) {
-//     gp.min_x = -gp.max_x;
-//     gp.min_y = -gp.max_y;
-//   }
+  //   if (max_is_eq_to_min) {
+  //     gp.min_x = -gp.max_x;
+  //     gp.min_y = -gp.max_y;
+  //   }
 
   /* right_limit is Xmin on a graph axes, left_limit is Xmax
     if Xmax < Ymax, axes doesn't print fully */
@@ -463,7 +473,7 @@ static gboolean on_draw(GtkWidget *widget, cairo_t *cairo) {
 
   draw_axis(&gp);
 
-//   if (input_validation(expression) == S21_CORRECT_INPUT) {
+  //   if (input_validation(expression) == S21_CORRECT_INPUT) {
   if (1) {
     char buffer[64];
     if (gp.dx < 1)
@@ -618,8 +628,8 @@ void draw_axis(s_graph_properties *gp) {
 }
 
 void button_draw_clicked(GtkWidget *button, gpointer entry) {
-    printf("from button_draw_clicked");
-//   sprintf(expression, "%s", gtk_entry_get_text(entry));
+  printf("from button_draw_clicked");
+  //   sprintf(expression, "%s", gtk_entry_get_text(entry));
   gtk_widget_queue_draw(drawing_area);
 }
 
@@ -653,20 +663,21 @@ void check_same_max_min_toggled_cb(GtkCheckButton *button) {
   }
 }
 
-
-
 //     window_graph = gtk_window_new (GTK_WINDOW_TOPLEVEL);
 //     gtk_window_set_default_size (GTK_WINDOW (window_graph), WIDTH, HEIGHT);
 //     gtk_window_set_title (GTK_WINDOW (window_graph), "Graph drawing");
-//     g_signal_connect (G_OBJECT (window_graph), "destroy", gtk_main_quit, NULL);
-//     da = gtk_drawing_area_new ();
-//     gtk_container_add (GTK_CONTAINER (window_graph), da);
+//     g_signal_connect (G_OBJECT (window_graph), "destroy", gtk_main_quit,
+//     NULL); da = gtk_drawing_area_new (); gtk_container_add (GTK_CONTAINER
+//     (window_graph), da);
 //     // g_signal_connect (G_OBJECT (da), "draw", G_CALLBACK (on_draw), NULL);
-//     // g_signal_connect (G_OBJECT (da), "draw", G_CALLBACK (on_draw_grid), NULL);
-//     // g_signal_connect (G_OBJECT (da), "draw", G_CALLBACK (on_draw_x), NULL);
-//     // g_signal_connect (G_OBJECT (da), "draw", G_CALLBACK (on_draw_y), NULL);
-//     // g_signal_connect (G_OBJECT (da), "draw", G_CALLBACK (draw_graph), NULL);
-//     gtk_widget_show_all(window_graph);
+//     // g_signal_connect (G_OBJECT (da), "draw", G_CALLBACK (on_draw_grid),
+//     NULL);
+//     // g_signal_connect (G_OBJECT (da), "draw", G_CALLBACK (on_draw_x),
+//     NULL);
+//     // g_signal_connect (G_OBJECT (da), "draw", G_CALLBACK (on_draw_y),
+//     NULL);
+//     // g_signal_connect (G_OBJECT (da), "draw", G_CALLBACK (draw_graph),
+//     NULL); gtk_widget_show_all(window_graph);
 // }
 
 //   setlocale(LC_NUMERIC, "C");
@@ -689,33 +700,36 @@ void check_same_max_min_toggled_cb(GtkCheckButton *button) {
 //   }
 // }
 
-int main(int argc, char * argv[]) {
+int main(int argc, char *argv[]) {
+  gtk_init(&argc, &argv);
 
-    gtk_init(&argc, &argv);
-    
-    GtkBuilder * builder;
-    GError * err = NULL;
+  GtkBuilder *builder;
+  GError *err = NULL;
 
-    builder = gtk_builder_new();
-    if(!gtk_builder_add_from_file(builder, "calc_ui.glade", &err)) {
-        g_critical ("Не вышло загрузить файл с UI : %s", err->message);
-        g_error_free (err);
-    }
+  builder = gtk_builder_new();
+  if (!gtk_builder_add_from_file(builder, "calc_ui.glade", &err)) {
+    g_critical("Не вышло загрузить файл с UI : %s", err->message);
+    g_error_free(err);
+  }
 
-    GtkWidget * window = GTK_WIDGET(gtk_builder_get_object(builder, "main_window"));
-    g_signal_connect(G_OBJECT(window), "destroy", G_CALLBACK(gtk_main_quit), NULL);
+  GtkWidget *window =
+      GTK_WIDGET(gtk_builder_get_object(builder, "main_window"));
+  g_signal_connect(G_OBJECT(window), "destroy", G_CALLBACK(gtk_main_quit),
+                   NULL);
 
-    // GtkButton * one_btn = GTK_BUTTON(gtk_builder_get_object(ui_builder, "one_btn"));
-    
-    label_result = GTK_WIDGET(gtk_builder_get_object(builder, "label_result"));
-    input_expression = GTK_ENTRY(gtk_builder_get_object(builder, "input_expression"));
-    input_x = GTK_ENTRY(gtk_builder_get_object(builder, "input_x"));
+  // GtkButton * one_btn = GTK_BUTTON(gtk_builder_get_object(ui_builder,
+  // "one_btn"));
 
-    // g_signal_connect(G_OBJECT(one_btn), "clicked", G_CALLBACK(onOneClicked), &is);
-    gtk_builder_connect_signals(builder, NULL);
-    gtk_widget_show_all(window);
-    gtk_main();
+  label_result = GTK_WIDGET(gtk_builder_get_object(builder, "label_result"));
+  input_expression =
+      GTK_ENTRY(gtk_builder_get_object(builder, "input_expression"));
+  input_x = GTK_ENTRY(gtk_builder_get_object(builder, "input_x"));
 
-    return 0;
+  // g_signal_connect(G_OBJECT(one_btn), "clicked", G_CALLBACK(onOneClicked),
+  // &is);
+  gtk_builder_connect_signals(builder, NULL);
+  gtk_widget_show_all(window);
+  gtk_main();
+
+  return 0;
 }
-
