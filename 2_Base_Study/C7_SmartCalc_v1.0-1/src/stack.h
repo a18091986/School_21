@@ -19,7 +19,6 @@ StackElement * findStackElement(StackElement * top, char * name);
 
 void freeStack(StackElement * top);
 void setStackElementName(StackElement * top, char * name);
-// void setStackElementValue(StackElement * top, double value);
 void setStackElementData(StackElement * top, void * data, unsigned int datasize);
 void show_stack(StackElement * top);
 

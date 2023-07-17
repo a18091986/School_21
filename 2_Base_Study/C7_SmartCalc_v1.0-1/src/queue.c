@@ -12,10 +12,10 @@ void queue_head(queue *q) {
     else printf("NULL\n");
 }
 
-int insert_queue (queue * q, char value[17], char type[10]) {
+int insert_queue (queue * q, char value[], char type[]) {
     int result = 1;
     
-    // создание нового элемента списка
+    // создание нового элемента очереди
     node * newnode = malloc(sizeof(node));
     if (!newnode) result = 0;
 
@@ -55,3 +55,10 @@ int get_from_queue (queue * q, char *value, char *type) {
     }
     return res;
 }
+
+// void free_queue (queue * q) {
+
+//     while (q -> head) {
+//         get
+//     }
+// }

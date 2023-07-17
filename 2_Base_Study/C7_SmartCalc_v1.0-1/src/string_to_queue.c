@@ -1,31 +1,26 @@
 #include "string_to_queue.h"
 
 
-int from_string_to_queue(char input_expression[256], queue * result_queue, double x_val) {
+int from_string_to_queue(char input_expression[], queue * result_queue, double x_val) {
     // printf("input: %s\n", input_expression);
-    int is_previous_operand = 0;
-    int res = 1;
+    int is_previous_operand = 0; // отслеживание типа предыдущей лексемы
+    int res = 1; 
+    int i = 0;
     // printf("X: %lf\n", x_val);
     // queue_head(&result_queue);
 
     int length_of_ie = (int) strlen(input_expression);
-    // printf("Длина входной строки: %d\n-----------------------\n", length_of_ie);
-
-    int i = 0;
+    // printf("Длина входной строки: %d\n-----------------------\n", length_of_ie);  
 
     printf("----------------------------------------------\nfrom_string_to_queue\n");
 
     while (i != length_of_ie - 1) {
-        // printf("1");
-        // printf("%c\n", input_expression[i]);
-    // while (input_expression[i] != '\0') {
         // printf("Symbol: %c\n", input_expression[i]);
-        // printf("Current symbol: %c\n", input_expression[i]);
         if (input_expression[i] == ' ') {
             pass_spaces(input_expression, &i);
         }
         if (input_expression[i] == '.') {
-            printf("Point not in number");
+            // printf("Point not in number");
             res = 0;
             i++;
         } 
@@ -35,44 +30,54 @@ int from_string_to_queue(char input_expression[256], queue * result_queue, doubl
             int is_unar = is_previous_operand ? 0 : 1;
             if (is_unar) {
                 if (!plus_or_minus_flag)
-                    insert_queue(result_queue, "u_plus", "operator");
+                    res = insert_queue(result_queue, "u_plus", "operator");
                 else
-                    insert_queue(result_queue, "u_minus", "operator");
+                    res = insert_queue(result_queue, "u_minus", "operator");
             } else { 
                 char plus_or_minus[2] = {"/0"};
                 strcpy(plus_or_minus, plus_or_minus_flag == 0 ? "+" : "-");
-                insert_queue(result_queue, plus_or_minus, "operator");
+                res = insert_queue(result_queue, plus_or_minus, "operator");
             }
             is_previous_operand = 0;
         } 
         else if (strchr("0123456789", input_expression[i])) {
-            char number[17]={'\0'};
+            char number[511]={'\0'};
             if (!get_digits(input_expression, &i, number)) {
-                printf("Incorrect number\n");
+                // printf("Incorrect number\n");
                 res = 0;     
             } else {
             res = insert_queue(result_queue, number, "operand");
             is_previous_operand = 1;
             }
         } 
+        else if (input_expression[i] == 'x') {
+            res = insert_queue(result_queue, "x", "operand");
+            is_previous_operand = 1;
+            i++;
+        }
         else if (input_expression[i] == '(') {
             res = insert_queue(result_queue, "(", "operator");
+            is_previous_operand = 0;
             i++;
         } 
         else if (input_expression[i] == ')') {
             res = insert_queue(result_queue, ")", "operator");
+            is_previous_operand = 1;
             i++;
         } 
         else if (input_expression[i] == '/') {
             res = insert_queue(result_queue, "/", "operator");
+            is_previous_operand = 0;
             i++;
         } 
         else if (input_expression[i] == '*') {
             res = insert_queue(result_queue, "*", "operator");
+            is_previous_operand = 0;
             i++;
         } 
         else if (input_expression[i] == '^') {
             res = insert_queue(result_queue, "^", "operator");
+            is_previous_operand = 0;
             i++;
         } 
         else if (check_is_sin(input_expression, &i) == 0) {
@@ -126,7 +131,7 @@ int from_string_to_queue(char input_expression[256], queue * result_queue, doubl
             i += 3;
         }
         else {
-            printf("No match in input_to_queue function\n");
+            // printf("No match in input_to_queue function\n");
             res = 0;
         }
         if (res == 0)
@@ -136,16 +141,15 @@ int from_string_to_queue(char input_expression[256], queue * result_queue, doubl
     return res;
 };
 
-void read_lex() {
-    printf("from read_lex");
-}
 
 void pass_spaces(char input_expression[], int * i) {
+    // пропуск пробелов
     while (input_expression[*i] == ' ') (*i)++;
 }
 
 
 int check_plus_or_minus(char input_expression[], int * i) {  
+    // определяет итоговый знак в случае нескольких подряд +/-
     int minus_count = 0;
     int plus_count = 0;
 
@@ -157,15 +161,11 @@ int check_plus_or_minus(char input_expression[], int * i) {
         (*i)++;
     }
     int res = (- minus_count + plus_count) > 0 ? 0 : 1;
-    // printf("--------------------------------------------\n");
-    // printf("from check_plus_or_minus: \n");
-    // printf("Minus count: %d, Plus count: %d\n", minus_count, plus_count);
-    // printf("Result: %d. If 0 => +, else - \n", res);
-    // printf("Next symbol: %c\n", input_expression[*i]);
     return res;
 }
 
 int get_digits(char input_expression[], int * i, char digits_string[]) {
+    // получение вещественного или целого числа
     int res = 1;
     int count = 0;
     int point_count = 0;
@@ -183,12 +183,6 @@ int get_digits(char input_expression[], int * i, char digits_string[]) {
     // printf("Next symbol: %c\n", input_expression[*i]);
     return point_count <= 1 ? 1 : 0;
 }
-
-// int check_is_unar(char input_expression[], int * i, int is_previous_operand) {
-//     // проверка унарный или бинарный + или -
-//     // return 0 - бинарный, 1 - унарный
-//     return is_previous_operand >= 0 ? 0 : 1;
-// }
 
 int check_is_sin(char input_expression[], int * i) {
     char sin_string [] = "sin(\0";
