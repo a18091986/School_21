@@ -45,24 +45,24 @@ void setStackElementData(StackElement *top, void *data, unsigned int datasize) {
   memcpy(top->data, data, datasize);
 }
 
-StackElement *findStackElement(StackElement *top, char *name) {
-  // поиск элемента в стеке по имени
-  StackElement *result = NULL;
-  while (top) {
-    if (strcmp(top->name, name) == 0) {
-      result = top;
-      break;
-    }
-    top = top->next;
-  };
-  return result;
-}
+// StackElement *findStackElement(StackElement *top, char *name) {
+//   // поиск элемента в стеке по имени
+//   StackElement *result = NULL;
+//   while (top) {
+//     if (strcmp(top->name, name) == 0) {
+//       result = top;
+//       break;
+//     }
+//     top = top->next;
+//   };
+//   return result;
+// }
 
-void show_stack(StackElement *top) {
-  printf("Current Stack:\n");
-  while (top) {
-    printf("Elemement_name: %s, value: %lf, data_value: %s\n", top->name,
-           top->value, top->data->value);
-    top = top->next;
-  }
-}
+// void show_stack(StackElement *top) {
+//   printf("Current Stack:\n");
+//   while (top) {
+//     printf("Elemement_name: %s, value: %lf, data_value: %s\n", top->name,
+//            top->value, top->data->value);
+//     top = top->next;
+//   }
+// }

@@ -33,7 +33,7 @@ SRC_TEST = tests/*.c
 # build: $(SRC_MAIN) $(SRC_LOGIC)
 # 	$(CC) $(FLAGS) 
 
-build: apply_clang $(SRC_C_FILES) $(SRC_LOGIC)
+build: apply_clang  $(SRC_LOGIC)
 	$(CC) $(BUILD_FLAGS) $(GTK_FLAGS) $(addprefix -I , $(INCLUDES)) $(SRC_LOGIC) main.c -o $(EXECUTABLE) $(LIBS_FLAGS) $(GTK_LIBS) -lm
 
 run: build
@@ -63,8 +63,6 @@ gcov_report: apply_clang
 # test: apply_clang $(SRC_C_FILES)
 # 	$(CC) $(BUILD_FLAGS) $(addprefix -I , $(INCLUDES)) $(SRC_LOGIC) $(SRC_TEST) -o $(TEST_TARGET) $(LIBS_FLAGS) -lm -lsubunit
 # 	./$(TEST_TARGET)
-
-
 
 
 # test: CFLAGS += -coverage

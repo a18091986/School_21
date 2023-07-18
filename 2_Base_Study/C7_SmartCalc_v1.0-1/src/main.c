@@ -21,7 +21,8 @@ int main() {
 
   result = back_process(input_string, polish_string, x, &q_in, &q_polish, s_in,
                         s_pol, &err);
-  if (!err) printf("Result: %lf\n", result);
+  // printf("%lf\n", result);
+  // if (!err) printf("Result: %lf\n", result);
   return 0;
 }
 

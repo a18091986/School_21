@@ -61,15 +61,15 @@ int from_input_string_to_queue(char input_expression[], queue* result_queue,
       res = insert_queue(result_queue, ")", "operator");
       is_previous_operand = 1;
       i++;
-    } else if (input_expression[i] == '/') {
+    } else if (input_expression[i] == '/' && is_previous_operand) {
       res = insert_queue(result_queue, "/", "operator");
       is_previous_operand = 0;
       i++;
-    } else if (input_expression[i] == '*') {
+    } else if (input_expression[i] == '*' && is_previous_operand) {
       res = insert_queue(result_queue, "*", "operator");
       is_previous_operand = 0;
       i++;
-    } else if (input_expression[i] == '^') {
+    } else if (input_expression[i] == '^' && is_previous_operand) {
       res = insert_queue(result_queue, "^", "operator");
       is_previous_operand = 0;
       i++;
@@ -109,7 +109,8 @@ int from_input_string_to_queue(char input_expression[], queue* result_queue,
       res = insert_queue(result_queue, "log", "operator");
       is_previous_operand = 0;
       i += 3;
-    } else if (check_is_mod(input_expression, &i) == 0) {
+    } else if (check_is_mod(input_expression, &i) == 0 && is_previous_operand) {
+      printf("mod\n");
       res = insert_queue(result_queue, "mod", "operator");
       is_previous_operand = 0;
       i += 3;
@@ -123,11 +124,12 @@ int from_input_string_to_queue(char input_expression[], queue* result_queue,
       // printf("No match in input_to_queue function\n");
       res = 0;
     }
-    if (res == 0) break;
+    if (!res) break;
   }
   printf(
       "from_input_string_to_queue\n--------------------------------------------"
       "--\n");
+  printf("res: %d\n", res);
   return res;
 };
 
