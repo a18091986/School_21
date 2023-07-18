@@ -9,7 +9,7 @@ StackElement *pushStackElement(StackElement *top) {
   new_el->next = top;
 
   return new_el;
-};
+}
 
 StackElement *popStackElement(StackElement *top) {
   StackElement *result;
@@ -24,7 +24,7 @@ StackElement *popStackElement(StackElement *top) {
     free(top);
   }
   return result;
-};
+}
 
 void freeStack(StackElement *top) {
   // очистка стека полностью

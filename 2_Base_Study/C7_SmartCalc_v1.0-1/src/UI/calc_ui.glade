@@ -393,7 +393,7 @@
                 </child>
                 <child>
                   <object class="GtkButton" id="X_val">
-                    <property name="label" translatable="yes">X</property>
+                    <property name="label" translatable="yes">x</property>
                     <property name="visible">True</property>
                     <property name="can-focus">True</property>
                     <property name="receives-default">True</property>
@@ -490,6 +490,7 @@
                     <property name="visible">True</property>
                     <property name="can-focus">True</property>
                     <property name="receives-default">True</property>
+                    <signal name="clicked" handler="funcbtnClicked" swapped="no"/>
                   </object>
                   <packing>
                     <property name="left-attach">8</property>
@@ -503,6 +504,7 @@
                     <property name="visible">True</property>
                     <property name="can-focus">True</property>
                     <property name="receives-default">True</property>
+                    <signal name="clicked" handler="funcbtnClicked" swapped="no"/>
                   </object>
                   <packing>
                     <property name="left-attach">8</property>

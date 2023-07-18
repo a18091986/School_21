@@ -2,14 +2,15 @@ TARGET = app
 TEST_TARGET = test1
 CC = gcc 
 # FLAGS = -Wall -Wextra -Werror -std=c11
-# FLAGS = -Wextra -Werror -std=c11
+FLAGS = -Wextra -Werror -std=c11
 
 
 VALGRIND_OUTPUT = valgrind.txt
 # BUILD_FLAGS = -Wall -Wextra -Werror -std=c11 -pedantic -fanalyzer
+BUILD_FLAGS = -Wextra -Werror -std=c11 -pedantic
 GTK_FLAGS = `pkg-config gtk+-3.0 --cflags`
 GTK_LIBS = `pkg-config gtk+-3.0 --libs`
-VALGRIND_FLAGS = --log-file="$(VALGRIND_OUTPUT)" --track-origins=yes --trace-children=yes --leak-check=full --leak-resolution=med
+VALGRIND_FLAGS = -s --log-file="$(VALGRIND_OUTPUT)" --track-origins=yes --trace-children=yes --leak-check=full --leak-resolution=med
 LIBS_FLAGS = -lcheck
 EXECUTABLE = smart_calc
 
@@ -29,22 +30,23 @@ INCLUDES = .
 SRC_MAIN = *.c
 SRC_LOGIC = logic/*.c
 SRC_TEST = tests/*.c
+SRC_UI = UI/*.c
 
 # build: $(SRC_MAIN) $(SRC_LOGIC)
 # 	$(CC) $(FLAGS) 
 
-build: apply_clang  $(SRC_LOGIC)
-	$(CC) $(BUILD_FLAGS) $(GTK_FLAGS) $(addprefix -I , $(INCLUDES)) $(SRC_LOGIC) main.c -o $(EXECUTABLE) $(LIBS_FLAGS) $(GTK_LIBS) -lm
+build: apply_clang  $(SRC_LOGIC) $(SRC_UI)
+	$(CC) $(BUILD_FLAGS) $(GTK_FLAGS) $(addprefix -I , $(INCLUDES)) $(SRC_LOGIC) $(SRC_UI) main.c -o $(EXECUTABLE) $(LIBS_FLAGS) $(GTK_LIBS) -lm -rdynamic
 
 run: build
 	./$(EXECUTABLE)
 
 test: apply_clang $(SRC_LOGIC) $(SRC_TEST)
-	$(CC) $(BUILD_FLAGS) $(addprefix -I , $(INCLUDES)) $(SRC_LOGIC) $(SRC_TEST) -o $(TEST_TARGET) $(LIBS_FLAGS) -lm -lsubunit
+	$(CC) $(BUILD_FLAGS) $(GTK_FLAGS) $(addprefix -I , $(INCLUDES)) $(SRC_LOGIC) $(SRC_TEST) -o $(TEST_TARGET) $(LIBS_FLAGS) $(GTK_LIBS) -lm -lsubunit
 	./$(TEST_TARGET)
 
 build_test: apply_clang $(SRC_LOGIC)
-	$(CC) $(BUILD_FLAGS) $(addprefix -I , $(INCLUDES)) $(SRC_LOGIC) $(SRC_TEST) -o $(TEST_TARGET) $(LIBS_FLAGS) -lm -lsubunit
+	$(CC) $(BUILD_FLAGS) $(GTK_FLAGS) $(addprefix -I , $(INCLUDES)) $(SRC_LOGIC) $(SRC_TEST) -o $(TEST_TARGET) $(LIBS_FLAGS) $(GTK_LIBS) -lm -lsubunit
 
 apply_clang: 
 	cp ../materials/linters/.clang-format .
@@ -53,12 +55,21 @@ apply_clang:
 	rm -f .clang-format
 
 gcov_report: apply_clang
-	$(CC) --coverage $(BUILD_FLAGS) $(addprefix -I , $(INCLUDES)) $(SRC_LOGIC) $(SRC_TEST) -o $(TEST_TARGET) $(LIBS_FLAGS) -lm -lsubunit
+	$(CC) --coverage $(BUILD_FLAGS) $(GTK_FLAGS) $(addprefix -I , $(INCLUDES)) $(SRC_LOGIC) $(SRC_TEST) -o $(TEST_TARGET) $(LIBS_FLAGS) $(GTK_LIBS) -lm -lsubunit
 	./$(TEST_TARGET)
 	lcov -t "$(TEST_TARGET)" -o $(TEST_TARGET).info -c -d .
 	genhtml -o report $(TEST_TARGET).info
 	rm *.gcda *.gcno *.info
 	open report/index.html
+
+cppcheck:
+	cppcheck --enable=all --suppress=missingIncludeSystem --suppress=unusedFunction .
+
+
+valgrind: apply_clang build_test
+	valgrind $(VALGRIND_FLAGS) ./$(TEST_TARGET)
+	grep --color=always -n "ERROR SUMMARY" $(VALGRIND_OUTPUT) | grep -v "0 errors from 0 contexts" || true
+	grep --color=always -n "definitely lost:" $(VALGRIND_OUTPUT) | grep -v "0 bytes in 0 blocks" || true
 
 # test: apply_clang $(SRC_C_FILES)
 # 	$(CC) $(BUILD_FLAGS) $(addprefix -I , $(INCLUDES)) $(SRC_LOGIC) $(SRC_TEST) -o $(TEST_TARGET) $(LIBS_FLAGS) -lm -lsubunit
@@ -82,6 +93,9 @@ gcov_report: apply_clang
 
 # .o - объектные файлы
 # .c - файлы с исходным кодом
+
+dist: build
+	tar -czvf $(EXECUTABLE).tgz $(EXECUTABLE)
 
 clean : 
 	rm *.o

@@ -1,11 +1,11 @@
 //Подключаем заголовочные файлы gtk
 
-#include "main.h"
-
 #include <cairo.h>
 #include <gtk/gtk.h>
 #include <math.h>
 #include <string.h>
+
+#include "main.h"
 
 #define WIDTH 640
 #define HEIGHT 480

@@ -225,10 +225,8 @@ END_TEST
 
 START_TEST(back_7) {
   int err = 0;
-  double result = 0.0;
   char polish_string[512] = {'\0'};
   double x = 4.0;
-  double right_res = 2.0;
 
   queue q_in;
   queue q_polish;
@@ -241,8 +239,8 @@ START_TEST(back_7) {
 
   char *input_string = "10+3)\n";
 
-  result = back_process(input_string, polish_string, x, &q_in, &q_polish, s_in,
-                        s_pol, &err);
+  back_process(input_string, polish_string, x, &q_in, &q_polish, s_in, s_pol,
+               &err);
 
   ck_assert_int_eq(err, 1);
 
@@ -279,8 +277,7 @@ START_TEST(back_8) {
   init_queue(&q_in);
   init_queue(&q_polish);
 
-  // char *input_string = "2^(2^3)\n";
-  char *input_string = "2//2\n";
+  char *input_string = "2^(2^3)\n";
 
   result = back_process(input_string, polish_string, x, &q_in, &q_polish, s_in,
                         s_pol, &err);
@@ -304,8 +301,49 @@ START_TEST(back_8) {
 }
 END_TEST
 
+START_TEST(back_9) {
+  int err = 0;
+  char polish_string[512] = {'\0'};
+  double x = 4.0;
+
+  queue q_in;
+  queue q_polish;
+
+  StackElement *s_in = NULL;
+  StackElement *s_pol = NULL;
+
+  init_queue(&q_in);
+  init_queue(&q_polish);
+
+  char *input_string = "2 mod mod 2\n";
+
+  back_process(input_string, polish_string, x, &q_in, &q_polish, s_in, s_pol,
+               &err);
+
+  ck_assert_int_eq(err, 1);
+
+  // int code = parse_to_tokens(str, &res);
+
+  // ck_assert_int_eq(code, SUCCESS);
+  // queue *rpn;
+  // rpn = make_rpn(res, &code);
+  // ck_assert_int_eq(code, SUCCESS);
+  // double dres = calc_rpn(rpn, 0, &code);
+  // ck_assert_int_eq(code, SUCCESS);
+
+  // ck_assert_double_eq_tol(result, right_res, EPS);
+
+  // free_queue(&res);
+  // free_queue(&rpn);
+  // freeStack(s_in);
+  // freeStack(s_pol);
+  // free(input_string);
+}
+END_TEST
+
 Suite *calc_suite() {
   Suite *s = suite_create("calc_suite");
+
   TCase *t1 = tcase_create("back_1");
   suite_add_tcase(s, t1);
   tcase_add_test(t1, back_1);
@@ -337,6 +375,10 @@ Suite *calc_suite() {
   TCase *t8 = tcase_create("back_8");
   suite_add_tcase(s, t8);
   tcase_add_test(t8, back_8);
+
+  TCase *t9 = tcase_create("back_9");
+  suite_add_tcase(s, t9);
+  tcase_add_test(t9, back_9);
 
   return s;
 }

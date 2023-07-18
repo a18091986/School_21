@@ -6,15 +6,16 @@ int from_input_string_to_queue(char input_expression[], queue* result_queue,
   int is_previous_operand = 0;  // отслеживание типа предыдущей лексемы
   int res = 1;
   int i = 0;
+  int pow_count = 0;
   // printf("X: %lf\n", x_val);
   // queue_head(&result_queue);
 
   int length_of_ie = (int)strlen(input_expression);
   printf("Длина входной строки: %d\n-----------------------\n", length_of_ie);
 
-  printf(
-      "----------------------------------------------\nfrom_input_string_to_"
-      "queue\n");
+  // printf(
+  //     "----------------------------------------------\nfrom_input_string_to_"
+  //     "queue\n");
 
   while (i != length_of_ie - 1) {
     // printf("Symbol: %c\n", input_expression[i]);
@@ -41,12 +42,26 @@ int from_input_string_to_queue(char input_expression[], queue* result_queue,
       }
       is_previous_operand = 0;
     } else if (strchr("0123456789", input_expression[i])) {
+      int is_next_pow = 0;
+      int is_prev_pow = 0;
       char number[511] = {'\0'};
-      if (!get_digits(input_expression, &i, number)) {
+      if (!get_digits(input_expression, &i, number, &is_next_pow, &is_prev_pow,
+                      &pow_count)) {
         // printf("Incorrect number\n");
         res = 0;
       } else {
-        res = insert_queue(result_queue, number, "operand");
+        // printf("pow_count: %d, prev_pow: %d, next_pow: %d\n", pow_count,
+        //        is_prev_pow, is_next_pow);
+        if (is_next_pow && pow_count == 1) {
+          res = insert_queue(result_queue, "(", "operator") &&
+                insert_queue(result_queue, number, "operand");
+        } else if (is_prev_pow && pow_count == 2) {
+          res = insert_queue(result_queue, number, "operand") &&
+                insert_queue(result_queue, ")", "operator");
+          pow_count = 0;
+        } else {
+          res = insert_queue(result_queue, number, "operand");
+        }
         is_previous_operand = 1;
       }
     } else if (input_expression[i] == 'x') {
@@ -71,6 +86,7 @@ int from_input_string_to_queue(char input_expression[], queue* result_queue,
       i++;
     } else if (input_expression[i] == '^' && is_previous_operand) {
       res = insert_queue(result_queue, "^", "operator");
+      pow_count++;
       is_previous_operand = 0;
       i++;
     } else if (check_is_sin(input_expression, &i) == 0) {
@@ -110,28 +126,29 @@ int from_input_string_to_queue(char input_expression[], queue* result_queue,
       is_previous_operand = 0;
       i += 3;
     } else if (check_is_mod(input_expression, &i) == 0 && is_previous_operand) {
-      printf("mod\n");
       res = insert_queue(result_queue, "mod", "operator");
       is_previous_operand = 0;
       i += 3;
+      // break;
     } else if (check_is_u_minus(input_expression, &i) == 0) {
       res = insert_queue(result_queue, "u_minus", "operator");
       i += 7;
-    } else if (check_is_mod(input_expression, &i) == 0) {
+    } else if (check_is_u_plus(input_expression, &i) == 0) {
       res = insert_queue(result_queue, "u_plus", "operator");
       i += 6;
     } else {
       // printf("No match in input_to_queue function\n");
       res = 0;
     }
-    if (!res) break;
+    if (!res) {
+      break;
+    }
   }
-  printf(
-      "from_input_string_to_queue\n--------------------------------------------"
-      "--\n");
-  printf("res: %d\n", res);
+  // printf(
+  //     "from_input_string_to_queue\n--------------------------------------------"
+  //     "\n");
   return res;
-};
+}
 
 int from_polish_string_to_queue(char input_expression[], queue* result_queue,
                                 double x_val) {
@@ -139,9 +156,9 @@ int from_polish_string_to_queue(char input_expression[], queue* result_queue,
   int i = 0;
   int length_of_ie = (int)strlen(input_expression);
 
-  printf(
-      "----------------------------------------------\nfrom_polish_string_to_"
-      "queue\n");
+  // printf(
+  //     "----------------------------------------------\nfrom_polish_string_to_"
+  //     "queue\n");
 
   while (i != length_of_ie - 1) {
     if (input_expression[i] == ' ') {
@@ -154,7 +171,7 @@ int from_polish_string_to_queue(char input_expression[], queue* result_queue,
       i++;
     } else if (strchr("0123456789", input_expression[i])) {
       char number[511] = {'\0'};
-      if (!get_digits(input_expression, &i, number))
+      if (!get_digits_1(input_expression, &i, number))
         res = 0;
       else
         res = insert_queue(result_queue, number, "operand");
@@ -217,18 +234,19 @@ int from_polish_string_to_queue(char input_expression[], queue* result_queue,
     }
     if (res == 0) break;
   }
-  printf(
-      "from_polish_string_to_queue\n-------------------------------------------"
-      "---\n");
+  // printf(
+  //     "from_polish_string_to_queue\n-----------------------------------------"
+  //     "--"
+  //     "---\n");
   return res;
-};
+}
 
-void pass_spaces(char input_expression[], int* i) {
+void pass_spaces(char const input_expression[], int* i) {
   // пропуск пробелов
   while (input_expression[*i] == ' ') (*i)++;
 }
 
-int check_plus_or_minus(char input_expression[], int* i) {
+int check_plus_or_minus(char const input_expression[], int* i) {
   // определяет итоговый знак в случае нескольких подряд +/-
   int minus_count = 0;
   int plus_count = 0;
@@ -244,9 +262,34 @@ int check_plus_or_minus(char input_expression[], int* i) {
   return res;
 }
 
-int get_digits(char input_expression[], int* i, char digits_string[]) {
+int get_digits(char input_expression[], int* i, char digits_string[],
+               int* is_next_pow, int* is_prev_pow, int* const pow_count) {
   // получение вещественного или целого числа
-  int res = 1;
+  int count = 0;
+  int point_count = 0;
+  int j = *i;
+  if (input_expression[*i - 1] == '^' && *pow_count != 0) {
+    *is_prev_pow = 1;
+  }
+  while (strchr("0123456789.", input_expression[*i])) {
+    if (input_expression[*i] == '.') point_count++;
+    count++;
+    (*i)++;
+  }
+  strncpy(digits_string, &input_expression[j], count);
+  pass_spaces(input_expression, i);
+  if (input_expression[*i] == '^' && *pow_count != 0) {
+    *is_next_pow = 1;
+  }
+  // printf("--------------------------------------------\n");
+  // printf("from get_digits: \n");
+  // printf("Result digits string: %s\n", digits_string);
+  // printf("Next symbol: %c\n", input_expression[*i]);
+  return point_count <= 1 ? 1 : 0;
+}
+
+int get_digits_1(char input_expression[], int* i, char digits_string[]) {
+  // получение вещественного или целого числа
   int count = 0;
   int point_count = 0;
   int j = *i;

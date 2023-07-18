@@ -22,6 +22,7 @@ typedef struct {
 
 void init_queue(queue *q);
 void queue_head(queue *q);
+void free_queue(queue *q);
 
 int insert_queue(queue *q, char value[], char type[]);
 // 1 - Успешное добавление в очередь, 0 - ошибка при выделении памяти

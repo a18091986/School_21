@@ -3,6 +3,7 @@
 
 #include <math.h>
 
+#include "UI/ui.h"
 #include "logic/calc.h"
 #include "logic/polish.h"
 #include "logic/queue.h"

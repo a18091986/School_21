@@ -1,7 +1,7 @@
 #include "logic/polish.h"
 
 int get_prior(char* operator) {
-  int prior;
+  int prior = 0;
   if (!strcmp(operator, "+") || !strcmp(operator, "-")) {
     prior = 1;
   } else if (!strcmp(operator, "*") || !strcmp(operator, "/") ||
@@ -21,7 +21,7 @@ int get_prior(char* operator) {
 }
 
 int form_polish_string(queue* q, StackElement* s, char postfix[]) {
-  printf("----------------------------------------------\npolish\n");
+  // printf("----------------------------------------------\npolish\n");
   int res = 1;
   int j = 0;  // outer_string_pointer
   node tmp;
@@ -100,7 +100,7 @@ int form_polish_string(queue* q, StackElement* s, char postfix[]) {
     if (strcmp(current_operator_from_stack, "(") == 0) res = 0;
   }
   // show_stack(s);
-  printf("POSTFIX_STRING: %s\n", postfix);
-  printf("polish\n----------------------------------------------\n");
+  // printf("POSTFIX_STRING: %s\n", postfix);
+  // printf("polish\n----------------------------------------------\n");
   return res;
 }

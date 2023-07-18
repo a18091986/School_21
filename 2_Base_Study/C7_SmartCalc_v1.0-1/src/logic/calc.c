@@ -3,7 +3,7 @@
 #include "main.h"
 
 double calc(queue* q, StackElement* s, double x) {
-  printf("----------------------------------------------\nCALC\n");
+  // printf("----------------------------------------------\nCALC\n");
   double res = 0.0;
   double value;
   node lexema;
@@ -92,7 +92,7 @@ double calc(queue* q, StackElement* s, double x) {
     s = popStackElement(s);
   }
 
-  printf("CALC\n----------------------------------------------\n");
+  // printf("CALC\n----------------------------------------------\n");
   return res;
 }
 
@@ -101,26 +101,27 @@ double back_process(char input_string[], char polish_string[], double x,
                     StackElement* s_pol, int* err) {
   double result = 0.0;
 
-  printf("%d: \n", from_input_string_to_queue(input_string, q_in, x));
-  printf("123");
-
-  // if (from_input_string_to_queue(input_string, q_in, x)) {
-  //   if (form_polish_string(q_in, s_in, polish_string)) {
-  //     if (from_polish_string_to_queue(polish_string, q_polish, x)) {
-  //       result = calc(q_polish, s_pol, x);
-  //       printf("%lf\n", result);
-  //     } else {
-  //       printf("Error while polish to queue\n");
-  //       *err = 1;
-  //     }
-  //   } else {
-  //     printf("Error while convert to polish\n");
-  //     *err = 1;
-  //   }
-  // } else {
-  //   printf("Error while read input string\n");
-  //   *err = 1;
-  // }
+  if (from_input_string_to_queue(input_string, q_in, x)) {
+    if (form_polish_string(q_in, s_in, polish_string)) {
+      if (from_polish_string_to_queue(polish_string, q_polish, x)) {
+        result = calc(q_polish, s_pol, x);
+        // printf("%lf\n", result);
+      } else {
+        // printf("Error while polish to queue\n");
+        *err = 1;
+      }
+    } else {
+      // printf("Error while convert to polish\n");
+      *err = 1;
+    }
+  } else {
+    // printf("Error while read input string\n");
+    *err = 1;
+  }
+  freeStack(s_in);
+  freeStack(s_pol);
+  free_queue(q_in);
+  free_queue(q_polish);
 
   return result;
 }
