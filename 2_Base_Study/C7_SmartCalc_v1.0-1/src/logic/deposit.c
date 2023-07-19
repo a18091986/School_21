@@ -4,7 +4,9 @@ int deposit(char* start, char* time, char* dep_pct, char* tax_pct,
             int pay_period, int cap, char* plus_period, char* plus_sum,
             char* minus_period, char* minus_sum, double* depo_result_sum_num,
             double* depo_result_pct_num, double* depo_result_tax_num) {
-  int is_double = 0;
+  //   int is_double = 0;
+
+  // https://journal.tinkoff.ru/guide/deposit-interests/
   int err = 0;
   printf("start: %s\n", start);
   printf("time: %s\n", time);

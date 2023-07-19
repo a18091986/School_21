@@ -7,6 +7,7 @@
 #include <math.h>
 #include <string.h>
 
+#include "logic/credit.h"
 #include "logic/deposit.h"
 #include "main.h"
 

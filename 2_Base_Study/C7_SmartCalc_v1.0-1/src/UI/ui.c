@@ -27,6 +27,7 @@ GtkRadioButton *credit_type_dif;
 GtkLabel *month_pay_result;
 GtkLabel *additional_payment_result;
 GtkLabel *sum_payment_result;
+GtkLabel *credit_error;
 
 GtkEntry *depo_start;
 GtkEntry *depo_time;
@@ -90,6 +91,7 @@ int app() {
       GTK_LABEL(gtk_builder_get_object(builder, "additional_payment_result"));
   sum_payment_result =
       GTK_LABEL(gtk_builder_get_object(builder, "sum_payment_result"));
+  credit_error = GTK_LABEL(gtk_builder_get_object(builder, "credit_error"));
 
   depo_start = GTK_ENTRY(gtk_builder_get_object(builder, "depo_start"));
   depo_time = GTK_ENTRY(gtk_builder_get_object(builder, "depo_time"));
@@ -146,15 +148,6 @@ void onDepoCalcBtnClicked() {
   strcpy(depo_minus_period_num, gtk_entry_get_text(depo_minus_period));
   strcpy(depo_minus_sum_num, gtk_entry_get_text(depo_minus_sum));
 
-  //   int depo_time_num = atoi(gtk_entry_get_text(depo_time));
-  //   double depo_pct_num = atof(gtk_entry_get_text(depo_pct));
-  //   double depo_tax_pct_num = atof(gtk_entry_get_text(depo_tax_pct));
-
-  //   int depo_plus_period_num = atof(gtk_entry_get_text(depo_plus_period));
-  //   double depo_plus_sum_num = atof(gtk_entry_get_text(depo_plus_sum));
-  //   int depo_minus_period_num = atof(gtk_entry_get_text(depo_minus_period));
-  //   double depo_minus_sum_num = atof(gtk_entry_get_text(depo_minus_sum));
-
   printf("Начальная сумма вклада: %s\n", depo_start_num);
   printf("Срок вклада: %s\n", depo_time_num);
   printf("Процентная ставка: %s\n", depo_pct_num);
@@ -198,33 +191,57 @@ void onDepoCalcBtnClicked() {
 
 void onCreditCalcBtnClicked() {
   int credit_type =
-      gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(credit_type_ann)) ? 0 : 1;
-  double credit_sum_num = atof(gtk_entry_get_text(credit_sum));
-  double credit_time_num = atof(gtk_entry_get_text(credit_time));
-  double credit_percent_num = atof(gtk_entry_get_text(credit_percent));
-  printf("credit_sum_num: %lf\n", credit_sum_num);
-  printf("credit_time_num: %lf\n", credit_time_num);
-  printf("credit_percent_num: %lf\n", credit_percent_num);
-  printf("credit type: %d\n", credit_type);
+      gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(credit_type_ann)) ? 1 : 0;
 
-  double month_pay_result_num = 0.0;
+  char credit_sum_num[256] = {'\0'};
+  char credit_time_num[256] = {'\0'};
+  char credit_percent_num[256] = {'\0'};
+
+  strcpy(credit_sum_num, gtk_entry_get_text(credit_sum));
+  strcpy(credit_time_num, gtk_entry_get_text(credit_time));
+  strcpy(credit_percent_num, gtk_entry_get_text(credit_percent));
+
+  printf("credit_sum_num: %s\n", credit_sum_num);
+  printf("credit_time_num: %s\n", credit_time_num);
+  printf("credit_percent_num: %s\n", credit_percent_num);
+  printf("схема платежей: %s\n",
+         credit_type ? "аннуитетная" : "дифференциальная");
+
+  double month_pay_result_num_f = 0.0;
+  double month_pay_result_num_l = 0.0;
   double additional_payment_result_num = 0.0;
   double sum_payment_result_num = 0.0;
-  char month_pay_result_str[256] = {'\0'};
-  char additional_payment_result_str[256] = {'\0'};
-  char sum_payment_result_str[256] = {'\0'};
 
-  sprintf(month_pay_result_str, "%f", month_pay_result_num);
-  sprintf(additional_payment_result_str, "%f", additional_payment_result_num);
-  sprintf(sum_payment_result_str, "%f", sum_payment_result_num);
+  int err =
+      credit(credit_sum_num, credit_time_num, credit_percent_num, credit_type,
+             &month_pay_result_num_f, &month_pay_result_num_l,
+             &additional_payment_result_num, &sum_payment_result_num);
+  if (!err) {
+    char month_pay_result_str[256] = {'\0'};
+    char month_pay_result_str_f[256] = {'\0'};
+    char month_pay_result_str_l[256] = {'\0'};
+    char additional_payment_result_str[256] = {'\0'};
+    char sum_payment_result_str[256] = {'\0'};
 
-  gtk_label_set_text(month_pay_result, month_pay_result_str);
-  gtk_label_set_text(additional_payment_result, additional_payment_result_str);
-  gtk_label_set_text(sum_payment_result, sum_payment_result_str);
+    sprintf(month_pay_result_str_f, "%.2f", month_pay_result_num_f);
+    sprintf(month_pay_result_str_l, "%.2f", month_pay_result_num_l);
+    strcat(month_pay_result_str, month_pay_result_str_f);
+    strcat(month_pay_result_str, " / ");
+    strcat(month_pay_result_str, month_pay_result_str_l);
+    sprintf(additional_payment_result_str, "%.2f",
+            additional_payment_result_num);
+    sprintf(sum_payment_result_str, "%.2f", sum_payment_result_num);
 
-  //   if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(credit_type_ann))) {
-  //     printf("Radio ann\n");
-  //   }
+    gtk_label_set_text(month_pay_result, month_pay_result_str);
+    gtk_label_set_text(additional_payment_result,
+                       additional_payment_result_str);
+    gtk_label_set_text(sum_payment_result, sum_payment_result_str);
+  } else {
+    gtk_label_set_text(credit_error, "НЕВЕРНЫЕ ВХОДНЫЕ ДАННЫЕ");
+    gtk_label_set_text(month_pay_result, "");
+    gtk_label_set_text(additional_payment_result, "");
+    gtk_label_set_text(sum_payment_result, "");
+  }
 }
 
 void clearClicked() {
