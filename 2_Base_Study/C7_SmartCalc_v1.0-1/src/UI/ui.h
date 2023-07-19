@@ -1,9 +1,14 @@
-#ifndef SRC_S21_SMARTCALC_GTK_H_
-#define SRC_S21_SMARTCALC_GTK_H_
+#ifndef SRC_UI_H_
+#define SRC_UI_H_
 
+#include <cairo.h>
 #include <gtk/gtk.h>
 #include <locale.h>
 #include <math.h>
+#include <string.h>
+
+#include "logic/deposit.h"
+#include "main.h"
 
 typedef struct {
   cairo_t *cr;
@@ -33,4 +38,4 @@ void close_window(GtkWidget *widget, gpointer window);
 void draw_axis(s_graph_properties *gp);
 void draw_graph_line(s_graph_properties *gp);
 
-#endif  // SRC_S21_SMARTCALC_H_
+#endif  // SRC_UI_H_

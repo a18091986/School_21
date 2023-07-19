@@ -1,12 +1,5 @@
 #include "UI/ui.h"
 
-#include <cairo.h>
-#include <gtk/gtk.h>
-#include <math.h>
-#include <string.h>
-
-#include "main.h"
-
 #define WIDTH 640
 #define HEIGHT 480
 
@@ -25,6 +18,32 @@ double x_value = NAN;
 GtkEntry *input_expression;
 GtkEntry *input_x;
 GtkWidget *label_result;
+
+GtkEntry *credit_sum;
+GtkEntry *credit_time;
+GtkEntry *credit_percent;
+GtkRadioButton *credit_type_ann;
+GtkRadioButton *credit_type_dif;
+GtkLabel *month_pay_result;
+GtkLabel *additional_payment_result;
+GtkLabel *sum_payment_result;
+
+GtkEntry *depo_start;
+GtkEntry *depo_time;
+GtkEntry *depo_pct;
+GtkEntry *depo_tax_pct;
+GtkRadioButton *depo_cap_yes;
+GtkRadioButton *depo_cap_no;
+GtkRadioButton *period_month;
+GtkRadioButton *period_day;
+GtkEntry *depo_plus_period;
+GtkEntry *depo_plus_sum;
+GtkEntry *depo_minus_period;
+GtkEntry *depo_minus_sum;
+GtkLabel *depo_pct_res;
+GtkLabel *depo_tax_res;
+GtkLabel *depo_sum_res;
+GtkLabel *depo_error;
 
 char *expression;
 GtkWidget *drawing_area;
@@ -57,12 +76,155 @@ int app() {
   input_expression =
       GTK_ENTRY(gtk_builder_get_object(builder, "input_expression"));
   input_x = GTK_ENTRY(gtk_builder_get_object(builder, "input_x"));
+
+  credit_sum = GTK_ENTRY(gtk_builder_get_object(builder, "credit_sum"));
+  credit_time = GTK_ENTRY(gtk_builder_get_object(builder, "credit_time"));
+  credit_percent = GTK_ENTRY(gtk_builder_get_object(builder, "credit_percent"));
+  credit_type_ann =
+      GTK_RADIO_BUTTON(gtk_builder_get_object(builder, "credit_type_ann"));
+  credit_type_dif =
+      GTK_RADIO_BUTTON(gtk_builder_get_object(builder, "credit_type_diff"));
+  month_pay_result =
+      GTK_LABEL(gtk_builder_get_object(builder, "month_pay_result"));
+  additional_payment_result =
+      GTK_LABEL(gtk_builder_get_object(builder, "additional_payment_result"));
+  sum_payment_result =
+      GTK_LABEL(gtk_builder_get_object(builder, "sum_payment_result"));
+
+  depo_start = GTK_ENTRY(gtk_builder_get_object(builder, "depo_start"));
+  depo_time = GTK_ENTRY(gtk_builder_get_object(builder, "depo_time"));
+  depo_pct = GTK_ENTRY(gtk_builder_get_object(builder, "depo_pct"));
+  depo_tax_pct = GTK_ENTRY(gtk_builder_get_object(builder, "depo_tax_pct"));
+  depo_cap_yes =
+      GTK_RADIO_BUTTON(gtk_builder_get_object(builder, "depo_cap_yes"));
+  depo_cap_no =
+      GTK_RADIO_BUTTON(gtk_builder_get_object(builder, "depo_cap_no"));
+  period_month =
+      GTK_RADIO_BUTTON(gtk_builder_get_object(builder, "period_month"));
+  period_day = GTK_RADIO_BUTTON(gtk_builder_get_object(builder, "period_day"));
+  depo_plus_sum = GTK_ENTRY(gtk_builder_get_object(builder, "depo_plus_sum"));
+  depo_plus_period =
+      GTK_ENTRY(gtk_builder_get_object(builder, "depo_plus_period"));
+  depo_minus_period =
+      GTK_ENTRY(gtk_builder_get_object(builder, "depo_minus_period"));
+  depo_minus_sum = GTK_ENTRY(gtk_builder_get_object(builder, "depo_minus_sum"));
+  depo_pct_res = GTK_LABEL(gtk_builder_get_object(builder, "depo_pct_res"));
+  depo_tax_res = GTK_LABEL(gtk_builder_get_object(builder, "depo_tax_res"));
+  depo_sum_res = GTK_LABEL(gtk_builder_get_object(builder, "depo_sum_res"));
+  depo_error = GTK_LABEL(gtk_builder_get_object(builder, "depo_error"));
+
   //   if (gtk_entry_get_text(input_x)) x = atof(gtk_entry_get_text(input_x));
   gtk_builder_connect_signals(builder, NULL);
   gtk_widget_show_all(window);
   gtk_main();
 
   return 0;
+}
+
+void onDepoCalcBtnClicked() {
+  int is_cap =
+      gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(depo_cap_yes)) ? 1 : 0;
+
+  int depo_pay_period =
+      gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(period_month)) ? 1 : 0;
+
+  char depo_start_num[256] = {'\0'};
+  char depo_time_num[256] = {'\0'};
+  char depo_pct_num[256] = {'\0'};
+  char depo_tax_pct_num[256] = {'\0'};
+  char depo_plus_period_num[256] = {'\0'};
+  char depo_plus_sum_num[256] = {'\0'};
+  char depo_minus_period_num[256] = {'\0'};
+  char depo_minus_sum_num[256] = {'\0'};
+
+  strcpy(depo_start_num, gtk_entry_get_text(depo_start));
+  strcpy(depo_time_num, gtk_entry_get_text(depo_time));
+  strcpy(depo_pct_num, gtk_entry_get_text(depo_pct));
+  strcpy(depo_tax_pct_num, gtk_entry_get_text(depo_tax_pct));
+  strcpy(depo_plus_period_num, gtk_entry_get_text(depo_plus_period));
+  strcpy(depo_plus_sum_num, gtk_entry_get_text(depo_plus_sum));
+  strcpy(depo_minus_period_num, gtk_entry_get_text(depo_minus_period));
+  strcpy(depo_minus_sum_num, gtk_entry_get_text(depo_minus_sum));
+
+  //   int depo_time_num = atoi(gtk_entry_get_text(depo_time));
+  //   double depo_pct_num = atof(gtk_entry_get_text(depo_pct));
+  //   double depo_tax_pct_num = atof(gtk_entry_get_text(depo_tax_pct));
+
+  //   int depo_plus_period_num = atof(gtk_entry_get_text(depo_plus_period));
+  //   double depo_plus_sum_num = atof(gtk_entry_get_text(depo_plus_sum));
+  //   int depo_minus_period_num = atof(gtk_entry_get_text(depo_minus_period));
+  //   double depo_minus_sum_num = atof(gtk_entry_get_text(depo_minus_sum));
+
+  printf("Начальная сумма вклада: %s\n", depo_start_num);
+  printf("Срок вклада: %s\n", depo_time_num);
+  printf("Процентная ставка: %s\n", depo_pct_num);
+  printf("Налоговая ставка:  %s\n", depo_tax_pct_num);
+  printf("Периодичность выплаты процентов:  %s\n",
+         depo_pay_period ? "месяц" : "день");
+  printf("Капитализация процентов: %s\n", is_cap ? "да" : "нет");
+  printf("Периодичность пополнений:  %s\n", depo_plus_period_num);
+  printf("Сумма пополнения:  %s\n", depo_plus_sum_num);
+  printf("Периодичность снятий:  %s\n", depo_minus_period_num);
+  printf("Сумма снятия:  %s\n", depo_minus_sum_num);
+
+  double depo_result_pct_num = 0.0;
+  double depo_result_tax_num = 0.0;
+  double depo_result_sum_num = 0.0;
+
+  int err =
+      deposit(depo_start_num, depo_time_num, depo_pct_num, depo_tax_pct_num,
+              depo_pay_period, is_cap, depo_plus_period_num, depo_plus_sum_num,
+              depo_minus_period_num, depo_minus_sum_num, &depo_result_sum_num,
+              &depo_result_pct_num, &depo_result_tax_num);
+  if (!err) {
+    char depo_result_pct_str[256] = {'\0'};
+    char depo_result_tax_str[256] = {'\0'};
+    char depo_result_sum_str[256] = {'\0'};
+
+    sprintf(depo_result_pct_str, "%f", depo_result_pct_num);
+    sprintf(depo_result_tax_str, "%f", depo_result_tax_num);
+    sprintf(depo_result_sum_str, "%f", depo_result_sum_num);
+
+    gtk_label_set_text(depo_pct_res, depo_result_pct_str);
+    gtk_label_set_text(depo_tax_res, depo_result_tax_str);
+    gtk_label_set_text(depo_sum_res, depo_result_sum_str);
+  } else {
+    gtk_label_set_text(depo_error, "НЕВЕРНЫЕ ВХОДНЫЕ ДАННЫЕ");
+    gtk_label_set_text(depo_pct_res, "");
+    gtk_label_set_text(depo_tax_res, "");
+    gtk_label_set_text(depo_sum_res, "");
+  }
+}
+
+void onCreditCalcBtnClicked() {
+  int credit_type =
+      gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(credit_type_ann)) ? 0 : 1;
+  double credit_sum_num = atof(gtk_entry_get_text(credit_sum));
+  double credit_time_num = atof(gtk_entry_get_text(credit_time));
+  double credit_percent_num = atof(gtk_entry_get_text(credit_percent));
+  printf("credit_sum_num: %lf\n", credit_sum_num);
+  printf("credit_time_num: %lf\n", credit_time_num);
+  printf("credit_percent_num: %lf\n", credit_percent_num);
+  printf("credit type: %d\n", credit_type);
+
+  double month_pay_result_num = 0.0;
+  double additional_payment_result_num = 0.0;
+  double sum_payment_result_num = 0.0;
+  char month_pay_result_str[256] = {'\0'};
+  char additional_payment_result_str[256] = {'\0'};
+  char sum_payment_result_str[256] = {'\0'};
+
+  sprintf(month_pay_result_str, "%f", month_pay_result_num);
+  sprintf(additional_payment_result_str, "%f", additional_payment_result_num);
+  sprintf(sum_payment_result_str, "%f", sum_payment_result_num);
+
+  gtk_label_set_text(month_pay_result, month_pay_result_str);
+  gtk_label_set_text(additional_payment_result, additional_payment_result_str);
+  gtk_label_set_text(sum_payment_result, sum_payment_result_str);
+
+  //   if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(credit_type_ann))) {
+  //     printf("Radio ann\n");
+  //   }
 }
 
 void clearClicked() {
@@ -169,8 +331,6 @@ void funcbtnClicked(GtkButton *button) {
 }
 
 int button_draw_graph_clicked_cb() {
-  //   expression = in_string;
-  //   printf("Expression: %s\n", expression);
   strcat(in_string, "\n");
   GtkWidget *window_graph;
 
@@ -180,8 +340,6 @@ int button_draw_graph_clicked_cb() {
   GtkWidget *draw_button;
   GtkEntry *graph_entry = NULL;
   GtkWidget *graph_window;
-
-  //   //   char input[] = {'1', '2'};
 
   builder = gtk_builder_new_from_file("UI/graph_gui.glade");
   gtk_builder_connect_signals(builder, NULL);
