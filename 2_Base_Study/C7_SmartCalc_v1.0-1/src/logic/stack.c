@@ -35,14 +35,14 @@ void setStackElementName(StackElement *top, char *name) {
   // установка имени элемента стека
   if (top->name) free(top->name);
   top->name = (char *)malloc(strlen(name) + 1);
-  strcpy(top->name, name);
+  if (top->name) strcpy(top->name, name);
 }
 
 void setStackElementData(StackElement *top, void *data, unsigned int datasize) {
   // установка данных элемента стека
   if (top->data) free(top->data);
   top->data = malloc(datasize);
-  memcpy(top->data, data, datasize);
+  if (top->data) memcpy(top->data, data, datasize);
 }
 
 // StackElement *findStackElement(StackElement *top, char *name) {

@@ -8,10 +8,8 @@
 #ifndef STRING_TO_QUEUE_H
 #define STRING_TO_QUEUE_H
 
-int from_input_string_to_queue(char input_expression[], queue* result_queue,
-                               double x_val);
-int from_polish_string_to_queue(char input_expression[], queue* result_queue,
-                                double x_val);
+int from_input_string_to_queue(char input_expression[], queue* result_queue);
+int from_polish_string_to_queue(char input_expression[], queue* result_queue);
 void pass_spaces(char const input_expression[], int* i);
 
 //-------------------------------------------------------------------------------

@@ -1,20 +1,27 @@
-TARGET = app
+TARGET = calc
 TEST_TARGET = test
 CC = gcc 
-# FLAGS = -Wall -Wextra -Werror -std=c11
-FLAGS = -Wextra -Werror -std=c11
 
+INCLUDES = . 
+REPORT_DIR = report
+BUILD_DIR = ../build/
 
 VALGRIND_OUTPUT = valgrind.txt
-# BUILD_FLAGS = -Wall -Wextra -Werror -std=c11 -pedantic -fanalyzer
-BUILD_FLAGS = -Wextra -Werror -std=c11 -pedantic
+BUILD_FLAGS = -Wall -Wextra -Werror -std=c11 -pedantic -fanalyzer
 GTK_FLAGS = `pkg-config gtk+-3.0 --cflags`
 GTK_LIBS = `pkg-config gtk+-3.0 --libs`
 VALGRIND_FLAGS = -s --log-file="$(VALGRIND_OUTPUT)" --track-origins=yes --trace-children=yes --leak-check=full --leak-resolution=med
-LIBS_FLAGS = -lcheck
-EXECUTABLE = smart_calc
+LIBS_FLAGS = -lcheck -rdynamic
 
-INCLUDES = . 
+SRC_MAIN = *.c
+SRC_LOGIC = logic/*.c
+SRC_TEST = tests/*.c
+SRC_UI = UI/*.c
+
+UNAME_S := $(shell uname -s)
+ifeq ($(UNAME_S),Linux)
+	LIBS_FLAGS += -lsubunit -lm
+endif
 
 # SRC_MAIN = $(wildcard *.c) # имена всех исходных файлов
 # SRC_LOGIC = $(wildcard logic/*.c) # имена всех исходных файлов
@@ -27,26 +34,25 @@ INCLUDES = .
 # %.o : %.c # получение объектных файлов из всех, присутствующих в директории файлов исходных кодов
 # 	$(CC) $(FLAGS) -c $< -o $@ 
 
-SRC_MAIN = *.c
-SRC_LOGIC = logic/*.c
-SRC_TEST = tests/*.c
-SRC_UI = UI/*.c
+
 
 # build: $(SRC_MAIN) $(SRC_LOGIC)
 # 	$(CC) $(FLAGS) 
 
+# all: clean test build gcov_report dvi dist
+
 build: apply_clang  $(SRC_LOGIC) $(SRC_UI)
-	$(CC) $(BUILD_FLAGS) $(GTK_FLAGS) $(addprefix -I , $(INCLUDES)) $(SRC_LOGIC) $(SRC_UI) main.c -o $(EXECUTABLE) $(LIBS_FLAGS) $(GTK_LIBS) -lm -rdynamic
+	$(CC) $(BUILD_FLAGS) $(GTK_FLAGS) $(addprefix -I , $(INCLUDES)) $(SRC_LOGIC) $(SRC_UI) main.c -o $(EXECUTABLE) $(LIBS_FLAGS) $(GTK_LIBS) 
 
 run: build
 	./$(EXECUTABLE)
 
 test: apply_clang $(SRC_LOGIC) $(SRC_TEST)
-	$(CC) $(BUILD_FLAGS) $(GTK_FLAGS) $(addprefix -I , $(INCLUDES)) $(SRC_LOGIC) $(SRC_TEST) -o $(TEST_TARGET) $(LIBS_FLAGS) $(GTK_LIBS) -lm -lsubunit
+	$(CC) $(BUILD_FLAGS) $(GTK_FLAGS) $(addprefix -I , $(INCLUDES)) $(SRC_LOGIC) $(SRC_TEST) -o $(TEST_TARGET) $(LIBS_FLAGS) $(GTK_LIBS)
 	./$(TEST_TARGET)
 
 build_test: apply_clang $(SRC_LOGIC)
-	$(CC) $(BUILD_FLAGS) $(GTK_FLAGS) $(addprefix -I , $(INCLUDES)) $(SRC_LOGIC) $(SRC_TEST) -o $(TEST_TARGET) $(LIBS_FLAGS) $(GTK_LIBS) -lm -lsubunit
+	$(CC) $(BUILD_FLAGS) $(GTK_FLAGS) $(addprefix -I , $(INCLUDES)) $(SRC_LOGIC) $(SRC_TEST) -o $(TEST_TARGET) $(LIBS_FLAGS) $(GTK_LIBS)
 
 apply_clang: 
 	cp ../materials/linters/.clang-format .
@@ -71,6 +77,15 @@ valgrind: apply_clang build_test
 	grep --color=always -n "ERROR SUMMARY" $(VALGRIND_OUTPUT) | grep -v "0 errors from 0 contexts" || true
 	grep --color=always -n "definitely lost:" $(VALGRIND_OUTPUT) | grep -v "0 bytes in 0 blocks" || true
 
+uninstall:
+	$(DELETE) $(BUILD_DIR)
+
+install: uninstall build
+	mkdir $(BUILD_DIR)
+	cp $(TARGET) $(BUILD_DIR)
+
+
+
 # test: apply_clang $(SRC_C_FILES)
 # 	$(CC) $(BUILD_FLAGS) $(addprefix -I , $(INCLUDES)) $(SRC_LOGIC) $(SRC_TEST) -o $(TEST_TARGET) $(LIBS_FLAGS) -lm -lsubunit
 # 	./$(TEST_TARGET)
@@ -94,8 +109,23 @@ valgrind: apply_clang build_test
 # .o - объектные файлы
 # .c - файлы с исходным кодом
 
+dvi:
+	texi2dvi docs.tex
+	open docs.dvi
+
 dist: build
 	tar -czvf $(EXECUTABLE).tgz $(EXECUTABLE)
 
-clean : 
-	rm *.o
+clean:
+	$(DELETE) $(TEST_TARGET)
+	$(DELETE) $(TARGET)
+	$(DELETE) $(REPORT_DIR)
+	$(DELETE) *.info
+	$(DELETE) *.o
+	$(DELETE) *.gc*
+	$(DELETE) $(VALGRIND_OUTPUT)
+	$(DELETE) function.*
+	$(DELETE) docs.aux
+	$(DELETE) docs.log
+	$(DELETE) docs.dvi
+	$(DELETE) $(TARGET).tgz

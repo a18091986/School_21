@@ -1,7 +1,6 @@
 #include "logic/string_to_queue.h"
 
-int from_input_string_to_queue(char input_expression[], queue* result_queue,
-                               double x_val) {
+int from_input_string_to_queue(char input_expression[], queue* result_queue) {
   // printf("input: %s\n", input_expression);
   int is_previous_operand = 0;  // отслеживание типа предыдущей лексемы
   int res = 1;
@@ -152,8 +151,7 @@ int from_input_string_to_queue(char input_expression[], queue* result_queue,
   return res;
 }
 
-int from_polish_string_to_queue(char input_expression[], queue* result_queue,
-                                double x_val) {
+int from_polish_string_to_queue(char input_expression[], queue* result_queue) {
   int res = 1;
   int i = 0;
   int length_of_ie = (int)strlen(input_expression);

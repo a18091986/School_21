@@ -5,7 +5,7 @@
 double calc(queue* q, StackElement* s, double x) {
   // printf("----------------------------------------------\nCALC\n");
   double res = 0.0;
-  double value;
+
   node lexema;
   while (get_from_queue(q, lexema.value, lexema.type)) {
     // printf("value: %s, type: %s\n", lexema.value, lexema.type);
@@ -101,9 +101,9 @@ double back_process(char input_string[], char polish_string[], double x,
                     StackElement* s_pol, int* err) {
   double result = 0.0;
 
-  if (from_input_string_to_queue(input_string, q_in, x)) {
+  if (from_input_string_to_queue(input_string, q_in)) {
     if (form_polish_string(q_in, s_in, polish_string)) {
-      if (from_polish_string_to_queue(polish_string, q_polish, x)) {
+      if (from_polish_string_to_queue(polish_string, q_polish)) {
         result = calc(q_polish, s_pol, x);
         // printf("%lf\n", result);
       } else {

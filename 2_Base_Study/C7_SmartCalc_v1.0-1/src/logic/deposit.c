@@ -101,7 +101,6 @@ int get_num(char input_number[]) {
 }
 
 int check_correct_input(char input_number[]) {
-  int space_count = 0;
   int right_sym = 1;
   int right_len = strlen(input_number) < 256;
   for (size_t i = 0; i < strlen(input_number); i++)

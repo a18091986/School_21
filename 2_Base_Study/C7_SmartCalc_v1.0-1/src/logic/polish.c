@@ -32,7 +32,9 @@ int form_polish_string(queue* q, StackElement* s, char postfix[]) {
       // printf("Operand: %s\n", tmp.value);
       strncpy(&postfix[j], tmp.value, strlen(tmp.value));
       j += strlen(tmp.value);
-      strncpy(&postfix[j++], " ", 1);
+      // strncpy(&postfix[j++], " ", 1);
+      strcat(postfix, " ");
+      j++;
     } else if (strcmp(tmp.value, ")") == 0) {
       // show_stack(s);
       if (s) {
@@ -43,7 +45,9 @@ int form_polish_string(queue* q, StackElement* s, char postfix[]) {
           // current_operator_from_stack);
           strcpy(&postfix[j], current_operator_from_stack);
           j += strlen(current_operator_from_stack);
-          strncpy(&postfix[j++], " ", 1);
+          // strncpy(&postfix[j++], " ", 1);
+          strcat(postfix, " ");
+          j++;
           s = popStackElement(s);
           if (s)
             strcpy(current_operator_from_stack, s->name);
@@ -82,7 +86,9 @@ int form_polish_string(queue* q, StackElement* s, char postfix[]) {
         strcpy(current_operator_from_stack, s->name);
         strcpy(&postfix[j], current_operator_from_stack);
         j += strlen(current_operator_from_stack);
-        strncpy(&postfix[j++], " ", 1);
+        // strncpy(&postfix[j++], " ", 1);
+        strcat(postfix, " ");
+        j++;
         s = popStackElement(s);
       }
       s = pushStackElement(s);
@@ -95,7 +101,9 @@ int form_polish_string(queue* q, StackElement* s, char postfix[]) {
     strcpy(current_operator_from_stack, s->name);
     strcpy(&postfix[j], current_operator_from_stack);
     j += strlen(current_operator_from_stack);
-    strncpy(&postfix[j++], " ", 1);
+    // strncpy(&postfix[j++], " ", 1);
+    strcat(postfix, " ");
+    j++;
     s = popStackElement(s);
     if (strcmp(current_operator_from_stack, "(") == 0) res = 0;
   }

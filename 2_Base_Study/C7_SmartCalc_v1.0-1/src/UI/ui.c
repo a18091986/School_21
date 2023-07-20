@@ -282,18 +282,17 @@ void calculateClicked() {
   strcat(input_string, "\n");
   strcpy(x_num, gtk_entry_get_text(input_x));
 
-  if (strstr(input_string, "x"))
-    if ((strcmp(x_num, "\0") ? 1 : 0) && !get_num(x_num) &&
-        check_correct_input(x_num)) {
-      x = atof(x_num);
-    } else {
-      printf("strcmp: %d\n", strcmp(input_string, "x"));
-      printf("!get_num: %d\n", !get_num(x_num));
-      printf("check_correct_input: %d\n", check_correct_input(x_num));
-      err = 1;
-      gtk_label_set_text(GTK_LABEL(label_result),
-                         "----------ERROR IN X VALUE---------");
-    }
+  if (strstr(input_string, "x") && (strcmp(x_num, "\0") ? 1 : 0) &&
+      !get_num(x_num) && check_correct_input(x_num))
+    x = atof(x_num);
+  else {
+    // printf("strcmp: %d\n", strcmp(input_string, "x"));
+    // printf("!get_num: %d\n", !get_num(x_num));
+    // printf("check_correct_input: %d\n", check_correct_input(x_num));
+    err = 1;
+    gtk_label_set_text(GTK_LABEL(label_result),
+                       "----------ERROR IN X VALUE---------");
+  }
   if (!err) {
     queue q_in;
     queue q_polish;
@@ -364,8 +363,6 @@ int button_draw_graph_clicked_cb() {
   strcat(in_string, gtk_entry_get_text(input_expression));
   strcat(in_string, "\n");
 
-  GtkWidget *window_graph;
-
   //   GtkWidget *da;
   GtkBuilder *builder;
   //   GtkWidget *close_button;
@@ -410,7 +407,8 @@ int button_draw_graph_clicked_cb() {
   return 0;
 }
 
-static gboolean on_draw(GtkWidget *widget, cairo_t *cairo) {
+gboolean on_draw(GtkWidget *widget, cairo_t *cairo) {
+  if (!widget) printf(" ");
   s_graph_properties gp = {'\0'};
   double x_middle;
   double y_middle;
@@ -450,7 +448,6 @@ static gboolean on_draw(GtkWidget *widget, cairo_t *cairo) {
     err = 1;
     gtk_label_set_text(GTK_LABEL(label_result),
                        "----ERROR IN INPUT X OR Y RANGE----");
-    ;
   }
 
   //   gp.max_x = 10;
@@ -600,7 +597,6 @@ void draw_axis_text(s_graph_properties *gp, gdouble value, int rotate) {
 void draw_axis(s_graph_properties *gp) {
   char buffer[64];
   gdouble step = set_axis_step(gp);
-  int flag = 1;
   gdouble text_offset = 2 * gp->dx;
   int vector = -1;
 
