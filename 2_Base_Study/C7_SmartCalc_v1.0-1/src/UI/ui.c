@@ -1,19 +1,11 @@
 #include "UI/ui.h"
 
-#define WIDTH 640
-#define HEIGHT 480
-
-#define ZOOM_X 100.0
-#define ZOOM_Y 100.0
+#define ROTATE 1
+#define DONT_ROTATE 0
 
 char in_string[512] = {'\0'};
 char result_string[50] = {'\0'};
 double x_value = NAN;
-
-#define DA_WIDTH 600
-#define DA_HEIGHT 600
-#define ROTATE 1
-#define DONT_ROTATE 0
 
 GtkEntry *input_expression;
 GtkEntry *input_x;
@@ -46,13 +38,17 @@ GtkLabel *depo_tax_res;
 GtkLabel *depo_sum_res;
 GtkLabel *depo_error;
 
-char *expression;
 GtkWidget *drawing_area;
-GtkWidget *graph_error_label;
 GtkWidget *domain_max_spin;
 GtkWidget *codomain_max_spin;
 GtkWidget *domain_min_spin;
 GtkWidget *codomain_min_spin;
+
+GtkEntry *x_min_input;
+GtkEntry *x_max_input;
+GtkEntry *y_min_input;
+GtkEntry *y_max_input;
+
 int max_is_eq_to_min = 0;
 int dom_is_eq_to_codom = 0;
 
@@ -77,6 +73,11 @@ int app() {
   input_expression =
       GTK_ENTRY(gtk_builder_get_object(builder, "input_expression"));
   input_x = GTK_ENTRY(gtk_builder_get_object(builder, "input_x"));
+
+  x_min_input = GTK_ENTRY(gtk_builder_get_object(builder, "x_min_input"));
+  x_max_input = GTK_ENTRY(gtk_builder_get_object(builder, "x_max_input"));
+  y_min_input = GTK_ENTRY(gtk_builder_get_object(builder, "y_min_input"));
+  y_max_input = GTK_ENTRY(gtk_builder_get_object(builder, "y_max_input"));
 
   credit_sum = GTK_ENTRY(gtk_builder_get_object(builder, "credit_sum"));
   credit_time = GTK_ENTRY(gtk_builder_get_object(builder, "credit_time"));
@@ -115,7 +116,6 @@ int app() {
   depo_sum_res = GTK_LABEL(gtk_builder_get_object(builder, "depo_sum_res"));
   depo_error = GTK_LABEL(gtk_builder_get_object(builder, "depo_error"));
 
-  //   if (gtk_entry_get_text(input_x)) x = atof(gtk_entry_get_text(input_x));
   gtk_builder_connect_signals(builder, NULL);
   gtk_widget_show_all(window);
   gtk_main();
@@ -262,38 +262,41 @@ void deleteClicked() {
 double calculateClicked() {
   int err = 0;
   double result_digit = 0.0;
-  char input_string[512] = {'\0'};
-  char polish_string[512] = {'\0'};
-  double x = 1.0;
-  //   printf("%s\n", gtk_entry_get_text(input_x));
-  if (gtk_entry_get_text(input_x)) x = atof(gtk_entry_get_text(input_x));
+  char x_num[512] = {'\0'};
+  double x;
+  strcpy(x_num, gtk_entry_get_text(input_x));
+  if (strcmp(x_num, "\0") ? 0 : 1) strcpy(x_num, "1.0");
+  if (!get_num(x_num) && check_correct_input(x_num)) {
+    x = atof(x_num);
+    char input_string[512] = {'\0'};
+    char polish_string[512] = {'\0'};
 
-  queue q_in;
-  queue q_polish;
+    strcpy(input_string, gtk_entry_get_text(input_expression));
+    strcat(input_string, "\n");
 
-  StackElement *s_in = NULL;
-  StackElement *s_pol = NULL;
+    queue q_in;
+    queue q_polish;
 
-  init_queue(&q_in);
-  init_queue(&q_polish);
+    StackElement *s_in = NULL;
+    StackElement *s_pol = NULL;
 
-  printf("%s\n", in_string);
-  strcat(in_string, "\n");
-  printf("%s\n", in_string);
-  strcpy(input_string, in_string);
-  //   strtok(input_string, "\0");
+    init_queue(&q_in);
+    init_queue(&q_polish);
 
-  result_digit = back_process(input_string, polish_string, x, &q_in, &q_polish,
-                              s_in, s_pol, &err);
-
-  if (!err) {
-    sprintf(result_string, "%f", result_digit);
-    gtk_label_set_text(GTK_LABEL(label_result), result_string);
-  } else
-    gtk_label_set_text(GTK_LABEL(label_result), "Error");
-
-  freeStack(s_in);
-  freeStack(s_pol);
+    result_digit = back_process(input_string, polish_string, x, &q_in,
+                                &q_polish, s_in, s_pol, &err);
+    if (!err) {
+      sprintf(result_string, "%f", result_digit);
+      gtk_label_set_text(GTK_LABEL(label_result), result_string);
+    } else
+      gtk_label_set_text(GTK_LABEL(label_result), "----------ERROR---------");
+    freeStack(s_in);
+    freeStack(s_pol);
+  } else {
+    err = 1;
+    gtk_label_set_text(GTK_LABEL(label_result),
+                       "----------ERROR IN X VALUE---------");
+  }
   return result_digit;
 }
 
@@ -302,9 +305,6 @@ double calculateForGraph(double x) {
   double result_digit = 0.0;
   char input_string[512] = {'\0'};
   char polish_string[512] = {'\0'};
-  //   double x = 1.0;
-  // //   printf("%s\n", gtk_entry_get_text(input_x));
-  //   if (gtk_entry_get_text(input_x)) x = atof(gtk_entry_get_text(input_x));
 
   queue q_in;
   queue q_polish;
@@ -338,6 +338,7 @@ double calculateForGraph(double x) {
 void numbtnClicked(GtkButton *button) {
   const gchar *text = gtk_button_get_label(button);
   strcat(in_string, text);
+  printf("%s\n", text);
   gtk_entry_set_text(input_expression, (const gchar *)in_string);
 }
 
@@ -349,6 +350,7 @@ void funcbtnClicked(GtkButton *button) {
 
 int button_draw_graph_clicked_cb() {
   strcat(in_string, "\n");
+
   GtkWidget *window_graph;
 
   GtkWidget *da;
@@ -367,8 +369,6 @@ int button_draw_graph_clicked_cb() {
   draw_button =
       GTK_WIDGET(gtk_builder_get_object(builder, "graph_draw_button"));
 
-  graph_error_label =
-      GTK_WIDGET(gtk_builder_get_object(builder, "graph_error_label"));
   domain_max_spin =
       GTK_WIDGET(gtk_builder_get_object(builder, "graph_spin_domain_max"));
   codomain_max_spin =
@@ -379,8 +379,8 @@ int button_draw_graph_clicked_cb() {
       GTK_WIDGET(gtk_builder_get_object(builder, "graph_spin_codomain_min"));
 
   gtk_entry_set_text(graph_entry, (const gchar *)in_string);
-  gtk_widget_set_size_request(drawing_area, DA_WIDTH,
-                              DA_HEIGHT);  // size in pixels
+  gtk_widget_set_size_request(drawing_area, 600,
+                              600);  // size in pixels
 
   g_signal_connect(G_OBJECT(drawing_area), "draw", G_CALLBACK(on_draw), NULL);
   g_signal_connect(G_OBJECT(draw_button), "clicked",
@@ -412,15 +412,38 @@ static gboolean on_draw(GtkWidget *widget, cairo_t *cairo) {
   cairo_device_to_user_distance(gp.cr, &gp.dx, &gp.dy);
 
   /* max value is always positive, min value is always negative */
-  //   gp.max_x = gtk_spin_button_get_value(GTK_SPIN_BUTTON(domain_max_spin));
-  //   gp.max_y = gtk_spin_button_get_value(GTK_SPIN_BUTTON(codomain_max_spin));
-  //   gp.min_x = gtk_spin_button_get_value(GTK_SPIN_BUTTON(domain_min_spin));
-  //   gp.min_y = gtk_spin_button_get_value(GTK_SPIN_BUTTON(codomain_min_spin));
 
-  gp.max_x = 10;
-  gp.max_y = 100;
-  gp.min_x = -10;
-  gp.min_y = -1;
+  char x_min_graph_num[512] = {'\0'};
+  char x_max_graph_num[256] = {'\0'};
+  char y_min_graph_num[256] = {'\0'};
+  char y_max_graph_num[256] = {'\0'};
+
+  strcpy(x_min_graph_num, gtk_entry_get_text(x_min_input));
+  strcpy(x_max_graph_num, gtk_entry_get_text(x_max_input));
+  strcpy(y_min_graph_num, gtk_entry_get_text(y_min_input));
+  strcpy(y_max_graph_num, gtk_entry_get_text(y_max_input));
+
+  if (!get_num(x_min_graph_num) && !get_num(x_max_graph_num) &&
+      !get_num(y_min_graph_num) && !get_num(y_max_graph_num) &&
+      check_correct_input(x_min_graph_num) &&
+      check_correct_input(x_max_graph_num) &&
+      check_correct_input(y_min_graph_num) &&
+      check_correct_input(y_max_graph_num)) {
+    gp.max_x = atof(x_max_graph_num);
+    gp.max_y = atof(y_max_graph_num);
+    gp.min_x = atof(x_min_graph_num);
+    gp.min_y = atof(y_min_graph_num);
+    printf("x_min: %lf, x_max: %lf, y_min: %lf, y_max: %lf\n", gp.min_x,
+           gp.max_x, gp.min_y, gp.max_y);
+  } else {
+    int err = 1;
+    printf("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n");
+  }
+
+  //   gp.max_x = 10;
+  //   gp.max_y = 100;
+  //   gp.min_x = -10;
+  //   gp.min_y = -1;
 
   //   if (dom_is_eq_to_codom) {
   //     gp.max_y = gp.max_x;
@@ -444,11 +467,11 @@ static gboolean on_draw(GtkWidget *widget, cairo_t *cairo) {
   y_range = gp.upper_limit - gp.lower_limit;
 
   /* Pixels between each point, has to be same */
-  gp.dx = (x_range) / DA_WIDTH;
-  gp.dy = (x_range) / DA_HEIGHT;
+  gp.dx = (x_range) / 600;
+  gp.dy = (x_range) / 600;
 
-  x_middle = (fabs(gp.right_limit) / (x_range)) * DA_WIDTH;
-  y_middle = (fabs(gp.lower_limit)) / (y_range)*DA_HEIGHT;
+  x_middle = (fabs(gp.right_limit) / (x_range)) * 600;
+  y_middle = (fabs(gp.lower_limit)) / (y_range)*600;
 
   cairo_translate(gp.cr, x_middle, y_middle);
 
@@ -464,10 +487,10 @@ static gboolean on_draw(GtkWidget *widget, cairo_t *cairo) {
       sprintf(buffer, "scale px/unit: %.4g/%g", 1 / gp.dx, 1.0);
     else
       sprintf(buffer, "scale px/unit: %g/%.4g", 1.0, gp.dx);
-    gtk_label_set_text(GTK_LABEL(graph_error_label), buffer);
+    gtk_label_set_text(GTK_LABEL(label_result), buffer);
     draw_graph_line(&gp);
   } else {
-    gtk_label_set_text(GTK_LABEL(graph_error_label),
+    gtk_label_set_text(GTK_LABEL(label_result),
                        (const gchar *)"INCORRECT INPUT");
   }
   return FALSE;

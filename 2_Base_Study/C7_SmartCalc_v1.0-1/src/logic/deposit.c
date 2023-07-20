@@ -79,7 +79,7 @@ int get_num(char input_number[]) {
   size_t i;
   int point_count = 0;
   for (i = 0; i < strlen(input_number); i++) {
-    if (strchr("0123456789.", input_number[i])) {
+    if (strchr("-0123456789.", input_number[i])) {
       if (input_number[i] == '.') point_count++;
     } else
       break;
@@ -100,9 +100,9 @@ int check_correct_input(char input_number[]) {
   int right_sym = 1;
   int right_len = strlen(input_number) < 256;
   for (size_t i = 0; i < strlen(input_number); i++)
-    if (!strchr("0123456789.", input_number[i])) right_sym = 0;
+    if (!strchr("-0123456789.", input_number[i])) right_sym = 0;
   int not_empty = strcmp(input_number, "\0") ? 1 : 0;
-  printf("input: %s, right_sym: %d, right_len: %d, not_empty: %d\n",
-         input_number, right_sym, right_len, not_empty);
+  // printf("input: %s, right_sym: %d, right_len: %d, not_empty: %d\n",
+  //        input_number, right_sym, right_len, not_empty);
   return (right_len && not_empty && right_sym);
 }

@@ -2,7 +2,7 @@
 
 int from_input_string_to_queue(char input_expression[], queue* result_queue,
                                double x_val) {
-  printf("input: %s\n", input_expression);
+  // printf("input: %s\n", input_expression);
   int is_previous_operand = 0;  // отслеживание типа предыдущей лексемы
   int res = 1;
   int i = 0;
@@ -11,7 +11,8 @@ int from_input_string_to_queue(char input_expression[], queue* result_queue,
   // queue_head(&result_queue);
 
   int length_of_ie = (int)strlen(input_expression);
-  printf("Длина входной строки: %d\n-----------------------\n", length_of_ie);
+  // printf("Длина входной строки: %d\n-----------------------\n",
+  // length_of_ie);
 
   // printf(
   //     "----------------------------------------------\nfrom_input_string_to_"
