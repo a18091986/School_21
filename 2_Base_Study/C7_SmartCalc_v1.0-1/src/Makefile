@@ -1,5 +1,5 @@
 TARGET = app
-TEST_TARGET = test1
+TEST_TARGET = test
 CC = gcc 
 # FLAGS = -Wall -Wextra -Werror -std=c11
 FLAGS = -Wextra -Werror -std=c11

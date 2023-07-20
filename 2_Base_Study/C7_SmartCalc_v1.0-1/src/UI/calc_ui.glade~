@@ -295,6 +295,7 @@
                     <property name="name">input</property>
                     <property name="visible">True</property>
                     <property name="can-focus">True</property>
+                    <property name="max-length">255</property>
                     <property name="text" translatable="yes">0</property>
                   </object>
                   <packing>
@@ -344,7 +345,7 @@
                 </child>
                 <child>
                   <object class="GtkButton" id="mod">
-                    <property name="label" translatable="yes">%</property>
+                    <property name="label" translatable="yes">mod</property>
                     <property name="visible">True</property>
                     <property name="can-focus">True</property>
                     <property name="receives-default">True</property>
@@ -508,9 +509,11 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkEntry" id="x_min_inpu">
+                  <object class="GtkEntry" id="x_min_input">
                     <property name="visible">True</property>
                     <property name="can-focus">True</property>
+                    <property name="text" translatable="yes">-10</property>
+                    <property name="input-purpose">number</property>
                   </object>
                   <packing>
                     <property name="left-attach">0</property>
@@ -522,6 +525,7 @@
                   <object class="GtkEntry" id="y_min_input">
                     <property name="visible">True</property>
                     <property name="can-focus">True</property>
+                    <property name="text" translatable="yes">-10</property>
                   </object>
                   <packing>
                     <property name="left-attach">4</property>
@@ -533,6 +537,7 @@
                   <object class="GtkEntry" id="y_max_input">
                     <property name="visible">True</property>
                     <property name="can-focus">True</property>
+                    <property name="text" translatable="yes">10</property>
                   </object>
                   <packing>
                     <property name="left-attach">6</property>
@@ -610,6 +615,7 @@
                   <object class="GtkEntry" id="x_max_input">
                     <property name="visible">True</property>
                     <property name="can-focus">True</property>
+                    <property name="text" translatable="yes">10</property>
                   </object>
                   <packing>
                     <property name="left-attach">2</property>

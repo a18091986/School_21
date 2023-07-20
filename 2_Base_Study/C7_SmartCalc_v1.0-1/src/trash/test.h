@@ -2,7 +2,7 @@
 #define SRC_S21_SMARTCALC_GTK_H_
 
 #include <gtk/gtk.h>
-#include <locale.h>
+// #include <locale.h>
 #include <math.h>
 
 typedef struct {

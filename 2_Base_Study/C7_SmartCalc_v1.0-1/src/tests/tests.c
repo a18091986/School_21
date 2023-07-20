@@ -190,7 +190,7 @@ START_TEST(back_6) {
   double result = 0.0;
   char polish_string[512] = {'\0'};
   double x = 4.0;
-  double right_res = 2.0;
+  double right_res = 1.0;
 
   queue q_in;
   queue q_polish;
@@ -201,7 +201,8 @@ START_TEST(back_6) {
   init_queue(&q_in);
   init_queue(&q_polish);
 
-  char *input_string = "acos(1) + 10.0 mod 2 + sqrt(x) + ln(1) + atan(0)\n";
+  char *input_string =
+      "(acos(1) + 10.0 mod 2 + sqrt(x) + ln(1) + atan(0)) / 2.0\n";
 
   result = back_process(input_string, polish_string, x, &q_in, &q_polish, s_in,
                         s_pol, &err);
@@ -341,6 +342,57 @@ START_TEST(back_9) {
 }
 END_TEST
 
+START_TEST(deposit_test) {
+  char start[10] = "30000.00";
+  char time[10] = "12";
+  char dep_pct[10] = "8.3";
+  char tax_pct[10] = "13.0";
+  int pay_period = 1;
+  int cap = 1;
+
+  char plus_period[10] = "1";
+  char plus_sum[10] = "1000";
+  char minus_period[10] = "3";
+  char minus_sum[10] = "500";
+
+  double depo_result_sum_num;
+  double depo_result_pct_num;
+  double depo_result_tax_num;
+
+  deposit(start, time, dep_pct, tax_pct, pay_period, cap, plus_period, plus_sum,
+          minus_period, minus_sum, &depo_result_sum_num, &depo_result_pct_num,
+          &depo_result_tax_num);
+
+  printf("depo: %.8lf", depo_result_sum_num);
+  ck_assert_double_eq_tol(depo_result_sum_num, 43156.54878560, EPS);
+}
+END_TEST
+
+START_TEST(credit_test) {
+  char credit_v[10] = "400000.00";
+  char time[10] = "24";
+  char credit_pct[10] = "12.0";
+
+  int type = 1;
+
+  double pay_month_f;
+  double pay_month_l;
+  double over_pay;
+  double sum_pay;
+
+  credit(credit_v, time, credit_pct, type, &pay_month_f, &pay_month_l,
+         &over_pay, &sum_pay);
+
+  ck_assert_double_eq_tol(pay_month_f, 18829.38888931, EPS);
+
+  type = 0;
+  credit(credit_v, time, credit_pct, type, &pay_month_f, &pay_month_l,
+         &over_pay, &sum_pay);
+  printf("pay_month_f: %.8lf", pay_month_f);
+  ck_assert_double_eq_tol(pay_month_f, 20666.66666667, EPS);
+}
+END_TEST
+
 Suite *calc_suite() {
   Suite *s = suite_create("calc_suite");
 
@@ -379,6 +431,14 @@ Suite *calc_suite() {
   TCase *t9 = tcase_create("back_9");
   suite_add_tcase(s, t9);
   tcase_add_test(t9, back_9);
+
+  TCase *t10 = tcase_create("deposit");
+  suite_add_tcase(s, t10);
+  tcase_add_test(t10, deposit_test);
+
+  TCase *t11 = tcase_create("credit_test");
+  suite_add_tcase(s, t11);
+  tcase_add_test(t11, credit_test);
 
   return s;
 }

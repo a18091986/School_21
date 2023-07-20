@@ -81,14 +81,19 @@ int get_num(char input_number[]) {
   for (i = 0; i < strlen(input_number); i++) {
     if (strchr("-0123456789.", input_number[i])) {
       if (input_number[i] == '.') point_count++;
-    } else
-      break;
+    }
   }
+  // printf("Result_number: %s\n", result_number);
+  // printf("Input_number: %s\n", input_number);
   strncpy(result_number, input_number, i);
-  //   printf("i: %ld\n", i);
-  //   printf("result_number: %s\n", result_number);
-  //   printf("input_number: %s\n", input_number);
-  if (strlen(result_number) != strlen(input_number) || point_count > 1) err = 1;
+  // printf("Result_number: %s\n", result_number);
+  // printf("Input_number: %s\n", input_number);
+  // //   printf("i: %ld\n", i);
+  // //   printf("result_number: %s\n", result_number);
+  // //   printf("input_number: %s\n", input_number);
+  if (strlen(result_number) != strlen(input_number) || point_count > 1) {
+    err = 1;
+  }
 
   //   printf("from get_num \n");
   //   printf("--------------------------------------------\n");

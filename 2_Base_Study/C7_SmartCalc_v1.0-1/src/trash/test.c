@@ -490,7 +490,7 @@ static gboolean on_draw(GtkWidget *widget, cairo_t *cairo) {
 }
 
 void draw_graph_line(s_graph_properties *gp) {
-  setlocale(LC_NUMERIC, "C");
+  // setlocale(LC_NUMERIC, "C");
   int vector = -1; /* 1 or -1, depending on y axis*/
   int flag = 0;
   cairo_set_source_rgb(gp->cr, 0.60, 0.15, 1.0);

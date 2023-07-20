@@ -3,9 +3,9 @@
 #define ROTATE 1
 #define DONT_ROTATE 0
 
-char in_string[512] = {'\0'};
-char result_string[50] = {'\0'};
-double x_value = NAN;
+// char in_string[512] = {'\0'};
+// char result_string[50] = {'\0'};
+// double x_value = NAN;
 
 GtkEntry *input_expression;
 GtkEntry *input_x;
@@ -39,18 +39,18 @@ GtkLabel *depo_sum_res;
 GtkLabel *depo_error;
 
 GtkWidget *drawing_area;
-GtkWidget *domain_max_spin;
-GtkWidget *codomain_max_spin;
-GtkWidget *domain_min_spin;
-GtkWidget *codomain_min_spin;
+// GtkWidget *domain_max_spin;
+// GtkWidget *codomain_max_spin;
+// GtkWidget *domain_min_spin;
+// GtkWidget *codomain_min_spin;
 
 GtkEntry *x_min_input;
 GtkEntry *x_max_input;
 GtkEntry *y_min_input;
 GtkEntry *y_max_input;
 
-int max_is_eq_to_min = 0;
-int dom_is_eq_to_codom = 0;
+// int max_is_eq_to_min = 0;
+// int dom_is_eq_to_codom = 0;
 
 int app() {
   gtk_init(NULL, NULL);
@@ -60,7 +60,7 @@ int app() {
 
   builder = gtk_builder_new();
   if (!gtk_builder_add_from_file(builder, "UI/calc_ui.glade", &err_gtk)) {
-    g_critical("Не вышло загрузить файл с UI : %s", err_gtk->message);
+    // g_critical("Не вышло загрузить файл с UI : %s", err_gtk->message);
     g_error_free(err_gtk);
   }
 
@@ -124,6 +124,7 @@ int app() {
 }
 
 void onDepoCalcBtnClicked() {
+  setlocale(LC_NUMERIC, "C");
   int is_cap =
       gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(depo_cap_yes)) ? 1 : 0;
 
@@ -190,6 +191,7 @@ void onDepoCalcBtnClicked() {
 }
 
 void onCreditCalcBtnClicked() {
+  setlocale(LC_NUMERIC, "C");
   int credit_type =
       gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(credit_type_ann)) ? 1 : 0;
 
@@ -245,35 +247,54 @@ void onCreditCalcBtnClicked() {
 }
 
 void clearClicked() {
-  in_string[0] = '\0';
-  gtk_entry_set_text(input_expression, (const gchar *)in_string);
+  //   in_string[] = {'\0'};
+  //   gtk_entry_set_text(input_expression, (const gchar *)in_string);
+  gtk_entry_set_text(input_expression, (const gchar *)"");
   gtk_entry_set_text(input_x, (const gchar *)"");
   gtk_label_set_text(GTK_LABEL(label_result), (const gchar *)"0.00");
 }
 
 void deleteClicked() {
+  //   int input_size = strlen(in_string);
+  char in_string[256] = {'\0'};
+  strcpy(in_string, gtk_entry_get_text(input_expression));
+  //   in_string = gtk_entry_get_text(input_expression);
   int input_size = strlen(in_string);
+  //   int input_size = strlen(gtk_entry_get_text(input_expression));
   if (input_size > 0) {
     in_string[input_size - 1] = '\0';
+    // input_expression[input_size - 1] = '\0';
     gtk_entry_set_text(input_expression, (const gchar *)in_string);
   }
 }
 
-double calculateClicked() {
+void calculateClicked() {
+  setlocale(LC_NUMERIC, "C");
   int err = 0;
   double result_digit = 0.0;
+  double x = 1.0;
   char x_num[512] = {'\0'};
-  double x;
+  char input_string[512] = {'\0'};
+  char polish_string[512] = {'\0'};
+  char result_string[512] = {'\0'};
+
+  strcpy(input_string, gtk_entry_get_text(input_expression));
+  strcat(input_string, "\n");
   strcpy(x_num, gtk_entry_get_text(input_x));
-  if (strcmp(x_num, "\0") ? 0 : 1) strcpy(x_num, "1.0");
-  if (!get_num(x_num) && check_correct_input(x_num)) {
-    x = atof(x_num);
-    char input_string[512] = {'\0'};
-    char polish_string[512] = {'\0'};
 
-    strcpy(input_string, gtk_entry_get_text(input_expression));
-    strcat(input_string, "\n");
-
+  if (strstr(input_string, "x"))
+    if ((strcmp(x_num, "\0") ? 1 : 0) && !get_num(x_num) &&
+        check_correct_input(x_num)) {
+      x = atof(x_num);
+    } else {
+      printf("strcmp: %d\n", strcmp(input_string, "x"));
+      printf("!get_num: %d\n", !get_num(x_num));
+      printf("check_correct_input: %d\n", check_correct_input(x_num));
+      err = 1;
+      gtk_label_set_text(GTK_LABEL(label_result),
+                         "----------ERROR IN X VALUE---------");
+    }
+  if (!err) {
     queue q_in;
     queue q_polish;
 
@@ -292,101 +313,95 @@ double calculateClicked() {
       gtk_label_set_text(GTK_LABEL(label_result), "----------ERROR---------");
     freeStack(s_in);
     freeStack(s_pol);
-  } else {
-    err = 1;
-    gtk_label_set_text(GTK_LABEL(label_result),
-                       "----------ERROR IN X VALUE---------");
   }
-  return result_digit;
 }
 
-double calculateForGraph(double x) {
+int calculateForGraph(double x, double *result) {
+  setlocale(LC_NUMERIC, "C");
   int err = 0;
-  double result_digit = 0.0;
+
   char input_string[512] = {'\0'};
   char polish_string[512] = {'\0'};
 
+  strcpy(input_string, gtk_entry_get_text(input_expression));
+  strcat(input_string, "\n");
+
   queue q_in;
   queue q_polish;
-
   StackElement *s_in = NULL;
   StackElement *s_pol = NULL;
 
   init_queue(&q_in);
   init_queue(&q_polish);
 
-  //   printf("%s\n", in_string);
-  //   strcat(in_string, "\n");
-  //   printf("%s\n", in_string);
-  strcpy(input_string, in_string);
-  //   strtok(input_string, "\0");
-
-  result_digit = back_process(input_string, polish_string, x, &q_in, &q_polish,
-                              s_in, s_pol, &err);
-
-  if (!err) {
-    sprintf(result_string, "%f", result_digit);
-    gtk_label_set_text(GTK_LABEL(label_result), result_string);
-  } else
-    gtk_label_set_text(GTK_LABEL(label_result), "Error");
-
+  *result = back_process(input_string, polish_string, x, &q_in, &q_polish, s_in,
+                         s_pol, &err);
+  if (err)
+    gtk_label_set_text(GTK_LABEL(label_result), "----------ERROR---------");
   freeStack(s_in);
   freeStack(s_pol);
-  return result_digit;
+  return err;
 }
 
 void numbtnClicked(GtkButton *button) {
   const gchar *text = gtk_button_get_label(button);
+  char in_string[512] = {'\0'};
+  strcat(in_string, gtk_entry_get_text(input_expression));
   strcat(in_string, text);
-  printf("%s\n", text);
   gtk_entry_set_text(input_expression, (const gchar *)in_string);
 }
 
 void funcbtnClicked(GtkButton *button) {
   const gchar *text = gtk_button_get_label(button);
+  char in_string[512] = {'\0'};
+  strcat(in_string, gtk_entry_get_text(input_expression));
   strcat(in_string, text);
   gtk_entry_set_text(input_expression, (const gchar *)in_string);
 }
 
 int button_draw_graph_clicked_cb() {
+  char in_string[512] = {'\0'};
+  strcat(in_string, gtk_entry_get_text(input_expression));
   strcat(in_string, "\n");
 
   GtkWidget *window_graph;
 
-  GtkWidget *da;
+  //   GtkWidget *da;
   GtkBuilder *builder;
-  GtkWidget *close_button;
-  GtkWidget *draw_button;
-  GtkEntry *graph_entry = NULL;
+  //   GtkWidget *close_button;
+  //   GtkWidget *draw_button;
+  //   GtkEntry *graph_entry = NULL;
   GtkWidget *graph_window;
 
   builder = gtk_builder_new_from_file("UI/graph_gui.glade");
-  gtk_builder_connect_signals(builder, NULL);
+  //   gtk_builder_connect_signals(builder, NULL);
 
   graph_window = GTK_WIDGET(gtk_builder_get_object(builder, "graph_window"));
   drawing_area = GTK_WIDGET(gtk_builder_get_object(builder, "graph_da"));
-  close_button = GTK_WIDGET(gtk_builder_get_object(builder, "graph_close"));
-  draw_button =
-      GTK_WIDGET(gtk_builder_get_object(builder, "graph_draw_button"));
+  //   draw_button =
+  //       GTK_WIDGET(gtk_builder_get_object(builder, "graph_draw_button"));
 
-  domain_max_spin =
-      GTK_WIDGET(gtk_builder_get_object(builder, "graph_spin_domain_max"));
-  codomain_max_spin =
-      GTK_WIDGET(gtk_builder_get_object(builder, "graph_spin_codomain_max"));
-  domain_min_spin =
-      GTK_WIDGET(gtk_builder_get_object(builder, "graph_spin_domain_min"));
-  codomain_min_spin =
-      GTK_WIDGET(gtk_builder_get_object(builder, "graph_spin_codomain_min"));
+  //   domain_max_spin =
+  //       GTK_WIDGET(gtk_builder_get_object(builder, "graph_spin_domain_max"));
+  //   codomain_max_spin =
+  //       GTK_WIDGET(gtk_builder_get_object(builder,
+  //       "graph_spin_codomain_max"));
+  //   domain_min_spin =
+  //       GTK_WIDGET(gtk_builder_get_object(builder, "graph_spin_domain_min"));
+  //   codomain_min_spin =
+  //       GTK_WIDGET(gtk_builder_get_object(builder,
+  //       "graph_spin_codomain_min"));
 
-  gtk_entry_set_text(graph_entry, (const gchar *)in_string);
+  //   gtk_entry_set_text(graph_entry, (const gchar *)in_string);
   gtk_widget_set_size_request(drawing_area, 600,
                               600);  // size in pixels
 
   g_signal_connect(G_OBJECT(drawing_area), "draw", G_CALLBACK(on_draw), NULL);
-  g_signal_connect(G_OBJECT(draw_button), "clicked",
-                   G_CALLBACK(button_draw_clicked), G_OBJECT(graph_entry));
-  g_signal_connect(G_OBJECT(close_button), "clicked", G_CALLBACK(close_window),
-                   G_OBJECT(graph_window));
+  //   g_signal_connect(G_OBJECT(draw_button), "clicked",
+  //                    G_CALLBACK(button_draw_clicked), G_OBJECT(graph_entry));
+  //   g_signal_connect(G_OBJECT(close_button), "clicked",
+  //   G_CALLBACK(close_window),
+  //                    G_OBJECT(graph_window));
 
   g_object_unref(builder);
   gtk_window_set_position(GTK_WINDOW(graph_window), GTK_WIN_POS_CENTER);
@@ -396,22 +411,18 @@ int button_draw_graph_clicked_cb() {
 }
 
 static gboolean on_draw(GtkWidget *widget, cairo_t *cairo) {
-  //   printf("test\n");
   s_graph_properties gp = {'\0'};
   double x_middle;
   double y_middle;
   double x_range;
   double y_range;
-
+  double y_value;
+  int err = 0;
   gp.cr = cairo;
 
-  /* Draw on a background */
   cairo_set_source_rgb(gp.cr, 0.69, 0.91, 0.91);
   cairo_paint(gp.cr);
-
   cairo_device_to_user_distance(gp.cr, &gp.dx, &gp.dy);
-
-  /* max value is always positive, min value is always negative */
 
   char x_min_graph_num[512] = {'\0'};
   char x_max_graph_num[256] = {'\0'};
@@ -433,11 +444,13 @@ static gboolean on_draw(GtkWidget *widget, cairo_t *cairo) {
     gp.max_y = atof(y_max_graph_num);
     gp.min_x = atof(x_min_graph_num);
     gp.min_y = atof(y_min_graph_num);
-    printf("x_min: %lf, x_max: %lf, y_min: %lf, y_max: %lf\n", gp.min_x,
-           gp.max_x, gp.min_y, gp.max_y);
+    // printf("x_min: %lf, x_max: %lf, y_min: %lf, y_max: %lf\n", gp.min_x,
+    //        gp.max_x, gp.min_y, gp.max_y);
   } else {
-    int err = 1;
-    printf("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n");
+    err = 1;
+    gtk_label_set_text(GTK_LABEL(label_result),
+                       "----ERROR IN INPUT X OR Y RANGE----");
+    ;
   }
 
   //   gp.max_x = 10;
@@ -457,38 +470,49 @@ static gboolean on_draw(GtkWidget *widget, cairo_t *cairo) {
 
   /* right_limit is Xmin on a graph axes, left_limit is Xmax
     if Xmax < Ymax, axes doesn't print fully */
-  gp.right_limit = gp.min_x > gp.min_y ? gp.min_y : gp.min_x;
-  gp.left_limit = gp.max_x < gp.max_y ? gp.max_y : gp.max_x;
-  /* inverting Y axes*/
-  gp.lower_limit = -gp.max_y > -gp.max_x ? -gp.max_x : -gp.max_y;
-  gp.upper_limit = -gp.min_y < -gp.min_x ? -gp.min_x : -gp.min_y;
+  if (!err && !calculateForGraph((gp.max_x - gp.min_x) / 2, &y_value)) {
+    /* Draw on a background */
 
-  x_range = gp.left_limit - gp.right_limit;
-  y_range = gp.upper_limit - gp.lower_limit;
+    /* max value is always positive, min value is always negative */
+    gp.right_limit = gp.min_x > gp.min_y ? gp.min_y : gp.min_x;
+    gp.left_limit = gp.max_x < gp.max_y ? gp.max_y : gp.max_x;
+    /* inverting Y axes*/
+    gp.lower_limit = -gp.max_y > -gp.max_x ? -gp.max_x : -gp.max_y;
+    gp.upper_limit = -gp.min_y < -gp.min_x ? -gp.min_x : -gp.min_y;
 
-  /* Pixels between each point, has to be same */
-  gp.dx = (x_range) / 600;
-  gp.dy = (x_range) / 600;
+    x_range = gp.left_limit - gp.right_limit;
+    y_range = gp.upper_limit - gp.lower_limit;
 
-  x_middle = (fabs(gp.right_limit) / (x_range)) * 600;
-  y_middle = (fabs(gp.lower_limit)) / (y_range)*600;
+    /* Pixels between each point, has to be same */
+    gp.dx = (x_range) / 600;
+    gp.dy = (x_range) / 600;
 
-  cairo_translate(gp.cr, x_middle, y_middle);
+    x_middle = (fabs(gp.right_limit) / (x_range)) * 600;
+    y_middle = (fabs(gp.lower_limit)) / (y_range)*600;
 
-  cairo_scale(gp.cr, 1 / gp.dx, 1 / gp.dy);
+    cairo_translate(gp.cr, x_middle, y_middle);
 
-  draw_axis(&gp);
+    cairo_scale(gp.cr, 1 / gp.dx, 1 / gp.dy);
 
-  //   if (input_validation(expression) == S21_CORRECT_INPUT) {
-  printf("In string from on_draw %s\n", in_string);
-  if (1) {
-    char buffer[64];
-    if (gp.dx < 1)
-      sprintf(buffer, "scale px/unit: %.4g/%g", 1 / gp.dx, 1.0);
-    else
-      sprintf(buffer, "scale px/unit: %g/%.4g", 1.0, gp.dx);
-    gtk_label_set_text(GTK_LABEL(label_result), buffer);
+    draw_axis(&gp);
+
     draw_graph_line(&gp);
+
+    // //   if (input_validation(expression) == S21_CORRECT_INPUT) {
+    // printf("In string from on_draw %s\n",
+    // gtk_entry_get_text(input_expression)); if
+    // (gtk_entry_get_text(input_expression)) {
+    //     char buffer[64];
+    //     if (gp.dx < 1)
+    //     sprintf(buffer, "scale px/unit: %.4g/%g", 1 / gp.dx, 1.0);
+    //     else
+    //     sprintf(buffer, "scale px/unit: %g/%.4g", 1.0, gp.dx);
+    //     gtk_label_set_text(GTK_LABEL(label_result), buffer);
+    //     draw_graph_line(&gp);
+    // } else {
+    //     gtk_label_set_text(GTK_LABEL(label_result),
+    //                     (const gchar *)"INCORRECT INPUT");
+    // }
   } else {
     gtk_label_set_text(GTK_LABEL(label_result),
                        (const gchar *)"INCORRECT INPUT");
@@ -506,7 +530,8 @@ void draw_graph_line(s_graph_properties *gp) {
   for (gdouble x = gp->min_x; x < gp->max_x; x += step) {
     // gdouble y_value = calculation(expression, &x, NULL);
     // gdouble y_value = pow(x, 2);
-    gdouble y_value = calculateForGraph(x);
+    gdouble y_value;
+    calculateForGraph(x, &y_value);
     // double y_value = calculateForGraph(x);
     // printf("Y_VALUE: %lf\n", y_value);
     if (y_value > gp->max_y) {
@@ -637,38 +662,39 @@ void draw_axis(s_graph_properties *gp) {
   cairo_stroke(gp->cr);
 }
 
-void button_draw_clicked(GtkWidget *button, gpointer entry) {
-  printf("from button_draw_clicked");
-  //   sprintf(expression, "%s", gtk_entry_get_text(entry));
-  gtk_widget_queue_draw(drawing_area);
-}
+// void button_draw_clicked(GtkWidget *button, gpointer entry) {
+//   printf("from button_draw_clicked");
+//   //   sprintf(expression, "%s", gtk_entry_get_text(entry));
+//   gtk_widget_queue_draw(drawing_area);
+// }
 
-void close_window(GtkWidget *widget, gpointer window) {
-  gtk_widget_destroy(GTK_WIDGET(window));
-}
+// void close_window(GtkWidget *widget, gpointer window) {
+//   gtk_widget_destroy(GTK_WIDGET(window));
+// }
 
-void check_same_dom_codom_toggled_cb(GtkCheckButton *button) {
-  gboolean status = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(button));
-  if (status) {
-    dom_is_eq_to_codom = 1;
-    gtk_widget_set_sensitive(codomain_max_spin, FALSE);
-    gtk_widget_set_sensitive(codomain_min_spin, FALSE);
-  } else {
-    dom_is_eq_to_codom = 0;
-    gtk_widget_set_sensitive(codomain_max_spin, TRUE);
-    if (!max_is_eq_to_min) gtk_widget_set_sensitive(codomain_min_spin, TRUE);
-  }
-}
+// void check_same_dom_codom_toggled_cb(GtkCheckButton *button) {
+//   gboolean status = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(button));
+//   if (status) {
+//     dom_is_eq_to_codom = 1;
+//     gtk_widget_set_sensitive(codomain_max_spin, FALSE);
+//     gtk_widget_set_sensitive(codomain_min_spin, FALSE);
+//   } else {
+//     dom_is_eq_to_codom = 0;
+//     gtk_widget_set_sensitive(codomain_max_spin, TRUE);
+//     if (!max_is_eq_to_min) gtk_widget_set_sensitive(codomain_min_spin, TRUE);
+//   }
+// }
 
-void check_same_max_min_toggled_cb(GtkCheckButton *button) {
-  gboolean status = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(button));
-  if (status) {
-    max_is_eq_to_min = 1;
-    gtk_widget_set_sensitive(domain_min_spin, FALSE);
-    gtk_widget_set_sensitive(codomain_min_spin, FALSE);
-  } else {
-    max_is_eq_to_min = 0;
-    gtk_widget_set_sensitive(domain_min_spin, TRUE);
-    if (!dom_is_eq_to_codom) gtk_widget_set_sensitive(codomain_min_spin, TRUE);
-  }
-}
+// void check_same_max_min_toggled_cb(GtkCheckButton *button) {
+//   gboolean status = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(button));
+//   if (status) {
+//     max_is_eq_to_min = 1;
+//     gtk_widget_set_sensitive(domain_min_spin, FALSE);
+//     gtk_widget_set_sensitive(codomain_min_spin, FALSE);
+//   } else {
+//     max_is_eq_to_min = 0;
+//     gtk_widget_set_sensitive(domain_min_spin, TRUE);
+//     if (!dom_is_eq_to_codom) gtk_widget_set_sensitive(codomain_min_spin,
+//     TRUE);
+//   }
+// }

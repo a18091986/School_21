@@ -67,6 +67,7 @@ int from_input_string_to_queue(char input_expression[], queue* result_queue,
       }
     } else if (input_expression[i] == 'x') {
       res = insert_queue(result_queue, "x", "operand");
+      if (is_previous_operand) res = 0;
       is_previous_operand = 1;
       i++;
     } else if (input_expression[i] == '(') {

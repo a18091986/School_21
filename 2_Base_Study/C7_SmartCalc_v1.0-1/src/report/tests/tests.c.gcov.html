@@ -4,7 +4,7 @@
 
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-  <title>LCOV - test1.info - tests/tests.c</title>
+  <title>LCOV - test.info - tests/tests.c</title>
   <link rel="stylesheet" type="text/css" href="../gcov.css">
 </head>
 
@@ -28,20 +28,20 @@
           </tr>
           <tr>
             <td class="headerItem">Test:</td>
-            <td class="headerValue">test1.info</td>
+            <td class="headerValue">test.info</td>
             <td></td>
             <td class="headerItem">Lines:</td>
-            <td class="headerCovTableEntry">164</td>
-            <td class="headerCovTableEntry">164</td>
+            <td class="headerCovTableEntry">197</td>
+            <td class="headerCovTableEntry">197</td>
             <td class="headerCovTableEntryHi">100.0 %</td>
           </tr>
           <tr>
             <td class="headerItem">Date:</td>
-            <td class="headerValue">2023-07-20 01:50:23</td>
+            <td class="headerValue">2023-07-20 20:02:47</td>
             <td></td>
             <td class="headerItem">Functions:</td>
-            <td class="headerCovTableEntry">11</td>
-            <td class="headerCovTableEntry">11</td>
+            <td class="headerCovTableEntry">13</td>
+            <td class="headerCovTableEntry">13</td>
             <td class="headerCovTableEntryHi">100.0 %</td>
           </tr>
           <tr><td><img src="../glass.png" width=3 height=3 alt=""></td></tr>
@@ -252,7 +252,7 @@
 <a name="190"><span class="lineNum">     190 </span><span class="lineCov">          1 :   double result = 0.0;</span></a>
 <a name="191"><span class="lineNum">     191 </span><span class="lineCov">          1 :   char polish_string[512] = {'\0'};</span></a>
 <a name="192"><span class="lineNum">     192 </span><span class="lineCov">          1 :   double x = 4.0;</span></a>
-<a name="193"><span class="lineNum">     193 </span><span class="lineCov">          1 :   double right_res = 2.0;</span></a>
+<a name="193"><span class="lineNum">     193 </span><span class="lineCov">          1 :   double right_res = 1.0;</span></a>
 <a name="194"><span class="lineNum">     194 </span>            : </a>
 <a name="195"><span class="lineNum">     195 </span>            :   queue q_in;</a>
 <a name="196"><span class="lineNum">     196 </span>            :   queue q_polish;</a>
@@ -263,198 +263,258 @@
 <a name="201"><span class="lineNum">     201 </span><span class="lineCov">          1 :   init_queue(&amp;q_in);</span></a>
 <a name="202"><span class="lineNum">     202 </span><span class="lineCov">          1 :   init_queue(&amp;q_polish);</span></a>
 <a name="203"><span class="lineNum">     203 </span>            : </a>
-<a name="204"><span class="lineNum">     204 </span><span class="lineCov">          1 :   char *input_string = &quot;acos(1) + 10.0 mod 2 + sqrt(x) + ln(1) + atan(0)\n&quot;;</span></a>
-<a name="205"><span class="lineNum">     205 </span>            : </a>
-<a name="206"><span class="lineNum">     206 </span><span class="lineCov">          1 :   result = back_process(input_string, polish_string, x, &amp;q_in, &amp;q_polish, s_in,</span></a>
-<a name="207"><span class="lineNum">     207 </span>            :                         s_pol, &amp;err);</a>
-<a name="208"><span class="lineNum">     208 </span>            : </a>
-<a name="209"><span class="lineNum">     209 </span>            :   // int code = parse_to_tokens(str, &amp;res);</a>
-<a name="210"><span class="lineNum">     210 </span>            : </a>
-<a name="211"><span class="lineNum">     211 </span>            :   // ck_assert_int_eq(code, SUCCESS);</a>
-<a name="212"><span class="lineNum">     212 </span>            :   // queue *rpn;</a>
-<a name="213"><span class="lineNum">     213 </span>            :   // rpn = make_rpn(res, &amp;code);</a>
-<a name="214"><span class="lineNum">     214 </span>            :   // ck_assert_int_eq(code, SUCCESS);</a>
-<a name="215"><span class="lineNum">     215 </span>            :   // double dres = calc_rpn(rpn, 0, &amp;code);</a>
-<a name="216"><span class="lineNum">     216 </span>            :   // ck_assert_int_eq(code, SUCCESS);</a>
-<a name="217"><span class="lineNum">     217 </span>            : </a>
-<a name="218"><span class="lineNum">     218 </span><span class="lineCov">          1 :   ck_assert_double_eq_tol(result, right_res, EPS);</span></a>
-<a name="219"><span class="lineNum">     219 </span>            : </a>
-<a name="220"><span class="lineNum">     220 </span>            :   // free_queue(&amp;res);</a>
-<a name="221"><span class="lineNum">     221 </span>            :   // free_queue(&amp;rpn);</a>
-<a name="222"><span class="lineNum">     222 </span><span class="lineCov">          1 :   freeStack(s_in);</span></a>
-<a name="223"><span class="lineNum">     223 </span><span class="lineCov">          1 : }</span></a>
-<a name="224"><span class="lineNum">     224 </span>            : END_TEST</a>
-<a name="225"><span class="lineNum">     225 </span>            : </a>
-<a name="226"><span class="lineNum">     226 </span><span class="lineCov">          1 : START_TEST(back_7) {</span></a>
-<a name="227"><span class="lineNum">     227 </span><span class="lineCov">          1 :   int err = 0;</span></a>
-<a name="228"><span class="lineNum">     228 </span><span class="lineCov">          1 :   char polish_string[512] = {'\0'};</span></a>
-<a name="229"><span class="lineNum">     229 </span><span class="lineCov">          1 :   double x = 4.0;</span></a>
-<a name="230"><span class="lineNum">     230 </span>            : </a>
-<a name="231"><span class="lineNum">     231 </span>            :   queue q_in;</a>
-<a name="232"><span class="lineNum">     232 </span>            :   queue q_polish;</a>
-<a name="233"><span class="lineNum">     233 </span>            : </a>
-<a name="234"><span class="lineNum">     234 </span><span class="lineCov">          1 :   StackElement *s_in = NULL;</span></a>
-<a name="235"><span class="lineNum">     235 </span><span class="lineCov">          1 :   StackElement *s_pol = NULL;</span></a>
-<a name="236"><span class="lineNum">     236 </span>            : </a>
-<a name="237"><span class="lineNum">     237 </span><span class="lineCov">          1 :   init_queue(&amp;q_in);</span></a>
-<a name="238"><span class="lineNum">     238 </span><span class="lineCov">          1 :   init_queue(&amp;q_polish);</span></a>
-<a name="239"><span class="lineNum">     239 </span>            : </a>
-<a name="240"><span class="lineNum">     240 </span><span class="lineCov">          1 :   char *input_string = &quot;10+3)\n&quot;;</span></a>
-<a name="241"><span class="lineNum">     241 </span>            : </a>
-<a name="242"><span class="lineNum">     242 </span><span class="lineCov">          1 :   back_process(input_string, polish_string, x, &amp;q_in, &amp;q_polish, s_in, s_pol,</span></a>
-<a name="243"><span class="lineNum">     243 </span>            :                &amp;err);</a>
-<a name="244"><span class="lineNum">     244 </span>            : </a>
-<a name="245"><span class="lineNum">     245 </span><span class="lineCov">          1 :   ck_assert_int_eq(err, 1);</span></a>
-<a name="246"><span class="lineNum">     246 </span>            : </a>
-<a name="247"><span class="lineNum">     247 </span>            :   // int code = parse_to_tokens(str, &amp;res);</a>
-<a name="248"><span class="lineNum">     248 </span>            : </a>
-<a name="249"><span class="lineNum">     249 </span>            :   // ck_assert_int_eq(code, SUCCESS);</a>
-<a name="250"><span class="lineNum">     250 </span>            :   // queue *rpn;</a>
-<a name="251"><span class="lineNum">     251 </span>            :   // rpn = make_rpn(res, &amp;code);</a>
-<a name="252"><span class="lineNum">     252 </span>            :   // ck_assert_int_eq(code, SUCCESS);</a>
-<a name="253"><span class="lineNum">     253 </span>            :   // double dres = calc_rpn(rpn, 0, &amp;code);</a>
-<a name="254"><span class="lineNum">     254 </span>            :   // ck_assert_int_eq(code, SUCCESS);</a>
-<a name="255"><span class="lineNum">     255 </span>            : </a>
-<a name="256"><span class="lineNum">     256 </span>            :   // ck_assert_double_eq_tol(result, right_res, EPS);</a>
-<a name="257"><span class="lineNum">     257 </span>            : </a>
-<a name="258"><span class="lineNum">     258 </span>            :   // free_queue(&amp;res);</a>
-<a name="259"><span class="lineNum">     259 </span>            :   // free_queue(&amp;rpn);</a>
-<a name="260"><span class="lineNum">     260 </span><span class="lineCov">          1 :   freeStack(s_in);</span></a>
-<a name="261"><span class="lineNum">     261 </span><span class="lineCov">          1 : }</span></a>
-<a name="262"><span class="lineNum">     262 </span>            : END_TEST</a>
-<a name="263"><span class="lineNum">     263 </span>            : </a>
-<a name="264"><span class="lineNum">     264 </span><span class="lineCov">          1 : START_TEST(back_8) {</span></a>
-<a name="265"><span class="lineNum">     265 </span><span class="lineCov">          1 :   int err = 0;</span></a>
-<a name="266"><span class="lineNum">     266 </span><span class="lineCov">          1 :   double result = 0.0;</span></a>
-<a name="267"><span class="lineNum">     267 </span><span class="lineCov">          1 :   char polish_string[512] = {'\0'};</span></a>
-<a name="268"><span class="lineNum">     268 </span><span class="lineCov">          1 :   double x = 4.0;</span></a>
-<a name="269"><span class="lineNum">     269 </span><span class="lineCov">          1 :   double right_res = 256;</span></a>
-<a name="270"><span class="lineNum">     270 </span>            : </a>
-<a name="271"><span class="lineNum">     271 </span>            :   queue q_in;</a>
-<a name="272"><span class="lineNum">     272 </span>            :   queue q_polish;</a>
-<a name="273"><span class="lineNum">     273 </span>            : </a>
-<a name="274"><span class="lineNum">     274 </span><span class="lineCov">          1 :   StackElement *s_in = NULL;</span></a>
-<a name="275"><span class="lineNum">     275 </span><span class="lineCov">          1 :   StackElement *s_pol = NULL;</span></a>
-<a name="276"><span class="lineNum">     276 </span>            : </a>
-<a name="277"><span class="lineNum">     277 </span><span class="lineCov">          1 :   init_queue(&amp;q_in);</span></a>
-<a name="278"><span class="lineNum">     278 </span><span class="lineCov">          1 :   init_queue(&amp;q_polish);</span></a>
-<a name="279"><span class="lineNum">     279 </span>            : </a>
-<a name="280"><span class="lineNum">     280 </span><span class="lineCov">          1 :   char *input_string = &quot;2^(2^3)\n&quot;;</span></a>
-<a name="281"><span class="lineNum">     281 </span>            : </a>
-<a name="282"><span class="lineNum">     282 </span><span class="lineCov">          1 :   result = back_process(input_string, polish_string, x, &amp;q_in, &amp;q_polish, s_in,</span></a>
-<a name="283"><span class="lineNum">     283 </span>            :                         s_pol, &amp;err);</a>
-<a name="284"><span class="lineNum">     284 </span>            : </a>
-<a name="285"><span class="lineNum">     285 </span>            :   // ck_assert_int_eq(err, 1);</a>
-<a name="286"><span class="lineNum">     286 </span>            : </a>
-<a name="287"><span class="lineNum">     287 </span>            :   // int code = parse_to_tokens(str, &amp;res);</a>
-<a name="288"><span class="lineNum">     288 </span>            : </a>
-<a name="289"><span class="lineNum">     289 </span>            :   // ck_assert_int_eq(code, SUCCESS);</a>
-<a name="290"><span class="lineNum">     290 </span>            :   // queue *rpn;</a>
-<a name="291"><span class="lineNum">     291 </span>            :   // rpn = make_rpn(res, &amp;code);</a>
-<a name="292"><span class="lineNum">     292 </span>            :   // ck_assert_int_eq(code, SUCCESS);</a>
-<a name="293"><span class="lineNum">     293 </span>            :   // double dres = calc_rpn(rpn, 0, &amp;code);</a>
-<a name="294"><span class="lineNum">     294 </span>            :   // ck_assert_int_eq(code, SUCCESS);</a>
-<a name="295"><span class="lineNum">     295 </span>            : </a>
-<a name="296"><span class="lineNum">     296 </span><span class="lineCov">          1 :   ck_assert_double_eq_tol(result, right_res, EPS);</span></a>
-<a name="297"><span class="lineNum">     297 </span>            : </a>
-<a name="298"><span class="lineNum">     298 </span>            :   // free_queue(&amp;res);</a>
-<a name="299"><span class="lineNum">     299 </span>            :   // free_queue(&amp;rpn);</a>
-<a name="300"><span class="lineNum">     300 </span><span class="lineCov">          1 :   freeStack(s_in);</span></a>
-<a name="301"><span class="lineNum">     301 </span><span class="lineCov">          1 : }</span></a>
-<a name="302"><span class="lineNum">     302 </span>            : END_TEST</a>
-<a name="303"><span class="lineNum">     303 </span>            : </a>
-<a name="304"><span class="lineNum">     304 </span><span class="lineCov">          1 : START_TEST(back_9) {</span></a>
-<a name="305"><span class="lineNum">     305 </span><span class="lineCov">          1 :   int err = 0;</span></a>
-<a name="306"><span class="lineNum">     306 </span><span class="lineCov">          1 :   char polish_string[512] = {'\0'};</span></a>
-<a name="307"><span class="lineNum">     307 </span><span class="lineCov">          1 :   double x = 4.0;</span></a>
-<a name="308"><span class="lineNum">     308 </span>            : </a>
-<a name="309"><span class="lineNum">     309 </span>            :   queue q_in;</a>
-<a name="310"><span class="lineNum">     310 </span>            :   queue q_polish;</a>
-<a name="311"><span class="lineNum">     311 </span>            : </a>
-<a name="312"><span class="lineNum">     312 </span><span class="lineCov">          1 :   StackElement *s_in = NULL;</span></a>
-<a name="313"><span class="lineNum">     313 </span><span class="lineCov">          1 :   StackElement *s_pol = NULL;</span></a>
-<a name="314"><span class="lineNum">     314 </span>            : </a>
-<a name="315"><span class="lineNum">     315 </span><span class="lineCov">          1 :   init_queue(&amp;q_in);</span></a>
-<a name="316"><span class="lineNum">     316 </span><span class="lineCov">          1 :   init_queue(&amp;q_polish);</span></a>
-<a name="317"><span class="lineNum">     317 </span>            : </a>
-<a name="318"><span class="lineNum">     318 </span><span class="lineCov">          1 :   char *input_string = &quot;2 mod mod 2\n&quot;;</span></a>
-<a name="319"><span class="lineNum">     319 </span>            : </a>
-<a name="320"><span class="lineNum">     320 </span><span class="lineCov">          1 :   back_process(input_string, polish_string, x, &amp;q_in, &amp;q_polish, s_in, s_pol,</span></a>
-<a name="321"><span class="lineNum">     321 </span>            :                &amp;err);</a>
-<a name="322"><span class="lineNum">     322 </span>            : </a>
-<a name="323"><span class="lineNum">     323 </span><span class="lineCov">          1 :   ck_assert_int_eq(err, 1);</span></a>
-<a name="324"><span class="lineNum">     324 </span>            : </a>
-<a name="325"><span class="lineNum">     325 </span>            :   // int code = parse_to_tokens(str, &amp;res);</a>
-<a name="326"><span class="lineNum">     326 </span>            : </a>
-<a name="327"><span class="lineNum">     327 </span>            :   // ck_assert_int_eq(code, SUCCESS);</a>
-<a name="328"><span class="lineNum">     328 </span>            :   // queue *rpn;</a>
-<a name="329"><span class="lineNum">     329 </span>            :   // rpn = make_rpn(res, &amp;code);</a>
-<a name="330"><span class="lineNum">     330 </span>            :   // ck_assert_int_eq(code, SUCCESS);</a>
-<a name="331"><span class="lineNum">     331 </span>            :   // double dres = calc_rpn(rpn, 0, &amp;code);</a>
-<a name="332"><span class="lineNum">     332 </span>            :   // ck_assert_int_eq(code, SUCCESS);</a>
-<a name="333"><span class="lineNum">     333 </span>            : </a>
-<a name="334"><span class="lineNum">     334 </span>            :   // ck_assert_double_eq_tol(result, right_res, EPS);</a>
-<a name="335"><span class="lineNum">     335 </span>            : </a>
-<a name="336"><span class="lineNum">     336 </span>            :   // free_queue(&amp;res);</a>
-<a name="337"><span class="lineNum">     337 </span>            :   // free_queue(&amp;rpn);</a>
-<a name="338"><span class="lineNum">     338 </span>            :   // freeStack(s_in);</a>
-<a name="339"><span class="lineNum">     339 </span>            :   // freeStack(s_pol);</a>
-<a name="340"><span class="lineNum">     340 </span>            :   // free(input_string);</a>
-<a name="341"><span class="lineNum">     341 </span><span class="lineCov">          1 : }</span></a>
-<a name="342"><span class="lineNum">     342 </span>            : END_TEST</a>
-<a name="343"><span class="lineNum">     343 </span>            : </a>
-<a name="344"><span class="lineNum">     344 </span><span class="lineCov">          1 : Suite *calc_suite() {</span></a>
-<a name="345"><span class="lineNum">     345 </span><span class="lineCov">          1 :   Suite *s = suite_create(&quot;calc_suite&quot;);</span></a>
-<a name="346"><span class="lineNum">     346 </span>            : </a>
-<a name="347"><span class="lineNum">     347 </span><span class="lineCov">          1 :   TCase *t1 = tcase_create(&quot;back_1&quot;);</span></a>
-<a name="348"><span class="lineNum">     348 </span><span class="lineCov">          1 :   suite_add_tcase(s, t1);</span></a>
-<a name="349"><span class="lineNum">     349 </span><span class="lineCov">          1 :   tcase_add_test(t1, back_1);</span></a>
-<a name="350"><span class="lineNum">     350 </span>            : </a>
-<a name="351"><span class="lineNum">     351 </span><span class="lineCov">          1 :   TCase *t2 = tcase_create(&quot;back_2&quot;);</span></a>
-<a name="352"><span class="lineNum">     352 </span><span class="lineCov">          1 :   suite_add_tcase(s, t2);</span></a>
-<a name="353"><span class="lineNum">     353 </span><span class="lineCov">          1 :   tcase_add_test(t2, back_2);</span></a>
-<a name="354"><span class="lineNum">     354 </span>            : </a>
-<a name="355"><span class="lineNum">     355 </span><span class="lineCov">          1 :   TCase *t3 = tcase_create(&quot;back_3&quot;);</span></a>
-<a name="356"><span class="lineNum">     356 </span><span class="lineCov">          1 :   suite_add_tcase(s, t3);</span></a>
-<a name="357"><span class="lineNum">     357 </span><span class="lineCov">          1 :   tcase_add_test(t3, back_3);</span></a>
-<a name="358"><span class="lineNum">     358 </span>            : </a>
-<a name="359"><span class="lineNum">     359 </span><span class="lineCov">          1 :   TCase *t4 = tcase_create(&quot;back_4&quot;);</span></a>
-<a name="360"><span class="lineNum">     360 </span><span class="lineCov">          1 :   suite_add_tcase(s, t4);</span></a>
-<a name="361"><span class="lineNum">     361 </span><span class="lineCov">          1 :   tcase_add_test(t4, back_4);</span></a>
-<a name="362"><span class="lineNum">     362 </span>            : </a>
-<a name="363"><span class="lineNum">     363 </span><span class="lineCov">          1 :   TCase *t5 = tcase_create(&quot;back_5&quot;);</span></a>
-<a name="364"><span class="lineNum">     364 </span><span class="lineCov">          1 :   suite_add_tcase(s, t5);</span></a>
-<a name="365"><span class="lineNum">     365 </span><span class="lineCov">          1 :   tcase_add_test(t5, back_5);</span></a>
-<a name="366"><span class="lineNum">     366 </span>            : </a>
-<a name="367"><span class="lineNum">     367 </span><span class="lineCov">          1 :   TCase *t6 = tcase_create(&quot;back_6&quot;);</span></a>
-<a name="368"><span class="lineNum">     368 </span><span class="lineCov">          1 :   suite_add_tcase(s, t6);</span></a>
-<a name="369"><span class="lineNum">     369 </span><span class="lineCov">          1 :   tcase_add_test(t6, back_6);</span></a>
+<a name="204"><span class="lineNum">     204 </span><span class="lineCov">          1 :   char *input_string =</span></a>
+<a name="205"><span class="lineNum">     205 </span>            :       &quot;(acos(1) + 10.0 mod 2 + sqrt(x) + ln(1) + atan(0)) / 2.0\n&quot;;</a>
+<a name="206"><span class="lineNum">     206 </span>            : </a>
+<a name="207"><span class="lineNum">     207 </span><span class="lineCov">          1 :   result = back_process(input_string, polish_string, x, &amp;q_in, &amp;q_polish, s_in,</span></a>
+<a name="208"><span class="lineNum">     208 </span>            :                         s_pol, &amp;err);</a>
+<a name="209"><span class="lineNum">     209 </span>            : </a>
+<a name="210"><span class="lineNum">     210 </span>            :   // int code = parse_to_tokens(str, &amp;res);</a>
+<a name="211"><span class="lineNum">     211 </span>            : </a>
+<a name="212"><span class="lineNum">     212 </span>            :   // ck_assert_int_eq(code, SUCCESS);</a>
+<a name="213"><span class="lineNum">     213 </span>            :   // queue *rpn;</a>
+<a name="214"><span class="lineNum">     214 </span>            :   // rpn = make_rpn(res, &amp;code);</a>
+<a name="215"><span class="lineNum">     215 </span>            :   // ck_assert_int_eq(code, SUCCESS);</a>
+<a name="216"><span class="lineNum">     216 </span>            :   // double dres = calc_rpn(rpn, 0, &amp;code);</a>
+<a name="217"><span class="lineNum">     217 </span>            :   // ck_assert_int_eq(code, SUCCESS);</a>
+<a name="218"><span class="lineNum">     218 </span>            : </a>
+<a name="219"><span class="lineNum">     219 </span><span class="lineCov">          1 :   ck_assert_double_eq_tol(result, right_res, EPS);</span></a>
+<a name="220"><span class="lineNum">     220 </span>            : </a>
+<a name="221"><span class="lineNum">     221 </span>            :   // free_queue(&amp;res);</a>
+<a name="222"><span class="lineNum">     222 </span>            :   // free_queue(&amp;rpn);</a>
+<a name="223"><span class="lineNum">     223 </span><span class="lineCov">          1 :   freeStack(s_in);</span></a>
+<a name="224"><span class="lineNum">     224 </span><span class="lineCov">          1 : }</span></a>
+<a name="225"><span class="lineNum">     225 </span>            : END_TEST</a>
+<a name="226"><span class="lineNum">     226 </span>            : </a>
+<a name="227"><span class="lineNum">     227 </span><span class="lineCov">          1 : START_TEST(back_7) {</span></a>
+<a name="228"><span class="lineNum">     228 </span><span class="lineCov">          1 :   int err = 0;</span></a>
+<a name="229"><span class="lineNum">     229 </span><span class="lineCov">          1 :   char polish_string[512] = {'\0'};</span></a>
+<a name="230"><span class="lineNum">     230 </span><span class="lineCov">          1 :   double x = 4.0;</span></a>
+<a name="231"><span class="lineNum">     231 </span>            : </a>
+<a name="232"><span class="lineNum">     232 </span>            :   queue q_in;</a>
+<a name="233"><span class="lineNum">     233 </span>            :   queue q_polish;</a>
+<a name="234"><span class="lineNum">     234 </span>            : </a>
+<a name="235"><span class="lineNum">     235 </span><span class="lineCov">          1 :   StackElement *s_in = NULL;</span></a>
+<a name="236"><span class="lineNum">     236 </span><span class="lineCov">          1 :   StackElement *s_pol = NULL;</span></a>
+<a name="237"><span class="lineNum">     237 </span>            : </a>
+<a name="238"><span class="lineNum">     238 </span><span class="lineCov">          1 :   init_queue(&amp;q_in);</span></a>
+<a name="239"><span class="lineNum">     239 </span><span class="lineCov">          1 :   init_queue(&amp;q_polish);</span></a>
+<a name="240"><span class="lineNum">     240 </span>            : </a>
+<a name="241"><span class="lineNum">     241 </span><span class="lineCov">          1 :   char *input_string = &quot;10+3)\n&quot;;</span></a>
+<a name="242"><span class="lineNum">     242 </span>            : </a>
+<a name="243"><span class="lineNum">     243 </span><span class="lineCov">          1 :   back_process(input_string, polish_string, x, &amp;q_in, &amp;q_polish, s_in, s_pol,</span></a>
+<a name="244"><span class="lineNum">     244 </span>            :                &amp;err);</a>
+<a name="245"><span class="lineNum">     245 </span>            : </a>
+<a name="246"><span class="lineNum">     246 </span><span class="lineCov">          1 :   ck_assert_int_eq(err, 1);</span></a>
+<a name="247"><span class="lineNum">     247 </span>            : </a>
+<a name="248"><span class="lineNum">     248 </span>            :   // int code = parse_to_tokens(str, &amp;res);</a>
+<a name="249"><span class="lineNum">     249 </span>            : </a>
+<a name="250"><span class="lineNum">     250 </span>            :   // ck_assert_int_eq(code, SUCCESS);</a>
+<a name="251"><span class="lineNum">     251 </span>            :   // queue *rpn;</a>
+<a name="252"><span class="lineNum">     252 </span>            :   // rpn = make_rpn(res, &amp;code);</a>
+<a name="253"><span class="lineNum">     253 </span>            :   // ck_assert_int_eq(code, SUCCESS);</a>
+<a name="254"><span class="lineNum">     254 </span>            :   // double dres = calc_rpn(rpn, 0, &amp;code);</a>
+<a name="255"><span class="lineNum">     255 </span>            :   // ck_assert_int_eq(code, SUCCESS);</a>
+<a name="256"><span class="lineNum">     256 </span>            : </a>
+<a name="257"><span class="lineNum">     257 </span>            :   // ck_assert_double_eq_tol(result, right_res, EPS);</a>
+<a name="258"><span class="lineNum">     258 </span>            : </a>
+<a name="259"><span class="lineNum">     259 </span>            :   // free_queue(&amp;res);</a>
+<a name="260"><span class="lineNum">     260 </span>            :   // free_queue(&amp;rpn);</a>
+<a name="261"><span class="lineNum">     261 </span><span class="lineCov">          1 :   freeStack(s_in);</span></a>
+<a name="262"><span class="lineNum">     262 </span><span class="lineCov">          1 : }</span></a>
+<a name="263"><span class="lineNum">     263 </span>            : END_TEST</a>
+<a name="264"><span class="lineNum">     264 </span>            : </a>
+<a name="265"><span class="lineNum">     265 </span><span class="lineCov">          1 : START_TEST(back_8) {</span></a>
+<a name="266"><span class="lineNum">     266 </span><span class="lineCov">          1 :   int err = 0;</span></a>
+<a name="267"><span class="lineNum">     267 </span><span class="lineCov">          1 :   double result = 0.0;</span></a>
+<a name="268"><span class="lineNum">     268 </span><span class="lineCov">          1 :   char polish_string[512] = {'\0'};</span></a>
+<a name="269"><span class="lineNum">     269 </span><span class="lineCov">          1 :   double x = 4.0;</span></a>
+<a name="270"><span class="lineNum">     270 </span><span class="lineCov">          1 :   double right_res = 256;</span></a>
+<a name="271"><span class="lineNum">     271 </span>            : </a>
+<a name="272"><span class="lineNum">     272 </span>            :   queue q_in;</a>
+<a name="273"><span class="lineNum">     273 </span>            :   queue q_polish;</a>
+<a name="274"><span class="lineNum">     274 </span>            : </a>
+<a name="275"><span class="lineNum">     275 </span><span class="lineCov">          1 :   StackElement *s_in = NULL;</span></a>
+<a name="276"><span class="lineNum">     276 </span><span class="lineCov">          1 :   StackElement *s_pol = NULL;</span></a>
+<a name="277"><span class="lineNum">     277 </span>            : </a>
+<a name="278"><span class="lineNum">     278 </span><span class="lineCov">          1 :   init_queue(&amp;q_in);</span></a>
+<a name="279"><span class="lineNum">     279 </span><span class="lineCov">          1 :   init_queue(&amp;q_polish);</span></a>
+<a name="280"><span class="lineNum">     280 </span>            : </a>
+<a name="281"><span class="lineNum">     281 </span><span class="lineCov">          1 :   char *input_string = &quot;2^(2^3)\n&quot;;</span></a>
+<a name="282"><span class="lineNum">     282 </span>            : </a>
+<a name="283"><span class="lineNum">     283 </span><span class="lineCov">          1 :   result = back_process(input_string, polish_string, x, &amp;q_in, &amp;q_polish, s_in,</span></a>
+<a name="284"><span class="lineNum">     284 </span>            :                         s_pol, &amp;err);</a>
+<a name="285"><span class="lineNum">     285 </span>            : </a>
+<a name="286"><span class="lineNum">     286 </span>            :   // ck_assert_int_eq(err, 1);</a>
+<a name="287"><span class="lineNum">     287 </span>            : </a>
+<a name="288"><span class="lineNum">     288 </span>            :   // int code = parse_to_tokens(str, &amp;res);</a>
+<a name="289"><span class="lineNum">     289 </span>            : </a>
+<a name="290"><span class="lineNum">     290 </span>            :   // ck_assert_int_eq(code, SUCCESS);</a>
+<a name="291"><span class="lineNum">     291 </span>            :   // queue *rpn;</a>
+<a name="292"><span class="lineNum">     292 </span>            :   // rpn = make_rpn(res, &amp;code);</a>
+<a name="293"><span class="lineNum">     293 </span>            :   // ck_assert_int_eq(code, SUCCESS);</a>
+<a name="294"><span class="lineNum">     294 </span>            :   // double dres = calc_rpn(rpn, 0, &amp;code);</a>
+<a name="295"><span class="lineNum">     295 </span>            :   // ck_assert_int_eq(code, SUCCESS);</a>
+<a name="296"><span class="lineNum">     296 </span>            : </a>
+<a name="297"><span class="lineNum">     297 </span><span class="lineCov">          1 :   ck_assert_double_eq_tol(result, right_res, EPS);</span></a>
+<a name="298"><span class="lineNum">     298 </span>            : </a>
+<a name="299"><span class="lineNum">     299 </span>            :   // free_queue(&amp;res);</a>
+<a name="300"><span class="lineNum">     300 </span>            :   // free_queue(&amp;rpn);</a>
+<a name="301"><span class="lineNum">     301 </span><span class="lineCov">          1 :   freeStack(s_in);</span></a>
+<a name="302"><span class="lineNum">     302 </span><span class="lineCov">          1 : }</span></a>
+<a name="303"><span class="lineNum">     303 </span>            : END_TEST</a>
+<a name="304"><span class="lineNum">     304 </span>            : </a>
+<a name="305"><span class="lineNum">     305 </span><span class="lineCov">          1 : START_TEST(back_9) {</span></a>
+<a name="306"><span class="lineNum">     306 </span><span class="lineCov">          1 :   int err = 0;</span></a>
+<a name="307"><span class="lineNum">     307 </span><span class="lineCov">          1 :   char polish_string[512] = {'\0'};</span></a>
+<a name="308"><span class="lineNum">     308 </span><span class="lineCov">          1 :   double x = 4.0;</span></a>
+<a name="309"><span class="lineNum">     309 </span>            : </a>
+<a name="310"><span class="lineNum">     310 </span>            :   queue q_in;</a>
+<a name="311"><span class="lineNum">     311 </span>            :   queue q_polish;</a>
+<a name="312"><span class="lineNum">     312 </span>            : </a>
+<a name="313"><span class="lineNum">     313 </span><span class="lineCov">          1 :   StackElement *s_in = NULL;</span></a>
+<a name="314"><span class="lineNum">     314 </span><span class="lineCov">          1 :   StackElement *s_pol = NULL;</span></a>
+<a name="315"><span class="lineNum">     315 </span>            : </a>
+<a name="316"><span class="lineNum">     316 </span><span class="lineCov">          1 :   init_queue(&amp;q_in);</span></a>
+<a name="317"><span class="lineNum">     317 </span><span class="lineCov">          1 :   init_queue(&amp;q_polish);</span></a>
+<a name="318"><span class="lineNum">     318 </span>            : </a>
+<a name="319"><span class="lineNum">     319 </span><span class="lineCov">          1 :   char *input_string = &quot;2 mod mod 2\n&quot;;</span></a>
+<a name="320"><span class="lineNum">     320 </span>            : </a>
+<a name="321"><span class="lineNum">     321 </span><span class="lineCov">          1 :   back_process(input_string, polish_string, x, &amp;q_in, &amp;q_polish, s_in, s_pol,</span></a>
+<a name="322"><span class="lineNum">     322 </span>            :                &amp;err);</a>
+<a name="323"><span class="lineNum">     323 </span>            : </a>
+<a name="324"><span class="lineNum">     324 </span><span class="lineCov">          1 :   ck_assert_int_eq(err, 1);</span></a>
+<a name="325"><span class="lineNum">     325 </span>            : </a>
+<a name="326"><span class="lineNum">     326 </span>            :   // int code = parse_to_tokens(str, &amp;res);</a>
+<a name="327"><span class="lineNum">     327 </span>            : </a>
+<a name="328"><span class="lineNum">     328 </span>            :   // ck_assert_int_eq(code, SUCCESS);</a>
+<a name="329"><span class="lineNum">     329 </span>            :   // queue *rpn;</a>
+<a name="330"><span class="lineNum">     330 </span>            :   // rpn = make_rpn(res, &amp;code);</a>
+<a name="331"><span class="lineNum">     331 </span>            :   // ck_assert_int_eq(code, SUCCESS);</a>
+<a name="332"><span class="lineNum">     332 </span>            :   // double dres = calc_rpn(rpn, 0, &amp;code);</a>
+<a name="333"><span class="lineNum">     333 </span>            :   // ck_assert_int_eq(code, SUCCESS);</a>
+<a name="334"><span class="lineNum">     334 </span>            : </a>
+<a name="335"><span class="lineNum">     335 </span>            :   // ck_assert_double_eq_tol(result, right_res, EPS);</a>
+<a name="336"><span class="lineNum">     336 </span>            : </a>
+<a name="337"><span class="lineNum">     337 </span>            :   // free_queue(&amp;res);</a>
+<a name="338"><span class="lineNum">     338 </span>            :   // free_queue(&amp;rpn);</a>
+<a name="339"><span class="lineNum">     339 </span>            :   // freeStack(s_in);</a>
+<a name="340"><span class="lineNum">     340 </span>            :   // freeStack(s_pol);</a>
+<a name="341"><span class="lineNum">     341 </span>            :   // free(input_string);</a>
+<a name="342"><span class="lineNum">     342 </span><span class="lineCov">          1 : }</span></a>
+<a name="343"><span class="lineNum">     343 </span>            : END_TEST</a>
+<a name="344"><span class="lineNum">     344 </span>            : </a>
+<a name="345"><span class="lineNum">     345 </span><span class="lineCov">          1 : START_TEST(deposit_test) {</span></a>
+<a name="346"><span class="lineNum">     346 </span><span class="lineCov">          1 :   char start[10] = &quot;30000.00&quot;;</span></a>
+<a name="347"><span class="lineNum">     347 </span><span class="lineCov">          1 :   char time[10] = &quot;12&quot;;</span></a>
+<a name="348"><span class="lineNum">     348 </span><span class="lineCov">          1 :   char dep_pct[10] = &quot;8.3&quot;;</span></a>
+<a name="349"><span class="lineNum">     349 </span><span class="lineCov">          1 :   char tax_pct[10] = &quot;13.0&quot;;</span></a>
+<a name="350"><span class="lineNum">     350 </span><span class="lineCov">          1 :   int pay_period = 1;</span></a>
+<a name="351"><span class="lineNum">     351 </span><span class="lineCov">          1 :   int cap = 1;</span></a>
+<a name="352"><span class="lineNum">     352 </span>            : </a>
+<a name="353"><span class="lineNum">     353 </span><span class="lineCov">          1 :   char plus_period[10] = &quot;1&quot;;</span></a>
+<a name="354"><span class="lineNum">     354 </span><span class="lineCov">          1 :   char plus_sum[10] = &quot;1000&quot;;</span></a>
+<a name="355"><span class="lineNum">     355 </span><span class="lineCov">          1 :   char minus_period[10] = &quot;3&quot;;</span></a>
+<a name="356"><span class="lineNum">     356 </span><span class="lineCov">          1 :   char minus_sum[10] = &quot;500&quot;;</span></a>
+<a name="357"><span class="lineNum">     357 </span>            : </a>
+<a name="358"><span class="lineNum">     358 </span>            :   double depo_result_sum_num;</a>
+<a name="359"><span class="lineNum">     359 </span>            :   double depo_result_pct_num;</a>
+<a name="360"><span class="lineNum">     360 </span>            :   double depo_result_tax_num;</a>
+<a name="361"><span class="lineNum">     361 </span>            : </a>
+<a name="362"><span class="lineNum">     362 </span><span class="lineCov">          1 :   deposit(start, time, dep_pct, tax_pct, pay_period, cap, plus_period, plus_sum,</span></a>
+<a name="363"><span class="lineNum">     363 </span>            :           minus_period, minus_sum, &amp;depo_result_sum_num, &amp;depo_result_pct_num,</a>
+<a name="364"><span class="lineNum">     364 </span>            :           &amp;depo_result_tax_num);</a>
+<a name="365"><span class="lineNum">     365 </span>            : </a>
+<a name="366"><span class="lineNum">     366 </span><span class="lineCov">          1 :   printf(&quot;depo: %.8lf&quot;, depo_result_sum_num);</span></a>
+<a name="367"><span class="lineNum">     367 </span><span class="lineCov">          1 :   ck_assert_double_eq_tol(depo_result_sum_num, 43156.54878560, EPS);</span></a>
+<a name="368"><span class="lineNum">     368 </span><span class="lineCov">          1 : }</span></a>
+<a name="369"><span class="lineNum">     369 </span>            : END_TEST</a>
 <a name="370"><span class="lineNum">     370 </span>            : </a>
-<a name="371"><span class="lineNum">     371 </span><span class="lineCov">          1 :   TCase *t7 = tcase_create(&quot;back_7&quot;);</span></a>
-<a name="372"><span class="lineNum">     372 </span><span class="lineCov">          1 :   suite_add_tcase(s, t7);</span></a>
-<a name="373"><span class="lineNum">     373 </span><span class="lineCov">          1 :   tcase_add_test(t7, back_7);</span></a>
-<a name="374"><span class="lineNum">     374 </span>            : </a>
-<a name="375"><span class="lineNum">     375 </span><span class="lineCov">          1 :   TCase *t8 = tcase_create(&quot;back_8&quot;);</span></a>
-<a name="376"><span class="lineNum">     376 </span><span class="lineCov">          1 :   suite_add_tcase(s, t8);</span></a>
-<a name="377"><span class="lineNum">     377 </span><span class="lineCov">          1 :   tcase_add_test(t8, back_8);</span></a>
-<a name="378"><span class="lineNum">     378 </span>            : </a>
-<a name="379"><span class="lineNum">     379 </span><span class="lineCov">          1 :   TCase *t9 = tcase_create(&quot;back_9&quot;);</span></a>
-<a name="380"><span class="lineNum">     380 </span><span class="lineCov">          1 :   suite_add_tcase(s, t9);</span></a>
-<a name="381"><span class="lineNum">     381 </span><span class="lineCov">          1 :   tcase_add_test(t9, back_9);</span></a>
+<a name="371"><span class="lineNum">     371 </span><span class="lineCov">          1 : START_TEST(credit_test) {</span></a>
+<a name="372"><span class="lineNum">     372 </span><span class="lineCov">          1 :   char credit_v[10] = &quot;400000.00&quot;;</span></a>
+<a name="373"><span class="lineNum">     373 </span><span class="lineCov">          1 :   char time[10] = &quot;24&quot;;</span></a>
+<a name="374"><span class="lineNum">     374 </span><span class="lineCov">          1 :   char credit_pct[10] = &quot;12.0&quot;;</span></a>
+<a name="375"><span class="lineNum">     375 </span>            : </a>
+<a name="376"><span class="lineNum">     376 </span><span class="lineCov">          1 :   int type = 1;</span></a>
+<a name="377"><span class="lineNum">     377 </span>            : </a>
+<a name="378"><span class="lineNum">     378 </span>            :   double pay_month_f;</a>
+<a name="379"><span class="lineNum">     379 </span>            :   double pay_month_l;</a>
+<a name="380"><span class="lineNum">     380 </span>            :   double over_pay;</a>
+<a name="381"><span class="lineNum">     381 </span>            :   double sum_pay;</a>
 <a name="382"><span class="lineNum">     382 </span>            : </a>
-<a name="383"><span class="lineNum">     383 </span><span class="lineCov">          1 :   return s;</span></a>
-<a name="384"><span class="lineNum">     384 </span>            : }</a>
+<a name="383"><span class="lineNum">     383 </span><span class="lineCov">          1 :   credit(credit_v, time, credit_pct, type, &amp;pay_month_f, &amp;pay_month_l,</span></a>
+<a name="384"><span class="lineNum">     384 </span>            :          &amp;over_pay, &amp;sum_pay);</a>
 <a name="385"><span class="lineNum">     385 </span>            : </a>
-<a name="386"><span class="lineNum">     386 </span><span class="lineCov">          1 : int main() {</span></a>
-<a name="387"><span class="lineNum">     387 </span><span class="lineCov">          1 :   int no_failed = 0;</span></a>
-<a name="388"><span class="lineNum">     388 </span><span class="lineCov">          1 :   Suite *s = calc_suite();</span></a>
-<a name="389"><span class="lineNum">     389 </span><span class="lineCov">          1 :   SRunner *runner = srunner_create(s);</span></a>
-<a name="390"><span class="lineNum">     390 </span><span class="lineCov">          1 :   srunner_set_fork_status(runner, CK_NOFORK);</span></a>
-<a name="391"><span class="lineNum">     391 </span><span class="lineCov">          1 :   srunner_run_all(runner, 2);</span></a>
-<a name="392"><span class="lineNum">     392 </span><span class="lineCov">          1 :   no_failed = srunner_ntests_failed(runner);</span></a>
-<a name="393"><span class="lineNum">     393 </span><span class="lineCov">          1 :   srunner_free(runner);</span></a>
-<a name="394"><span class="lineNum">     394 </span><span class="lineCov">          1 :   return (no_failed == 0) ? 0 : 1;</span></a>
-<a name="395"><span class="lineNum">     395 </span>            : }</a>
+<a name="386"><span class="lineNum">     386 </span><span class="lineCov">          1 :   ck_assert_double_eq_tol(pay_month_f, 18829.38888931, EPS);</span></a>
+<a name="387"><span class="lineNum">     387 </span>            : </a>
+<a name="388"><span class="lineNum">     388 </span><span class="lineCov">          1 :   type = 0;</span></a>
+<a name="389"><span class="lineNum">     389 </span><span class="lineCov">          1 :   credit(credit_v, time, credit_pct, type, &amp;pay_month_f, &amp;pay_month_l,</span></a>
+<a name="390"><span class="lineNum">     390 </span>            :          &amp;over_pay, &amp;sum_pay);</a>
+<a name="391"><span class="lineNum">     391 </span><span class="lineCov">          1 :   printf(&quot;pay_month_f: %.8lf&quot;, pay_month_f);</span></a>
+<a name="392"><span class="lineNum">     392 </span><span class="lineCov">          1 :   ck_assert_double_eq_tol(pay_month_f, 20666.66666667, EPS);</span></a>
+<a name="393"><span class="lineNum">     393 </span><span class="lineCov">          1 : }</span></a>
+<a name="394"><span class="lineNum">     394 </span>            : END_TEST</a>
+<a name="395"><span class="lineNum">     395 </span>            : </a>
+<a name="396"><span class="lineNum">     396 </span><span class="lineCov">          1 : Suite *calc_suite() {</span></a>
+<a name="397"><span class="lineNum">     397 </span><span class="lineCov">          1 :   Suite *s = suite_create(&quot;calc_suite&quot;);</span></a>
+<a name="398"><span class="lineNum">     398 </span>            : </a>
+<a name="399"><span class="lineNum">     399 </span><span class="lineCov">          1 :   TCase *t1 = tcase_create(&quot;back_1&quot;);</span></a>
+<a name="400"><span class="lineNum">     400 </span><span class="lineCov">          1 :   suite_add_tcase(s, t1);</span></a>
+<a name="401"><span class="lineNum">     401 </span><span class="lineCov">          1 :   tcase_add_test(t1, back_1);</span></a>
+<a name="402"><span class="lineNum">     402 </span>            : </a>
+<a name="403"><span class="lineNum">     403 </span><span class="lineCov">          1 :   TCase *t2 = tcase_create(&quot;back_2&quot;);</span></a>
+<a name="404"><span class="lineNum">     404 </span><span class="lineCov">          1 :   suite_add_tcase(s, t2);</span></a>
+<a name="405"><span class="lineNum">     405 </span><span class="lineCov">          1 :   tcase_add_test(t2, back_2);</span></a>
+<a name="406"><span class="lineNum">     406 </span>            : </a>
+<a name="407"><span class="lineNum">     407 </span><span class="lineCov">          1 :   TCase *t3 = tcase_create(&quot;back_3&quot;);</span></a>
+<a name="408"><span class="lineNum">     408 </span><span class="lineCov">          1 :   suite_add_tcase(s, t3);</span></a>
+<a name="409"><span class="lineNum">     409 </span><span class="lineCov">          1 :   tcase_add_test(t3, back_3);</span></a>
+<a name="410"><span class="lineNum">     410 </span>            : </a>
+<a name="411"><span class="lineNum">     411 </span><span class="lineCov">          1 :   TCase *t4 = tcase_create(&quot;back_4&quot;);</span></a>
+<a name="412"><span class="lineNum">     412 </span><span class="lineCov">          1 :   suite_add_tcase(s, t4);</span></a>
+<a name="413"><span class="lineNum">     413 </span><span class="lineCov">          1 :   tcase_add_test(t4, back_4);</span></a>
+<a name="414"><span class="lineNum">     414 </span>            : </a>
+<a name="415"><span class="lineNum">     415 </span><span class="lineCov">          1 :   TCase *t5 = tcase_create(&quot;back_5&quot;);</span></a>
+<a name="416"><span class="lineNum">     416 </span><span class="lineCov">          1 :   suite_add_tcase(s, t5);</span></a>
+<a name="417"><span class="lineNum">     417 </span><span class="lineCov">          1 :   tcase_add_test(t5, back_5);</span></a>
+<a name="418"><span class="lineNum">     418 </span>            : </a>
+<a name="419"><span class="lineNum">     419 </span><span class="lineCov">          1 :   TCase *t6 = tcase_create(&quot;back_6&quot;);</span></a>
+<a name="420"><span class="lineNum">     420 </span><span class="lineCov">          1 :   suite_add_tcase(s, t6);</span></a>
+<a name="421"><span class="lineNum">     421 </span><span class="lineCov">          1 :   tcase_add_test(t6, back_6);</span></a>
+<a name="422"><span class="lineNum">     422 </span>            : </a>
+<a name="423"><span class="lineNum">     423 </span><span class="lineCov">          1 :   TCase *t7 = tcase_create(&quot;back_7&quot;);</span></a>
+<a name="424"><span class="lineNum">     424 </span><span class="lineCov">          1 :   suite_add_tcase(s, t7);</span></a>
+<a name="425"><span class="lineNum">     425 </span><span class="lineCov">          1 :   tcase_add_test(t7, back_7);</span></a>
+<a name="426"><span class="lineNum">     426 </span>            : </a>
+<a name="427"><span class="lineNum">     427 </span><span class="lineCov">          1 :   TCase *t8 = tcase_create(&quot;back_8&quot;);</span></a>
+<a name="428"><span class="lineNum">     428 </span><span class="lineCov">          1 :   suite_add_tcase(s, t8);</span></a>
+<a name="429"><span class="lineNum">     429 </span><span class="lineCov">          1 :   tcase_add_test(t8, back_8);</span></a>
+<a name="430"><span class="lineNum">     430 </span>            : </a>
+<a name="431"><span class="lineNum">     431 </span><span class="lineCov">          1 :   TCase *t9 = tcase_create(&quot;back_9&quot;);</span></a>
+<a name="432"><span class="lineNum">     432 </span><span class="lineCov">          1 :   suite_add_tcase(s, t9);</span></a>
+<a name="433"><span class="lineNum">     433 </span><span class="lineCov">          1 :   tcase_add_test(t9, back_9);</span></a>
+<a name="434"><span class="lineNum">     434 </span>            : </a>
+<a name="435"><span class="lineNum">     435 </span><span class="lineCov">          1 :   TCase *t10 = tcase_create(&quot;deposit&quot;);</span></a>
+<a name="436"><span class="lineNum">     436 </span><span class="lineCov">          1 :   suite_add_tcase(s, t10);</span></a>
+<a name="437"><span class="lineNum">     437 </span><span class="lineCov">          1 :   tcase_add_test(t10, deposit_test);</span></a>
+<a name="438"><span class="lineNum">     438 </span>            : </a>
+<a name="439"><span class="lineNum">     439 </span><span class="lineCov">          1 :   TCase *t11 = tcase_create(&quot;credit_test&quot;);</span></a>
+<a name="440"><span class="lineNum">     440 </span><span class="lineCov">          1 :   suite_add_tcase(s, t11);</span></a>
+<a name="441"><span class="lineNum">     441 </span><span class="lineCov">          1 :   tcase_add_test(t11, credit_test);</span></a>
+<a name="442"><span class="lineNum">     442 </span>            : </a>
+<a name="443"><span class="lineNum">     443 </span><span class="lineCov">          1 :   return s;</span></a>
+<a name="444"><span class="lineNum">     444 </span>            : }</a>
+<a name="445"><span class="lineNum">     445 </span>            : </a>
+<a name="446"><span class="lineNum">     446 </span><span class="lineCov">          1 : int main() {</span></a>
+<a name="447"><span class="lineNum">     447 </span><span class="lineCov">          1 :   int no_failed = 0;</span></a>
+<a name="448"><span class="lineNum">     448 </span><span class="lineCov">          1 :   Suite *s = calc_suite();</span></a>
+<a name="449"><span class="lineNum">     449 </span><span class="lineCov">          1 :   SRunner *runner = srunner_create(s);</span></a>
+<a name="450"><span class="lineNum">     450 </span><span class="lineCov">          1 :   srunner_set_fork_status(runner, CK_NOFORK);</span></a>
+<a name="451"><span class="lineNum">     451 </span><span class="lineCov">          1 :   srunner_run_all(runner, 2);</span></a>
+<a name="452"><span class="lineNum">     452 </span><span class="lineCov">          1 :   no_failed = srunner_ntests_failed(runner);</span></a>
+<a name="453"><span class="lineNum">     453 </span><span class="lineCov">          1 :   srunner_free(runner);</span></a>
+<a name="454"><span class="lineNum">     454 </span><span class="lineCov">          1 :   return (no_failed == 0) ? 0 : 1;</span></a>
+<a name="455"><span class="lineNum">     455 </span>            : }</a>
 </pre>
       </td>
     </tr>
