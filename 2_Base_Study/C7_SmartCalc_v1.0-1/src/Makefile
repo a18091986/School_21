@@ -1,6 +1,7 @@
 TARGET = calc
 TEST_TARGET = test
 CC = gcc 
+DELETE = rm -rf
 
 INCLUDES = . 
 REPORT_DIR = report
@@ -39,13 +40,13 @@ endif
 # build: $(SRC_MAIN) $(SRC_LOGIC)
 # 	$(CC) $(FLAGS) 
 
-# all: clean test build gcov_report dvi dist
+all: clean test build gcov_report dvi dist run
 
 build: apply_clang  $(SRC_LOGIC) $(SRC_UI)
-	$(CC) $(BUILD_FLAGS) $(GTK_FLAGS) $(addprefix -I , $(INCLUDES)) $(SRC_LOGIC) $(SRC_UI) main.c -o $(EXECUTABLE) $(LIBS_FLAGS) $(GTK_LIBS) 
+	$(CC) $(BUILD_FLAGS) $(GTK_FLAGS) $(addprefix -I , $(INCLUDES)) $(SRC_LOGIC) $(SRC_UI) main.c -o $(TARGET) $(LIBS_FLAGS) $(GTK_LIBS) 
 
 run: build
-	./$(EXECUTABLE)
+	./$(TARGET)
 
 test: apply_clang $(SRC_LOGIC) $(SRC_TEST)
 	$(CC) $(BUILD_FLAGS) $(GTK_FLAGS) $(addprefix -I , $(INCLUDES)) $(SRC_LOGIC) $(SRC_TEST) -o $(TEST_TARGET) $(LIBS_FLAGS) $(GTK_LIBS)
@@ -110,11 +111,10 @@ install: uninstall build
 # .c - файлы с исходным кодом
 
 dvi:
-	texi2dvi docs.tex
-	open docs.dvi
+	open readme.md
 
 dist: build
-	tar -czvf $(EXECUTABLE).tgz $(EXECUTABLE)
+	tar -czvf $(TARGET).tgz $(TARGET)
 
 clean:
 	$(DELETE) $(TEST_TARGET)

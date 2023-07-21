@@ -31,13 +31,13 @@
             <td class="headerValue">test.info</td>
             <td></td>
             <td class="headerItem">Lines:</td>
-            <td class="headerCovTableEntry">61</td>
-            <td class="headerCovTableEntry">64</td>
-            <td class="headerCovTableEntryHi">95.3 %</td>
+            <td class="headerCovTableEntry">60</td>
+            <td class="headerCovTableEntry">63</td>
+            <td class="headerCovTableEntryHi">95.2 %</td>
           </tr>
           <tr>
             <td class="headerItem">Date:</td>
-            <td class="headerValue">2023-07-20 20:02:47</td>
+            <td class="headerValue">2023-07-21 01:36:42</td>
             <td></td>
             <td class="headerItem">Functions:</td>
             <td class="headerCovTableEntry">3</td>
@@ -163,16 +163,15 @@
 <a name="101"><span class="lineNum">     101 </span>            : }</a>
 <a name="102"><span class="lineNum">     102 </span>            : </a>
 <a name="103"><span class="lineNum">     103 </span><span class="lineCov">         14 : int check_correct_input(char input_number[]) {</span></a>
-<a name="104"><span class="lineNum">     104 </span><span class="lineCov">         14 :   int space_count = 0;</span></a>
-<a name="105"><span class="lineNum">     105 </span><span class="lineCov">         14 :   int right_sym = 1;</span></a>
-<a name="106"><span class="lineNum">     106 </span><span class="lineCov">         14 :   int right_len = strlen(input_number) &lt; 256;</span></a>
-<a name="107"><span class="lineNum">     107 </span><span class="lineCov">         70 :   for (size_t i = 0; i &lt; strlen(input_number); i++)</span></a>
-<a name="108"><span class="lineNum">     108 </span><span class="lineCov">         56 :     if (!strchr(&quot;-0123456789.&quot;, input_number[i])) right_sym = 0;</span></a>
-<a name="109"><span class="lineNum">     109 </span><span class="lineCov">         14 :   int not_empty = strcmp(input_number, &quot;\0&quot;) ? 1 : 0;</span></a>
-<a name="110"><span class="lineNum">     110 </span>            :   // printf(&quot;input: %s, right_sym: %d, right_len: %d, not_empty: %d\n&quot;,</a>
-<a name="111"><span class="lineNum">     111 </span>            :   //        input_number, right_sym, right_len, not_empty);</a>
-<a name="112"><span class="lineNum">     112 </span><span class="lineCov">         14 :   return (right_len &amp;&amp; not_empty &amp;&amp; right_sym);</span></a>
-<a name="113"><span class="lineNum">     113 </span>            : }</a>
+<a name="104"><span class="lineNum">     104 </span><span class="lineCov">         14 :   int right_sym = 1;</span></a>
+<a name="105"><span class="lineNum">     105 </span><span class="lineCov">         14 :   int right_len = strlen(input_number) &lt; 256;</span></a>
+<a name="106"><span class="lineNum">     106 </span><span class="lineCov">         70 :   for (size_t i = 0; i &lt; strlen(input_number); i++)</span></a>
+<a name="107"><span class="lineNum">     107 </span><span class="lineCov">         56 :     if (!strchr(&quot;-0123456789.&quot;, input_number[i])) right_sym = 0;</span></a>
+<a name="108"><span class="lineNum">     108 </span><span class="lineCov">         14 :   int not_empty = strcmp(input_number, &quot;\0&quot;) ? 1 : 0;</span></a>
+<a name="109"><span class="lineNum">     109 </span>            :   // printf(&quot;input: %s, right_sym: %d, right_len: %d, not_empty: %d\n&quot;,</a>
+<a name="110"><span class="lineNum">     110 </span>            :   //        input_number, right_sym, right_len, not_empty);</a>
+<a name="111"><span class="lineNum">     111 </span><span class="lineCov">         14 :   return (right_len &amp;&amp; not_empty &amp;&amp; right_sym);</span></a>
+<a name="112"><span class="lineNum">     112 </span>            : }</a>
 </pre>
       </td>
     </tr>
