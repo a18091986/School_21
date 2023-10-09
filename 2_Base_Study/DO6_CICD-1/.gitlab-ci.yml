@@ -1,0 +1,15 @@
+stages:
+  - build
+
+build:
+  stage: build
+  script:
+    - cd src/cat/
+    - make s21_cat 
+    - cd ../grep
+    - make s21_grep
+    artifacts:
+      paths:
+        - src/artifacts/cat
+        - src/artifacts/grep
+      expire_in: 30 days
