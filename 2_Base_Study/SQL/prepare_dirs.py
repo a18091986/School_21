@@ -7,7 +7,7 @@ day = int(day)
 cur_day = f"{day}" if day >= 10 else f"0{day}"
 ex_count = int(ex_count)
 
-for i in range(ex_count+1):
+for i in range(ex_count):
     ex = f"{i}" if i >= 10 else f"0{i}"
     dir = Path(Path.cwd(), "src", f"ex{ex}")
     dir.mkdir(exist_ok=True)
