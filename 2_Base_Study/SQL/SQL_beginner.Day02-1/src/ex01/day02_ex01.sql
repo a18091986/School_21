@@ -17,3 +17,4 @@ LEFT JOIN
 ON 
     missing_date.date = vd.visit_date
 WHERE visit_date IS NULL
+ORDER BY missing_date;
