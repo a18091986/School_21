@@ -8,10 +8,10 @@
 
 SELECT DISTINCT name FROM
     (SELECT id, name FROM person WHERE gender = 'male' AND address IN ('Moscow','Samara')) pp
-LEFT JOIN 
+JOIN 
     person_order
 ON pp.id = person_order.person_id
-LEFT JOIN
-    (SELECT id FROM menu WHERE pizza_name IN ('pepperoni pizza', 'mashroom pizza')) pz
-ON pz.id = person_order.id
+JOIN
+    (SELECT id FROM menu WHERE pizza_name IN ('pepperoni pizza', 'mushroom pizza')) pz
+ON pz.id = person_order.menu_id
 ORDER BY name DESC;
