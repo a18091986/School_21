@@ -10,3 +10,13 @@
 -- 2022-01-11
 -- 2022-01-12
 -- ...
+
+WITH 
+    all_days AS
+        (SELECT * FROM v_generated_dates),
+    visited_days AS
+        (SELECT visit_date FROM person_visits)
+SELECT generated_date as missing_date FROM all_days
+EXCEPT
+SELECT * FROM visited_days
+ORDER BY 1;
