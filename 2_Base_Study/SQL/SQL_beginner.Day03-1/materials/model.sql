@@ -1,11 +1,3 @@
-drop table if exists person_visits;
-drop table if exists person_order;
-drop table if exists person;
-drop table if exists menu;
-drop table if exists pizzeria;
-
-
-
 create table person
 ( id bigint primary key ,
   name varchar not null,
