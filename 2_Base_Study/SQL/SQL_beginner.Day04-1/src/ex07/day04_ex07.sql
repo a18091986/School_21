@@ -16,4 +16,4 @@ INSERT INTO person_visits VALUES
 
 REFRESH MATERIALIZED VIEW mv_dmitriy_visits_and_eats;
 
--- SELECT * FROM mv_dmitriy_visits_and_eats;
+SELECT * FROM mv_dmitriy_visits_and_eats;

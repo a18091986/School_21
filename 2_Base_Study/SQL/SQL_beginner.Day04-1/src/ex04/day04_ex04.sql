@@ -19,4 +19,4 @@ SELECT person_id FROM person_visits WHERE visit_date = '2022-01-02')
 ORDER BY 1;
 --
 
--- SELECT * FROM v_symmetric_union;
+SELECT * FROM v_symmetric_union;

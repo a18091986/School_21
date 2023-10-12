@@ -22,4 +22,4 @@ JOIN
 ON person_order.menu_id = menu.id
 ORDER BY 1, 2;
 
--- SELECT * FROM v_price_with_discount;
+SELECT * FROM v_price_with_discount;
