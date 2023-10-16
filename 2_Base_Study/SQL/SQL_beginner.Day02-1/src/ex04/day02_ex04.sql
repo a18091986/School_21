@@ -21,3 +21,16 @@ LEFT JOIN
 ON pzz.pizzeria_id = pizzeria.id
 ORDER BY pizza_name, pizzeria_name;
 
+SELECT 
+    pizza_name, pizzeria.name AS pizzeria_name, price 
+FROM 
+    (SELECT 
+        pizzeria_id, pizza_name, price 
+    FROM 
+        menu
+    WHERE 
+        pizza_name IN ('mushroom pizza', 'pepperoni pizza')) pzz
+LEFT JOIN
+    pizzeria
+ON pzz.pizzeria_id = pizzeria.id
+ORDER BY pizza_name, pizzeria_name;
