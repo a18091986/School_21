@@ -26,6 +26,20 @@ SELECT pizza_name, name FROM menu
 JOIN pizzeria pz on menu.pizzeria_id = pz.id;
 
 -- Hint: please think why your indexes are not working in a direct way and what should we do to enable it?
+
+-- drop table if exists test_for_index;
+
+-- create table test_for_index as
+-- select generate_series(1, 1000, 1), random()*100 as num;
+
+-- create index idx_test_for_index_num on test_for_index (num);
+
+-- EXPLAIN ANALYSE
+-- select * from test_for_index where num > 95;
+
+-- EXPLAIN ANALYSE
+-- select * from test_for_index where num > 5;
+
 -- индексы не работают вследствие малого объема данных - для выборки с помощью индексов СУБД придётся кроме того, что прочитать страницы, в которых хранятся данные колонок, ещё и страницы, в которых хранятся записи индексов. 
 
 -- https://edu.postgrespro.ru/sqlprimer/sqlprimer-2019-msu-08.pdf page 22
