@@ -1,3 +1,4 @@
+-- Active: 1698411269832@@46.8.219.63@5432@pizza
 -- Exercise 00: Let’s create separated views for persons	
 -- Turn-in directory	ex00
 -- Files to turn-in	day04_ex00.sql
@@ -13,6 +14,6 @@ CREATE OR REPLACE VIEW v_persons_female as
 CREATE OR REPLACE VIEW v_persons_male as 
     (SELECT * FROM person WHERE gender = 'male');
 
--- SELECT * FROM v_persons_female;
--- SELECT * FROM v_persons_male;
+SELECT * FROM v_persons_female;
+SELECT * FROM v_persons_male;
 
