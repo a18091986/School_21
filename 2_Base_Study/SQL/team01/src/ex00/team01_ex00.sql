@@ -72,6 +72,9 @@
 
 ----------------------------------------1--------------------------
 
+select * from currency;
+select * from "user";
+select * from balance;
 WITH t1 AS ( 
 SELECT
     id AS t1_id,
@@ -134,8 +137,14 @@ ORDER BY
     type ASC;
 
 -------------------------------------------2----------------------------
+select * from currency;
 
+select * from "user";
+
+select * from balance;
 WITH u_volume AS (
+    -- получаем таблицу поль
+    -- full join 
         SELECT
             COALESCE(u.name, 'not defined') AS name,
             COALESCE(u.lastname, 'not defined') AS lastname,
@@ -199,6 +208,35 @@ FROM b_cur_name
     LEFT JOIN rtu ON rtu.id = b_cur_name.currency_id
 ORDER BY 1 DESC, 2 ASC, 3 ASC;
 
+select user.name from "user";
+
+select * from currency;
+
+WITH
+    uv AS (
+        -- получаем таблицу пользователь - траты
+        -- full join потому что данные не консистентны
+        SELECT name, lastname, type, SUM(money) AS volume, currency_id
+        FROM "user" FULL JOIN balance ON "user".id = balance.user_id
+        GROUP BY type, name, lastname, currency_id),
+    uvc AS (
+        -- получаем пользователь - траты - валюта
+        SELECT uv.name, lastname, type, volume, currency.name AS currency_name, currency_id
+        FROM uv LEFT JOIN currency ON currency.id = uv.currency_id
+        GROUP BY name, lastname, type, volume, currency.name, uv.currency_id),
+    rtc AS (
+        -- получаем курсы обмена
+        SELECT currency.id, name, rate_to_usd, date_for_rate
+        FROM (SELECT id, MAX(updated) AS date_for_rate FROM currency GROUP BY id) t
+        LEFT JOIN currency ON t.date_for_rate  = currency.updated AND t.id = currency.id
+    )
+SELECT
+    uvc.name AS name, lastname AS lastname, type, volume, currency_name, 
+    COALESCE(rate_to_usd, 1) AS last_rate_to_usd,
+    COALESCE(volume * rate_to_usd, volume) AS total_volume_in_usd
+FROM uvc
+    LEFT JOIN rtc ON rtc.id = uvc.currency_id
+ORDER BY 1 DESC, 2 ASC, 3 ASC;
 
 
 ----------------------------------3-------------------------------------
