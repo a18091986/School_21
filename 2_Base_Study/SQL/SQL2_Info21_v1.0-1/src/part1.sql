@@ -193,7 +193,7 @@ CREATE TABLE
     IF NOT EXISTS Recommendations (
         "ID" SERIAL PRIMARY KEY,
         "Peer" VARCHAR NOT NULL,
-        "RecommendedPeer" VARCHAR NOT NULL,
+        "RecommendedPeer" VARCHAR,
         CONSTRAINT fk_RecommendationsPeer_PeersNickname FOREIGN KEY ("Peer") REFERENCES Peers("Nickname"),
         CONSTRAINT fk_RecommendationsRecommendedPeer_PeersNickname FOREIGN KEY ("RecommendedPeer") REFERENCES Peers("Nickname"),
         CONSTRAINT ch_recomen_peers_not_eq CHECK ("Peer" != "RecommendedPeer")
@@ -283,7 +283,7 @@ plpgsql;
 
 CREATE OR REPLACE FUNCTION pair_friends() RETURNS TRIGGER 
 AS 
-	$$ BEGIN IF NOT EXISTS ( SELECT "Peer1" , "Peer2" FROM Friends WHERE "Peer1" = NEW . "Peer2" AND "Peer2" = NEW . Peer1 ) THEN INSERT INTO Friends ( "Peer1" , "Peer2" ) VALUES ( NEW . "Peer2" , NEW . "Peer1" ) ;
+	$$ BEGIN IF NOT EXISTS ( SELECT "Peer1" , "Peer2" FROM Friends WHERE "Peer1" = NEW . "Peer2" AND "Peer2" = NEW . "Peer1" ) THEN INSERT INTO Friends ( "Peer1" , "Peer2" ) VALUES ( NEW . "Peer2" , NEW . "Peer1" ) ;
 	RETURN NEW;
 	ELSE RETURN NULL;
 	END IF;
@@ -325,7 +325,7 @@ CREATE OR REPLACE TRIGGER
 
 CREATE OR REPLACE PROCEDURE restore_from_csv(IN table_name VARCHAR, IN file_name VARCHAR, IN sep CHAR) AS 
 $$ DECLARE dir text;
-	BEGIN dir: = '/tmp/CSV/';
+	BEGIN dir := '/tmp/CSV/';
 	EXECUTE
 	    FORMAT (
 	        'COPY %s FROM ''%s'' DELIMITER ''%s'' CSV HEADER;', table_name, dir || file_name, sep);
@@ -334,7 +334,7 @@ $$ LANGUAGE plpgsql;
 
 CREATE OR REPLACE PROCEDURE backup_to_csv(IN table_name VARCHAR, IN file_name VARCHAR, IN sep CHAR) AS 
 $$ DECLARE dir text;
-	BEGIN dir: = '/tmp/CSV/';
+	BEGIN dir := '/tmp/CSV/';
 	EXECUTE
 	    FORMAT ('copy %s TO ''%s'' DELIMITER ''%s'' CSV HEADER;', table_name, dir || file_name, sep);
 	END;
@@ -348,8 +348,9 @@ CALL restore_from_csv('TransferredPoints', 'TransferredPoints.csv', ',');
 CALL restore_from_csv('Tasks', 'Tasks.csv', ',');
 CALL restore_from_csv('Checks', 'Checks.csv', ',');
 CALL restore_from_csv('XP', 'XP.csv', ',');
-CALL restore_from_csv('Verter', 'Verter.csv', ',');
 CALL restore_from_csv('P2P', 'P2P.csv', ',');
+CALL restore_from_csv('Verter', 'Verter.csv', ',');
+
 
 -- SELECT * FROM P2P;
 -- SELECT * FROM Verter;
