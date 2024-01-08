@@ -322,6 +322,35 @@ CREATE OR REPLACE TRIGGER
 	    FUNCTION check_parent_task ()
 ; 
 
+
+CREATE OR REPLACE PROCEDURE restore_from_csv(IN table_name VARCHAR, IN file_name VARCHAR, IN sep CHAR) AS 
+$$ DECLARE dir text;
+	BEGIN dir: = '/tmp/CSV/';
+	EXECUTE
+	    FORMAT (
+	        'COPY %s FROM ''%s'' DELIMITER ''%s'' CSV HEADER;', table_name, dir || file_name, sep);
+	END;
+$$ LANGUAGE plpgsql; 
+
+CREATE OR REPLACE PROCEDURE backup_to_csv(IN table_name VARCHAR, IN file_name VARCHAR, IN sep CHAR) AS 
+$$ DECLARE dir text;
+	BEGIN dir: = '/tmp/CSV/';
+	EXECUTE
+	    FORMAT ('copy %s TO ''%s'' DELIMITER ''%s'' CSV HEADER;', table_name, dir || file_name, sep);
+	END;
+$$ LANGUAGE plpgsql; 
+
+CALL restore_from_csv('Peers', 'Peers.csv', ',');
+CALL restore_from_csv('TimeTracking', 'TimeTracking.csv', ',');
+CALL restore_from_csv('Recommendations', 'Recommendations.csv', ',');
+CALL restore_from_csv('Friends', 'Friends.csv', ',');
+CALL restore_from_csv('TransferredPoints', 'TransferredPoints.csv', ',');
+CALL restore_from_csv('Tasks', 'Tasks.csv', ',');
+CALL restore_from_csv('Checks', 'Checks.csv', ',');
+CALL restore_from_csv('XP', 'XP.csv', ',');
+CALL restore_from_csv('Verter', 'Verter.csv', ',');
+CALL restore_from_csv('P2P', 'P2P.csv', ',');
+
 -- SELECT * FROM P2P;
 -- SELECT * FROM Verter;
 -- SELECT * FROM XP;
