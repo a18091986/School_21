@@ -48,8 +48,6 @@ SELECT * FROM verter ORDER BY "ID" DESC LIMIT 3;
 -- 3) Написать триггер: после добавления записи со статутом "начало" в таблицу P2P,
 -- изменить соответствующую запись в таблице TransferredPoints 
 
-SELECT * FROM P2P;
-
 CREATE OR REPLACE FUNCTION trans_points_add() RETURNS TRIGGER AS $$ 
 	BEGIN
         IF (NEW."State" = 'Start') THEN
@@ -81,10 +79,19 @@ CALL p2p_add( 'User5', 'User4', 'Task0', 'Start', '17:32:00' );
 
 CREATE OR REPLACE FUNCTION XP_add() RETURNS TRIGGER AS $$ 
     BEGIN 
-        IF NEW . "XPAmount" < = ( SELECT "MaxXP" FROM Tasks JOIN checks c ON tasks . "Title" = c . "Task" WHERE c . "ID" = NEW . "Check" ) AND NEW . "Check" in ( SELECT P2P . "Check" FROM P2P FULL JOIN Verter V ON P2P . "Check" = V . "Check" WHERE P2P . "State" = 'Success' AND ( V . "State" = 'Success' OR V . "State" ISNULL ) ) THEN RETURN NEW;
+        IF NEW."XPAmount" <= (SELECT "MaxXP" FROM Tasks JOIN Checks ON Tasks."Title" = Checks."Task" WHERE Checks."ID" = NEW."Check") AND NEW."Check" in 
+        (SELECT P2P."Check" FROM P2P FULL JOIN Verter ON P2P."Check" = Verter."Check" WHERE P2P."State" = 'Success' AND (Verter."State" = 'Success' OR Verter."State" ISNULL)) 
+        THEN RETURN NEW;
 	    ELSE RETURN NULL;
         END IF;
 	END 
 $$ LANGUAGE plpgsql; 
 
-CREATE TRIGGER t_XP BEFORE INSERT ON xp FOR EACH ROW EXECUTE FUNCTION XP_add (); 
+CREATE TRIGGER t_XP BEFORE INSERT ON xp FOR EACH ROW EXECUTE FUNCTION XP_add(); 
+
+-- select * from verter;
+-- select * from XP;
+-- select * from p2p;
+INSERT INTO XP VALUES(6, 8, 300);
+INSERT INTO XP VALUES(7, 3, 90);
+INSERT INTO XP VALUES(8, 4, 90);
