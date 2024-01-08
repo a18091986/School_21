@@ -257,85 +257,60 @@ CREATE TABLE
         CONSTRAINT ch_TimeTrackingState check ("State" in ('1', '2'))
     );
 
-CREATE OR REPLACE FUNCTION check_parent_task() RETURNS 
-TRIGGER AS 
-	$$ BEGIN IF NEW."ParentTask" IS NULL THEN IF EXISTS ( SELECT * FROM Tasks WHERE "ParentTask" IS NULL ) THEN RETURN NULL;
-	-- THEN RAISE EXCEPTION 'Task WITH NULL PARENT TASK ALREADY EXISTS';
-	END IF;
-	END IF;
-	IF NEW."ParentTask" IS NOT NULL THEN IF NOT EXISTS (
-	    SELECT *
-	    FROM Tasks
-	    WHERE
-	        "ParentTask" IS NULL
-	) THEN RETURN NULL;
-	-- THEN RAISE EXCEPTION 'NULL PARENT TASK NOT EXISTS YET';
-	END IF;
-	END IF;
+CREATE OR REPLACE FUNCTION check_parent_task() RETURNS TRIGGER AS $$ 
+	BEGIN 
+		IF NEW."ParentTask" IS NULL THEN 
+			IF EXISTS ( SELECT * FROM Tasks WHERE "ParentTask" IS NULL ) 
+			THEN RETURN NULL;
+			END IF;
+		END IF;
+		IF NEW."ParentTask" IS NOT NULL THEN 
+			IF NOT EXISTS (SELECT * FROM Tasks WHERE "ParentTask" IS NULL) 
+			THEN RETURN NULL;
+			END IF;
+		END IF;
 	RETURN NEW;
 	END;
-	$$ LANGUAGE
-plpgsql; 
+$$ LANGUAGE plpgsql; 
 
-CREATE OR REPLACE FUNCTION one_p2p_check_started() 
-RETURNS TRIGGER AS 
-	$$ BEGIN IF NEW . "State" = 'Start' THEN IF EXISTS ( SELECT * FROM P2P WHERE "Check" = NEW . "Check" AND "CheckingPeer" = New . "CheckingPeer" AND "State" = 'Start' ) THEN RETURN NULL;
-	END IF;
-	END IF;
+CREATE OR REPLACE FUNCTION one_p2p_check_started() RETURNS TRIGGER AS $$ 
+	BEGIN 
+		IF NEW."State" = 'Start' 
+			THEN 
+				IF EXISTS (SELECT * FROM P2P WHERE "Check" = NEW."Check" AND "CheckingPeer" = New."CheckingPeer" AND "State" = 'Start' ) 
+				THEN RETURN NULL;
+				END IF;
+		END IF;
 	RETURN NEW;
 	END;
-	$$ LANGUAGE
-plpgsql; 
+$$ LANGUAGE plpgsql; 
 
-CREATE OR REPLACE FUNCTION verter_check_is_allowed()
-RETURNS TRIGGER AS 
-	$$ BEGIN IF NOT EXISTS ( select Checks . "ID" from Checks left join P2P on Checks . "ID" = P2P . "Check" WHERE "State" = 'Success' and Checks . "ID" = NEW . "Check" ) THEN RETURN NULL;
-	END IF;
+CREATE OR REPLACE FUNCTION verter_check_is_allowed() RETURNS TRIGGER AS $$ 
+	BEGIN 
+		IF NOT EXISTS (select Checks."ID" from Checks left join P2P on Checks."ID" = P2P."Check" WHERE "State" = 'Success' and Checks."ID" = NEW."Check" ) 
+		THEN RETURN NULL;
+		END IF;
 	RETURN NEW;
 	END;
-	$$ LANGUAGE
-plpgsql; 
+$$ LANGUAGE plpgsql; 
 
-CREATE OR REPLACE FUNCTION pair_friends() RETURNS TRIGGER 
-AS 
-	$$ BEGIN IF NOT EXISTS ( SELECT "Peer1" , "Peer2" FROM Friends WHERE "Peer1" = NEW . "Peer2" AND "Peer2" = NEW . "Peer1" ) THEN INSERT INTO Friends ( "Peer1" , "Peer2" ) VALUES ( NEW . "Peer2" , NEW . "Peer1" ) ;
-	RETURN NEW;
-	ELSE RETURN NULL;
-	END IF;
+CREATE OR REPLACE FUNCTION pair_friends() RETURNS TRIGGER AS $$ 
+	BEGIN 
+		IF NOT EXISTS (SELECT "Peer1" , "Peer2" FROM Friends WHERE "Peer1" = NEW."Peer2" AND "Peer2" = NEW."Peer1") 
+			THEN INSERT INTO Friends ( "Peer1" , "Peer2" ) VALUES ( NEW."Peer2" , NEW."Peer1" );
+			RETURN NEW;
+		ELSE RETURN NULL;
+		END IF;
 	END;
-	$$ LANGUAGE
-plpgsql; 
+$$ LANGUAGE plpgsql; 
 
-CREATE OR REPLACE TRIGGER 
-	t_Friends
-	AFTER
-	INSERT ON Friends FOR EACH ROW
-	EXECUTE FUNCTION pair_friends ()
-; 
+CREATE OR REPLACE TRIGGER t_Friends	AFTER INSERT ON Friends FOR EACH ROW EXECUTE FUNCTION pair_friends (); 
 
-CREATE OR REPLACE TRIGGER 
-	t_Verter BEFORE
-	INSERT OR
-	UPDATE ON Verter FOR EACH ROW
-	EXECUTE
-	    FUNCTION verter_check_is_allowed ()
-; 
+CREATE OR REPLACE TRIGGER t_Verter BEFORE INSERT OR	UPDATE ON Verter FOR EACH ROW EXECUTE FUNCTION verter_check_is_allowed (); 
 
-CREATE OR REPLACE TRIGGER 
-	t_P2P BEFORE
-	INSERT OR
-	UPDATE ON P2P FOR EACH ROW
-	EXECUTE
-	    FUNCTION one_p2p_check_started ()
-; 
+CREATE OR REPLACE TRIGGER t_P2P BEFORE INSERT OR UPDATE ON P2P FOR EACH ROW	EXECUTE FUNCTION one_p2p_check_started (); 
 
-CREATE OR REPLACE TRIGGER 
-	t_Tasks BEFORE
-	INSERT OR
-	UPDATE ON Tasks FOR EACH ROW
-	EXECUTE
-	    FUNCTION check_parent_task ()
-; 
+CREATE OR REPLACE TRIGGER t_Tasks BEFORE INSERT OR UPDATE ON Tasks FOR EACH ROW EXECUTE FUNCTION check_parent_task (); 
 
 
 CREATE OR REPLACE PROCEDURE restore_from_csv(IN table_name VARCHAR, IN file_name VARCHAR, IN sep CHAR) AS 
@@ -367,13 +342,13 @@ CALL restore_from_csv('P2P', 'P2P.csv', ',');
 CALL restore_from_csv('Verter', 'Verter.csv', ',');
 
 
--- SELECT * FROM P2P;
--- SELECT * FROM Verter;
--- SELECT * FROM XP;
--- SELECT * FROM Checks;
--- SELECT * FROM Tasks;
--- SELECT * FROM TransferredPoints;
--- SELECT * FROM Friends;
--- SELECT * FROM Recommendations;
--- SELECT * FROM TimeTracking;
--- SELECT * FROM Peers;
+SELECT * FROM P2P;
+SELECT * FROM Verter;
+SELECT * FROM XP;
+SELECT * FROM Checks;
+SELECT * FROM Tasks;
+SELECT * FROM TransferredPoints;
+SELECT * FROM Friends;
+SELECT * FROM Recommendations;
+SELECT * FROM TimeTracking;
+SELECT * FROM Peers;
