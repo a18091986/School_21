@@ -79,3 +79,12 @@ CALL p2p_add( 'User5', 'User4', 'Task0', 'Start', '17:32:00' );
 -- если: Количество XP не превышает максимальное доступное для проверяемой задачи.
 -- Поле Check ссылается на успешную проверку Если запись не прошла проверку, не добавлять её в таблицу.
 
+CREATE OR REPLACE FUNCTION XP_add() RETURNS TRIGGER AS $$ 
+    BEGIN 
+        IF NEW . "XPAmount" < = ( SELECT "MaxXP" FROM Tasks JOIN checks c ON tasks . "Title" = c . "Task" WHERE c . "ID" = NEW . "Check" ) AND NEW . "Check" in ( SELECT P2P . "Check" FROM P2P FULL JOIN Verter V ON P2P . "Check" = V . "Check" WHERE P2P . "State" = 'Success' AND ( V . "State" = 'Success' OR V . "State" ISNULL ) ) THEN RETURN NEW;
+	    ELSE RETURN NULL;
+        END IF;
+	END 
+$$ LANGUAGE plpgsql; 
+
+CREATE TRIGGER t_XP BEFORE INSERT ON xp FOR EACH ROW EXECUTE FUNCTION XP_add (); 

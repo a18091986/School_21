@@ -2,6 +2,9 @@ DROP TRIGGER IF EXISTS t_Friends ON Friends;
 DROP TRIGGER IF EXISTS t_Verter ON Verter;
 DROP TRIGGER IF EXISTS t_P2P ON P2P;
 DROP TRIGGER IF EXISTS t_Tasks ON Tasks;
+DROP TRIGGER IF EXISTS t_TransferredPoints ON TransferredPoints;
+DROP TRIGGER IF EXISTS t_XP ON XP;
+
 DROP FUNCTION IF EXISTS pair_friends();
 
 DROP FUNCTION IF EXISTS verter_check_is_allowed();
@@ -10,7 +13,13 @@ DROP FUNCTION IF EXISTS one_p2p_check_started();
 
 DROP FUNCTION IF EXISTS check_parent_task();
 
-DROP PROCEDURE IF EXISTS p2p_add;
+DROP PROCEDURE IF EXISTS p2p_add();
+
+DROP PROCEDURE IF EXISTS verter_add();
+
+DROP FUNCTION IF EXISTS XP_add();
+
+DROP FUNCTION IF EXISTS trans_points_add();
 
 DROP TABLE IF EXISTS P2P;
 
