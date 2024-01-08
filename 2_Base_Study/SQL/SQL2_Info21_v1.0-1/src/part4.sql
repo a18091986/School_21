@@ -1,14 +1,15 @@
 DROP TRIGGER IF EXISTS t_Friends ON Friends;
+
 DROP TRIGGER IF EXISTS t_Verter ON Verter;
+
 DROP TRIGGER IF EXISTS t_P2P ON P2P;
+
 DROP TRIGGER IF EXISTS t_Tasks ON Tasks;
+
 DROP TRIGGER IF EXISTS t_TransferredPoints ON TransferredPoints;
+
 DROP TRIGGER IF EXISTS t_XP ON XP;
 
-DROP PROCEDURE IF EXISTS backup_to_csv;
-DROP PROCEDURE IF EXISTS p2p_add;
-DROP PROCEDURE IF EXISTS restore_from_csv;
-DROP PROCEDURE IF EXISTS verter_add;
 DROP FUNCTION IF EXISTS pair_friends();
 
 DROP FUNCTION IF EXISTS verter_check_is_allowed();
@@ -23,6 +24,8 @@ DROP PROCEDURE IF EXISTS verter_add();
 
 DROP FUNCTION IF EXISTS XP_add();
 
+DROP FUNCTION IF EXISTS trans_points_add();
+
 DROP TABLE IF EXISTS P2P;
 
 DROP TABLE IF EXISTS Verter;
@@ -34,8 +37,6 @@ DROP TABLE IF EXISTS Checks;
 DROP TABLE IF EXISTS Tasks;
 
 DROP TABLE IF EXISTS TransferredPoints;
-
-DROP FUNCTION IF EXISTS trans_points_add();
 
 DROP TABLE IF EXISTS Friends;
 
@@ -57,16 +58,6 @@ CREATE TABLE
         "Nickname" VARCHAR PRIMARY KEY NOT NULL,
         "Birthday" DATE NOT NULL
     );
-
---Таблица Tasks
---Название задания
---Название задания, являющегося условием входа
---Максимальное количество XP
-
---Чтобы получить доступ к заданию, нужно выполнить задание, являющееся его условием входа.
---Для упрощения будем считать, что у каждого задания всего одно условие входа.
---В таблице должно быть одно задание, у которого нет условия входа (т.е. поле ParentTask равно null).
-
 CREATE TABLE
     IF NOT EXISTS Tasks (
         "Title" VARCHAR PRIMARY KEY NOT NULL UNIQUE,
@@ -75,32 +66,15 @@ CREATE TABLE
         CONSTRAINT fk_TasksParentTask_TasksTitle FOREIGN KEY ("ParentTask") REFERENCES Tasks("Title"),
         CONSTRAINT ch_ParentTask_not_eq_Title CHECK ("ParentTask" != "Title")
     );
-
---Статус проверки
---Создать тип перечисления для статуса проверки, содержащий следующие значения:
---
---Start - начало проверки
---Success - успешное окончание проверки
---Failure - неудачное окончание проверки
+   
+CREATE TABLE
+    IF NOT EXISTS Tasks_two (
+        "Title" VARCHAR PRIMARY KEY NOT NULL UNIQUE,
+        "ParentTask" VARCHAR DEFAULT 'NULL',
+        "MaxXP" INT NOT NULL
+    );
 
 CREATE TYPE CheckStatus AS ENUM('Start', 'Success', 'Failure');
-
---Таблица Checks
---ID
---Ник пира
---Название задания
---Дата проверки
---Описывает проверку задания в целом.
---Проверка обязательно включает в себя один этап P2P и, возможно, этап Verter.
---Для упрощения будем считать, что пир ту пир и автотесты,
---относящиеся к одной проверке, всегда происходят в один день.
-
---Проверка считается успешной, если соответствующий P2P этап успешен,
---а этап Verter успешен, либо отсутствует.
---Проверка считается неуспешной, хоть один из этапов неуспешен.
---То есть проверки, в которых ещё не завершился этап P2P,
---или этап P2P успешен, но ещё не завершился этап Verter,
---не относятся ни к успешным, ни к неуспешным.
 
 CREATE TABLE
     IF NOT EXISTS Checks (
@@ -111,19 +85,6 @@ CREATE TABLE
         CONSTRAINT fk_ChecksPeer_PeersNickname FOREIGN KEY ("Peer") REFERENCES Peers("Nickname"),
         CONSTRAINT fk_ChecksTask_TasksTitle FOREIGN KEY ("Task") REFERENCES Tasks("Title")
     );
-
---Таблица P2P
---ID
---ID проверки
---Ник проверяющего пира
---Статус P2P проверки
---Время
---Каждая P2P проверка состоит из 2-х записей в таблице: первая имеет статус начало,
---вторая - успех или неуспех.
---В таблице не может быть больше одной незавершенной P2P проверки,
---относящейся к конкретному заданию, пиру и проверяющему.
---Каждая P2P проверка (т.е. обе записи, из которых она состоит)
---ссылается на проверку в таблице Checks, к которой она относится.
 
 CREATE TABLE
     IF NOT EXISTS P2P (
@@ -136,17 +97,6 @@ CREATE TABLE
         CONSTRAINT fk_P2PCheckingPeer_PeersNickname FOREIGN KEY ("CheckingPeer") REFERENCES Peers("Nickname") -- CONSTRAINT unique_CheckingPeer_CheckID_Status UNIQUE ("CheckingPeer", "Check", "State")
     );
 
---Таблица Verter
---ID
---ID проверки
---Статус проверки Verter'ом
---Время
---Каждая проверка Verter'ом состоит из 2-х записей в таблице:
---первая имеет статус начало, вторая - успех или неуспех.
---Каждая проверка Verter'ом (т.е. обе записи, из которых она состоит)
---ссылается на проверку в таблице Checks, к которой она относится.
---Проверка Verter'ом может ссылаться только на те проверки в таблице Checks,
---которые уже включают в себя успешную P2P проверку.
 
 CREATE TABLE
     IF NOT EXISTS Verter (
@@ -259,7 +209,7 @@ CREATE TABLE
 
 CREATE OR REPLACE FUNCTION check_parent_task() RETURNS 
 TRIGGER AS 
-	$$ BEGIN IF NEW."ParentTask" IS NULL THEN IF EXISTS ( SELECT * FROM Tasks WHERE "ParentTask" IS NULL ) THEN RETURN NULL;
+	$$ BEGIN IF NEW . "ParentTask" IS NULL THEN IF EXISTS ( SELECT * FROM Tasks WHERE "ParentTask" IS NULL ) THEN RETURN NULL;
 	-- THEN RAISE EXCEPTION 'Task WITH NULL PARENT TASK ALREADY EXISTS';
 	END IF;
 	END IF;
@@ -287,8 +237,8 @@ RETURNS TRIGGER AS
 	$$ LANGUAGE
 plpgsql; 
 
-CREATE OR REPLACE FUNCTION verter_check_is_allowed()
-RETURNS TRIGGER AS 
+CREATE OR REPLACE FUNCTION verter_check_is_allowed(
+) RETURNS TRIGGER AS 
 	$$ BEGIN IF NOT EXISTS ( select Checks . "ID" from Checks left join P2P on Checks . "ID" = P2P . "Check" WHERE "State" = 'Success' and Checks . "ID" = NEW . "Check" ) THEN RETURN NULL;
 	END IF;
 	RETURN NEW;
@@ -337,43 +287,216 @@ CREATE OR REPLACE TRIGGER
 	    FUNCTION check_parent_task ()
 ; 
 
+INSERT INTO public.tasks ("Title","ParentTask","MaxXP") VALUES
+	 ('Task0',NULL,100),
+	 ('Task1','Task0',150),
+	 ('Task2','Task0',150),
+	 ('Task3','Task1',200),
+	 ('Task4','Task2',300);
 
-CREATE OR REPLACE PROCEDURE restore_from_csv(IN table_name VARCHAR, IN file_name VARCHAR, IN sep CHAR) AS 
-$$ DECLARE dir text;
-	BEGIN dir := '/tmp/CSV/';
-	EXECUTE
-	    FORMAT (
-	        'COPY %s FROM ''%s'' DELIMITER ''%s'' CSV HEADER;', table_name, dir || file_name, sep);
-	END;
-$$ LANGUAGE plpgsql; 
+INSERT INTO public.peers ("Nickname","Birthday") VALUES
+	 ('User1','1990-01-01'),
+	 ('User2','1991-01-01'),
+	 ('User3','1992-01-01'),
+	 ('User4','1993-01-01'),
+	 ('User5','1994-01-01');
+INSERT INTO public.friends ("Peer1","Peer2") VALUES
+	 ('User1','User2'),
+	 ('User3','User4'),
+	 ('User2','User1'),
+	 ('User4','User3'),
+	 ('User1','User3'),
+	 ('User3','User1');
+	
+INSERT INTO public.checks ("Peer","Task","Date") VALUES
+	 ('User1','Task0','2020-01-01'),
+	 ('User2','Task1','2020-01-01'),
+	 ('User3','Task2','2020-01-01'),
+	 ('User2','Task1','2020-01-01'),
+	 ('User5','Task1','2020-01-01'),
+	 ('User4','Task0','2020-01-01'),
+	 ('User2','Task1','2020-01-01');
+INSERT INTO public.p2p ("Check","CheckingPeer","State","Time") VALUES
+	 (1,'User2','Start','10:03:00'),
+	 (2,'User3','Start','10:05:00'),
+	 (1,'User2','Success','10:20:00'),
+	 (2,'User3','Failure','10:30:00'),
+	 (3,'User1','Start','11:00:00'),
+	 (3,'User1','Success','11:15:00'),
+	 (4,'User1','Start','12:00:00'),
+	 (4,'User1','Success','12:30:00'),
+	 (5,'User4','Start','13:00:00'),
+	 (5,'User4','Success','14:00:00'),
+	 (6,'User3','Start','14:05:00'),
+	 (6,'User3','Success','14:15:00'),
+	 (7,'User3','Start','14:20:00'),
+	 (7,'User3','Success','14:45:00');
 
-CREATE OR REPLACE PROCEDURE backup_to_csv(IN table_name VARCHAR, IN file_name VARCHAR, IN sep CHAR) AS 
-$$ DECLARE dir text;
-	BEGIN dir := '/tmp/CSV/';
-	EXECUTE
-	    FORMAT ('copy %s TO ''%s'' DELIMITER ''%s'' CSV HEADER;', table_name, dir || file_name, sep);
-	END;
-$$ LANGUAGE plpgsql; 
+INSERT INTO public.recommendations ("Peer","RecommendedPeer") VALUES
+	 ('User1','User2'),
+	 ('User2',NULL),
+	 ('User3','User1'),
+	 ('User2','User1'),
+	 ('User5','User4'),
+	 ('User4','User3'),
+	 ('User2','User3');
 
-CALL restore_from_csv('Peers', 'Peers.csv', ',');
-CALL restore_from_csv('TimeTracking', 'TimeTracking.csv', ',');
-CALL restore_from_csv('Recommendations', 'Recommendations.csv', ',');
-CALL restore_from_csv('Friends', 'Friends.csv', ',');
-CALL restore_from_csv('TransferredPoints', 'TransferredPoints.csv', ',');
-CALL restore_from_csv('Tasks', 'Tasks.csv', ',');
-CALL restore_from_csv('Checks', 'Checks.csv', ',');
-CALL restore_from_csv('XP', 'XP.csv', ',');
-CALL restore_from_csv('P2P', 'P2P.csv', ',');
-CALL restore_from_csv('Verter', 'Verter.csv', ',');
+INSERT INTO public.timetracking ("Peer","Date","Time","State") VALUES
+	 ('User1','2020-01-01','08:00:00','1'),
+	 ('User1','2020-01-01','09:00:00','2'),
+	 ('User2','2020-01-01','09:30:00','1'),
+	 ('User3','2020-01-01','09:35:00','1'),
+	 ('User4','2020-01-01','09:45:00','1'),
+	 ('User5','2020-01-01','09:55:00','1'),
+	 ('User1','2020-01-01','10:00:00','1'),
+	 ('User3','2020-01-01','15:35:00','2'),
+	 ('User2','2020-01-01','17:30:00','2'),
+	 ('User1','2020-01-01','20:00:00','2'),
+	 ('User4','2020-01-01','21:45:00','2'),
+	 ('User5','2020-01-01','22:55:00','2');
+INSERT INTO public.transferredpoints ("CheckingPeer","CheckedPeer","PointsAmount") VALUES
+	 ('User2','User1',1),
+	 ('User3','User2',2),
+	 ('User1','User3',1),
+	 ('User1','User2',1),
+	 ('User4','User5',1),
+	 ('User3','User4',1);
+INSERT INTO public.verter ("Check","State","Time") VALUES
+	 (1,'Start','10:21:00'),
+	 (1,'Success','10:22:00'),
+	 (4,'Start','12:32:00'),
+	 (4,'Failure','12:35:00'),
+	 (5,'Start','14:02:00'),
+	 (5,'Success','14:05:00'),
+	 (6,'Start','14:16:00'),
+	 (6,'Success','14:17:00'),
+	 (7,'Start','14:46:00'),
+	 (7,'Success','14:47:00');
+INSERT INTO public.xp ("Check","XPAmount") VALUES
+	 (1,90),
+	 (3,150),
+	 (5,120),
+	 (6,100),
+	 (7,150);
+	
+
+--1) Создать хранимую процедуру, которая, не уничтожая базу данных, 
+--уничтожает все те таблицы текущей базы данных, 
+--имена которых начинаются с фразы 'TableName'.
+	
+CREATE OR REPLACE PROCEDURE delete_tables_by_names(IN name_part text) AS $$
+DECLARE
+    table_name text;
+BEGIN
+  FOR table_name IN SELECT tablename FROM pg_tables WHERE schemaname = 'public' AND tablename LIKE name_part || '%'
+  LOOP
+    EXECUTE format('DROP TABLE IF EXISTS %I CASCADE', table_name);
+  END LOOP;
+END;
+$$ LANGUAGE plpgsql;
+
+CALL delete_tables_by_names('tasks');
+
+	
+--2) Создать хранимую процедуру с выходным параметром, 
+--которая выводит список имен и параметров всех скалярных SQL 
+--функций пользователя в текущей базе данных. Имена функций без параметров не выводить. 
+--Имена и список параметров должны выводиться в одну строку. 
+--Выходной параметр возвращает количество найденных функций.
+	
+CREATE OR REPLACE PROCEDURE scalar_funcs_with_params(OUT counter integer) AS $$
+  DECLARE
+    record RECORD; --для итерации по результатам курсора
+    fname VARCHAR = '';
+    fparam VARCHAR = '';
+  BEGIN
+    counter = 0;
+    RAISE NOTICE ' List of names and parameters of all scalar users SQL functions in the current database.';
+    FOR record IN
+        SELECT routines.routine_name, parameters.data_type
+        FROM information_schema.routines
+            LEFT JOIN information_schema.parameters ON routines.specific_name=parameters.specific_name
+        WHERE routines.specific_schema NOT IN ('information_schema', 'pg_catalog') AND
+              parameters.ordinal_position IS NOT NULL
+        ORDER BY routines.routine_name, parameters.ordinal_position
+    LOOP
+        IF fname != record.routine_name
+        THEN
+            IF fname != ''
+            THEN
+                RAISE NOTICE '%(%)', fname, fparam;
+            END IF;
+            counter = counter + 1;
+            fname = record.routine_name;
+            fparam = record.data_type;
+        ELSE
+            fparam = fparam || ', ' || record.data_type;
+        END IF;
+    END LOOP;
+    IF fname != ''
+    THEN
+        RAISE NOTICE '%(%)', fname, fparam;
+    END IF;
+  END
+$$ LANGUAGE PLPGSQL;
+
+DO $$
+DECLARE counter int := 0;
+BEGIN
+  CALL all_functions(counter);
+  RAISE NOTICE 'counter = %', counter;
+END;
+$$;
+
+	
+--3) Создать хранимую процедуру с выходным параметром, которая уничтожает все 
+--SQL DML триггеры в текущей базе данных. Выходной параметр возвращает количество уничтоженных триггеров.
+	
+CREATE OR REPLACE PROCEDURE delete_dml_trig(OUT cnt INTEGER)AS $$
+DECLARE
+    record RECORD;
+BEGIN
+    cnt := 0;
+    FOR record IN
+        SELECT trigger_name, event_object_table
+        FROM information_schema.triggers
+        WHERE trigger_catalog = current_database() AND trigger_schema = 'public'
+          		AND event_manipulation IN ('INSERT', 'UPDATE', 'DELETE')
+    LOOP
+        EXECUTE format('DROP TRIGGER IF EXISTS %I ON %I CASCADE', record.trigger_name, record.event_object_table);
+        cnt := cnt + 1;
+    END LOOP;
+    RAISE NOTICE 'count: %', cnt;
+END
+$$ LANGUAGE plpgsql;
+
+DO $$
+DECLARE
+    counter INTEGER := 0;
+BEGIN
+    CALL delete_dml_trig(counter);
+END;
+$$;
 
 
--- SELECT * FROM P2P;
--- SELECT * FROM Verter;
--- SELECT * FROM XP;
--- SELECT * FROM Checks;
--- SELECT * FROM Tasks;
--- SELECT * FROM TransferredPoints;
--- SELECT * FROM Friends;
--- SELECT * FROM Recommendations;
--- SELECT * FROM TimeTracking;
--- SELECT * FROM Peers;
+--4) Создать хранимую процедуру с входным параметром, 
+--которая выводит имена и описания типа объектов (только хранимых процедур и скалярных функций), 
+--в тексте которых на языке SQL встречается строка, задаваемая параметром процедуры.
+
+CREATE OR REPLACE PROCEDURE find_by_text(IN find TEXT) AS $$
+DECLARE
+  record RECORD;
+BEGIN
+  FOR record IN
+    SELECT routine_name, routine_type, data_type, routine_body
+    FROM information_schema.routines
+    WHERE routines.routine_body = 'SQL'
+    AND (routine_name LIKE '%' || find || '%' or routine_definition LIKE '%' || find || '%')
+  LOOP
+    RAISE NOTICE 'Name: %, Type: %, Return type: %, Body: %', record.routine_name, record.routine_type, record.data_type, record.routine_body;
+  END LOOP;
+END;
+$$ LANGUAGE plpgsql;
+
+CALL find_by_text('length');
+CALL find_by_text('WTF');
