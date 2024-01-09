@@ -1,3 +1,4 @@
+-- Active: 1704653475145@@192.168.2.160@5432@edu
 -- 1) Написать функцию,
 -- возвращающую таблицу TransferredPoints в более человекочитаемом виде Ник пира 1,
 -- ник пира 2,
@@ -25,10 +26,31 @@ SELECT * FROM points_transfer();
 -- Одна задача может быть успешно выполнена несколько раз.В таком случае в таблицу включать все успешные проверки.
 
 
+CREATE OR REPLACE FUNCTION success_checks() RETURNS TABLE(Peer VARCHAR, Task VARCHAR, XP INT) AS $$ 
+    BEGIN RETURN QUERY 
+    (SELECT Checks."Peer", Checks."Task", XP."XPAmount" FROM Checks 
+    LEFT JOIN P2P ON P2P."Check" = Checks."ID" 
+    INNER JOIN XP ON XP."Check" = Checks."ID"
+    LEFT JOIN Verter ON Verter."Check" = Checks."ID"
+WHERE
+    P2P."State" = 'Success' AND (Verter."State" = 'Success' OR Verter."State" IS NULL));
+	END;
+$$ language plpgsql; 
+
+SELECT * FROM success_checks();
+
 -- 3) Написать функцию,
 -- определяющую пиров,
 -- которые не выходили из кампуса в течение всего дня Параметры функции: день,
 -- например 12.05.2022. Функция возвращает только список пиров.
+
+CREATE OR REPLACE FUNCTION peers_not_walking(current_day Date DEFAULT CURRENT_DATE) RETURNS TABLE("Peer" VARCHAR) AS $$
+    BEGIN 
+        RETURN QUERY (SELECT t."Peer" FROM TimeTracking t WHERE "Date" = current_day GROUP by t."Peer" HAVING (count("State") = 2));
+    END;
+$$ LANGUAGE plpgsql;
+
+SELECT * FROM peers_not_walking('2020-01-01');
 
 -- 4) Посчитать изменение в количестве пир поинтов каждого пира по таблице TransferredPoints 
 -- Результат вывести отсортированным по изменению числа поинтов.Формат вывода: ник пира,

@@ -1,0 +1,6 @@
+Title,ParentTask,MaxXP
+Task0,,100
+Task1,Task0,150
+Task2,Task0,150
+Task3,Task1,200
+Task4,Task2,300
