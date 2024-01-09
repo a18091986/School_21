@@ -4,6 +4,19 @@
 -- количество переданных пир поинтов.Количество отрицательное,
 -- если пир 2 получил от пира 1 больше поинтов.
 
+CREATE OR REPLACE FUNCTION points_transfer() RETURNS TABLE("Peer1" VARCHAR, "Peer2" VARCHAR, "PointsAmount" INT) AS $$
+    BEGIN 
+        RETURN QUERY (SELECT t3."Peer1", t3."Peer2", sum(t3."PointsAmount")::INT "PointsAmount" FROM
+                ((SELECT t1."CheckingPeer" "Peer1", t1."CheckedPeer" "Peer2", t1."PointsAmount" FROM TransferredPoints t1 WHERE "CheckingPeer" > "CheckedPeer")
+                UNION
+                (SELECT t2."CheckedPeer", t2."CheckingPeer", -t2."PointsAmount" FROM TransferredPoints t2 WHERE "CheckedPeer" > "CheckingPeer" )) t3
+                GROUP BY t3."Peer1", t3."Peer2"
+                ORDER BY 3 DESC);
+	END;
+$$ LANGUAGE plpgsql; 
+
+SELECT * FROM points_transfer();
+
 -- 2) Написать функцию,
 -- которая возвращает таблицу вида: ник пользователя,
 -- название проверенного задания,
