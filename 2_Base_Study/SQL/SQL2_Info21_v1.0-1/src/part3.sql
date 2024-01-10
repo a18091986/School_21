@@ -11,7 +11,7 @@ CREATE OR REPLACE FUNCTION points_transfer() RETURNS TABLE("Peer1" VARCHAR, "Pee
                 ((SELECT t1."CheckingPeer" "Peer1", t1."CheckedPeer" "Peer2", t1."PointsAmount" FROM TransferredPoints t1 WHERE "CheckingPeer" > "CheckedPeer")
                 UNION
                 (SELECT t2."CheckedPeer", t2."CheckingPeer", -t2."PointsAmount" FROM TransferredPoints t2 WHERE "CheckedPeer" > "CheckingPeer" )) t3
-                GROUP BY t3."Peer1", t3."Peer2"
+                GROUP BY (t3."Peer1", t3."Peer2")
                 ORDER BY 3 DESC);
 	END;
 $$ LANGUAGE plpgsql; 
@@ -56,14 +56,53 @@ SELECT * FROM peers_not_walking('2020-01-01');
 -- Результат вывести отсортированным по изменению числа поинтов.Формат вывода: ник пира,
 -- изменение в количество пир поинтов
 
+CREATE OR REPLACE FUNCTION points_change_v1() RETURNS TABLE("Peer" VARCHAR, "PointsChange" INTEGER) AS $$ 
+    BEGIN 
+        RETURN QUERY(SELECT t3."CheckingPeer" "Peer", SUM(t3.points_sum)::INT FROM
+                    (SELECT t1."CheckingPeer", SUM(t1."PointsAmount") points_sum FROM TransferredPoints t1 GROUP BY "CheckingPeer"
+                    UNION
+                    SELECT t2."CheckedPeer", -SUM(t2."PointsAmount") FROM TransferredPoints t2 GROUP BY "CheckedPeer") t3
+                    GROUP BY "CheckingPeer" ORDER BY 2 DESC, 1 ASC);
+    END;
+$$ LANGUAGE plpgsql;
+
+SELECT * FROM points_change_v1();
 
 -- 5) Посчитать изменение в количестве пир поинтов каждого пира по таблице,
 -- возвращаемой первой функцией из Part 3 Результат вывести отсортированным по изменению числа поинтов.Формат вывода: ник пира,
 -- изменение в количество пир поинтов
 
+
+
+CREATE OR REPLACE FUNCTION points_change_v2() RETURNS TABLE("Peer" VARCHAR, "PointsChange" INTEGER) AS $$ 
+    BEGIN 
+        RETURN QUERY(SELECT t3."Peer1" "Peer", SUM(t3."PointsChange")::INT FROM
+                    (SELECT t1."Peer1", Sum(t1."PointsAmount") "PointsChange" FROM points_transfer() t1 GROUP BY "Peer1"
+                    UNION
+                    SELECT t2."Peer2", -Sum(t2."PointsAmount") "PointsChange" FROM points_transfer() t2 GROUP BY "Peer2") t3
+                    GROUP BY "Peer1" ORDER BY 2 DESC, 1 ASC);
+    END;
+$$ LANGUAGE plpgsql;
+
+SELECT * FROM points_change_v2();
+
 -- 6) Определить самое часто проверяемое задание за каждый день При одинаковом количестве проверок каких - то заданий в определенный день,
 -- вывести их все.Формат вывода: день,
 -- название задания
+
+CREATE OR REPLACE FUNCTION most_often_task() RETURNS TABLE("Date" date, "Task" VARCHAR)  AS	$$ 
+    BEGIN 
+        RETURN QUERY 
+            WITH t1 AS (SELECT Checks."Date" , Checks."Task" , COUNT(*) ch_cnt FROM Checks 
+                        GROUP BY Checks."Task", Checks."Date" ORDER BY Checks."Date", ch_cnt), 
+                 t2 AS (SELECT t1."Date" , MAX(ch_cnt) AS top_ch FROM t1 GROUP BY t1."Date")
+            SELECT t2."Date", t1."Task" FROM t2 JOIN t1 ON t1."Date" = t2."Date" AND t1.ch_cnt = t2.top_ch;
+	END;
+$$ LANGUAGE plpgsql; 
+
+SELECT * FROM most_often_task();
+
+
 
 -- 7) Найти всех пиров,
 -- выполнивших весь заданный блок задач и дату завершения последнего задания Параметры процедуры: название блока,
@@ -72,9 +111,29 @@ SELECT * FROM peers_not_walking('2020-01-01');
 
 -- 8) Определить,
 -- к какому пиру стоит идти на проверку каждому обучающемуся Определять нужно исходя из рекомендаций друзей пира,
--- т.е.нужно найти пира,
--- проверяться у которого рекомендует наибольшее число друзей.Формат вывода: ник пира,
+-- т.е.нужно найти пира, проверяться у которого рекомендует наибольшее число друзей.Формат вывода: ник пира,
 -- ник найденного проверяющего
+
+CREATE OR REPLACE FUNCTION get_rec() RETURNS TABLE (peer VARCHAR,  recommendedpeer VARCHAR) AS $$
+    BEGIN RETURN QUERY 
+        WITH af AS (SELECT "Nickname",
+                           (CASE WHEN "Nickname" = f."Peer1" THEN f."Peer2" ELSE f."Peer1" END) AS friends
+                    FROM Peers p JOIN Friends f ON p."Nickname" = f."Peer1" OR p."Nickname" = f."Peer2"), 
+             ar AS (SELECT "Nickname", COUNT(r."RecommendedPeer") AS count_rec, r."RecommendedPeer" 
+                    FROM af a JOIN Recommendations r ON a.friends = r."Peer"
+                    WHERE a."Nickname" != r."RecommendedPeer" GROUP BY "Nickname", r."RecommendedPeer"),
+             gm AS (SELECT "Nickname", MAX(count_rec) AS max_count FROM ar GROUP BY "Nickname")
+            SELECT  a."Nickname" AS Peer, a."RecommendedPeer" FROM ar a 
+            JOIN gm g ON a."Nickname" = g."Nickname" AND a.count_rec = g.max_count 
+            ORDER BY 1, 2;
+END;
+$$LANGUAGE plpgsql;
+
+SELECT * FROM get_rec();
+
+select * from Friends;
+
+select * from Recommendations;
 
 -- 9) Определить процент пиров,
 -- которые: Приступили только к блоку 1 Приступили только к блоку 2 Приступили к обоим Не приступили ни к одному Пир считается приступившим к блоку,
