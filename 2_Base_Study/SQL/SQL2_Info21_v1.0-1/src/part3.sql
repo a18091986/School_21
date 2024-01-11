@@ -131,9 +131,9 @@ $$LANGUAGE plpgsql;
 
 SELECT * FROM get_rec();
 
-select * from Friends;
+SELECT * FROM Friends;
 
-select * from Recommendations;
+SELECT * FROM Recommendations;
 
 -- 9) Определить процент пиров,
 -- которые: Приступили только к блоку 1 Приступили только к блоку 2 Приступили к обоим Не приступили ни к одному Пир считается приступившим к блоку,
@@ -155,6 +155,21 @@ select * from Recommendations;
 -- процент пиров,
 -- проваливших проверку в день рождения
 
+CREATE OR REPLACE FUNCTION s_f_pct() RETURNS TABLE(SuccessfulChecks INT, UnsuccessfulChecks INT) AS $$ 
+    BEGIN RETURN QUERY 
+        WITH counts AS 
+            (SELECT 
+            COUNT(Checks."Peer") FILTER (WHERE P2P."State" = 'Success' ) AS s, 
+            COUNT(Checks."Peer") FILTER (WHERE P2P."State" = 'Failure' ) AS f 
+            FROM Checks LEFT JOIN Peers ON Checks."Peer" = Peers."Nickname" JOIN P2P ON Checks."ID" = P2P."Check" 
+            WHERE (EXTRACT (MONTH FROM Checks."Date" ) = EXTRACT  (MONTH FROM Peers."Birthday")) AND (EXTRACT (DAY FROM Checks."Date") = EXTRACT( DAY FROM Peers."Birthday" ))) 
+        
+        SELECT ( s::NUMERIC / NULLIF ( s + f , 0 )::NUMERIC * 100 )::INT "SuccessfulChecks" , 
+               ( f::NUMERIC / NULLIF ( s + f , 0 )::NUMERIC * 100 )::INT "UnsuccessfulChecks" FROM counts;
+    END 
+$$ LANGUAGE plpgsql; 
+
+SELECT * FROM s_f_pct();
 
 -- 11) Определить всех пиров,
 -- которые сдали заданные задания 1 и 2,
@@ -174,13 +189,43 @@ select * from Recommendations;
 -- 14) Определить пира с наибольшим количеством XP Формат вывода: ник пира,
 -- количество XP
 
+CREATE OR REPLACE FUNCTION maxXP() RETURNS TABLE(Peer VARCHAR, XP INTEGER) AS $$ 
+BEGIN RETURN QUERY
+    (SELECT DISTINCT "Peer", SUM("XPAmount"):: INT "XP" FROM Checks JOIN XP ON Checks."ID" = XP."Check" GROUP BY "Peer" ORDER BY "XP" DESC LIMIT 1);
+END;
+$$ LANGUAGE plpgsql; 
+
+SELECT * FROM maxXP();
+
+
+
 -- 15) Определить пиров,
 -- приходивших раньше заданного времени не менее N раз за всё время Параметры процедуры: время,
 -- количество раз N.Формат вывода: список пиров
 
+CREATE OR REPLACE FUNCTION coming_time_before(Came TIME, N INTEGER) RETURNS TABLE(Peer VARCHAR) AS $$ 
+BEGIN RETURN QUERY
+    (SELECT "Peer" FROM TimeTracking WHERE "State" = '1' AND "Time" < Came GROUP BY "Peer" HAVING COUNT ("Time") >= N ORDER BY 1);
+END;
+$$ LANGUAGE plpgsql; 
+
+SELECT * FROM coming_time_before('12:00:00', 2);
+
 -- 16) Определить пиров,
 -- выходивших за последние N дней из кампуса больше M раз Параметры процедуры: количество дней N,
 -- количество раз M.Формат вывода: список пиров
+
+CREATE OR REPLACE FUNCTION go_away_count(N INTEGER, M INTEGER) RETURNS TABLE(Peer VARCHAR) AS $$ 
+BEGIN RETURN QUERY
+   SELECT DISTINCT "Peer" FROM 
+        (SELECT "Peer", COUNT("Peer") OVER (PARTITION BY "Peer") FROM TimeTracking 
+        WHERE ("Date" BETWEEN CURRENT_DATE - (concat(N, 'day') :: INTERVAL) AND CURRENT_DATE) AND "State" = '2') t
+        WHERE count > M 
+        ORDER BY "Peer";
+END;
+$$ LANGUAGE plpgsql; 
+
+SELECT * FROM go_away_count(2000, 1);
 
 -- 17) Определить для каждого месяца процент ранних входов Для каждого месяца посчитать,
 -- сколько раз люди,
@@ -190,3 +235,18 @@ select * from Recommendations;
 --     будем называть это числом ранних входов).
 -- Для каждого месяца посчитать процент ранних входов в кампус относительно общего числа входов.Формат вывода: месяц,
 -- процент ранних входов
+
+CREATE OR REPLACE FUNCTION early_come_pct() RETURNS TABLE("Month" TEXT, "EarlyEntries" NUMERIC) AS $$ 
+    BEGIN RETURN QUERY 
+    (WITH tmp AS 
+            (SELECT date_trunc('month', TimeTracking."Date") AS "month" , COUNT (*) AS visits, COUNT (*) 
+                FILTER (WHERE 
+                    EXTRACT(hour FROM TimeTracking."Time" ) < 12) AS evisits FROM TimeTracking JOIN Peers ON TimeTracking."Peer" = Peers."Nickname" 
+                    AND 
+                    EXTRACT ("month" FROM Peers."Birthday") = EXTRACT("month" FROM TimeTracking."Date") WHERE TimeTracking."State" = '1' GROUP BY date_trunc('month' , TimeTracking."Date" )) 
+    SELECT to_char(tmp.month , 'Month') AS "Month", 
+           ROUND( 100.0 * tmp.evisits / tmp.visits, 2) AS "EarlyEntries" FROM tmp);
+	END;
+$$ LANGUAGE plpgsql; 
+
+SELECT * FROM early_come_pct();
