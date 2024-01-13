@@ -342,13 +342,13 @@ CALL restore_from_csv('P2P', 'P2P.csv', ',');
 CALL restore_from_csv('Verter', 'Verter.csv', ',');
 
 
-SELECT * FROM P2P;
-SELECT * FROM Verter;
-SELECT * FROM XP;
-SELECT * FROM Checks;
-SELECT * FROM Tasks;
-SELECT * FROM TransferredPoints;
-SELECT * FROM Friends;
-SELECT * FROM Recommendations;
-SELECT * FROM TimeTracking;
-SELECT * FROM Peers;
+-- SELECT * FROM P2P;
+-- SELECT * FROM Verter;
+-- SELECT * FROM XP;
+-- SELECT * FROM Checks;
+-- SELECT * FROM Tasks;
+-- SELECT * FROM TransferredPoints;
+-- SELECT * FROM Friends;
+-- SELECT * FROM Recommendations;
+-- SELECT * FROM TimeTracking;
+-- SELECT * FROM Peers;

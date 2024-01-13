@@ -109,6 +109,22 @@ SELECT * FROM most_often_task();
 -- например "CPP".Результат вывести отсортированным по дате завершения.Формат вывода: ник пира,
 -- дата завершения блока (т.е.последнего выполненного задания из этого блока)
 
+CREATE OR REPLACE FUNCTION end_block(task VARCHAR) RETURNS TABLE("Peer" VARCHAR, "Date" date) AS $$ 
+    DECLARE block_end VARCHAR;
+	BEGIN SELECT "Title" INTO block_end FROM tasks WHERE "Title" SIMILAR TO CONCAT(task, '[0-9]_%' ) ORDER BY "Title" DESC LIMIT 1;
+	RETURN QUERY 
+        SELECT Peers."Nickname", Checks."Date"
+	    FROM Peers
+	        JOIN Checks ON Peers."Nickname" = Checks."Peer"
+	        JOIN P2P on Checks."ID" = P2P."Check"
+	        LEFT JOIN Verter ON Checks."ID" = Verter."Check"
+	    WHERE
+    	    P2P."State" = 'Success' AND (Verter."State" = 'Success' OR Verter."State" IS NULL) AND Checks."Task" = block_end;
+	END;
+$$ LANGUAGE plpgsql; 
+
+SELECT * FROM end_block('C');
+
 -- 8) Определить,
 -- к какому пиру стоит идти на проверку каждому обучающемуся Определять нужно исходя из рекомендаций друзей пира,
 -- т.е.нужно найти пира, проверяться у которого рекомендует наибольшее число друзей.Формат вывода: ник пира,
@@ -147,6 +163,65 @@ SELECT * FROM Recommendations;
 -- процент приступивших к обоим,
 -- процент не приступивших ни к одному
 
+CREATE OR REPLACE FUNCTION block_completion_percentage ("block1" VARCHAR, "block2" VARCHAR) 
+RETURNS TABLE("StartedBlock1" NUMERIC, "StartedBlock2" NUMERIC, "StartedBothBlocks" NUMERIC, "DidntStartAnyBlock" NUMERIC) AS $$ 
+    DECLARE "block1_prefix" VARCHAR := "block1" || '%';
+	        "block2_prefix" VARCHAR := "block2" || '%';
+	        "all_peers" BIGINT;
+	BEGIN all_peers := ( SELECT count ("Nickname") FROM Peers );
+	RETURN QUERY
+	WITH block1_users AS (
+	        SELECT DISTINCT "Peer"
+	        FROM Checks
+	        WHERE
+	            "Task" LIKE block1_prefix
+	    ),
+	    block2_users AS (
+	        SELECT DISTINCT "Peer"
+	        FROM Checks
+	        WHERE
+	            "Task" LIKE block2_prefix
+	    ),
+	    both_blocks_users AS (
+	        SELECT "Peer"
+	        FROM block1_users
+	        INTERSECT
+	        SELECT "Peer"
+	        FROM
+	            block2_users
+	    ),
+	    neither_block_users AS (
+	        SELECT "Nickname" AS "Peer"
+	        FROM Peers
+	        EXCEPT (
+	            SELECT "Peer"
+	            FROM block1_users
+	            UNION DISTINCT
+	            SELECT "Peer"
+	            FROM block2_users
+	        )
+	    )
+	SELECT (
+	        SELECT count ("Peer")
+	        FROM
+	            block1_users
+	    ):: numeric / all_peers * 100, (
+	        SELECT count ("Peer")
+	        FROM
+	            block2_users
+	    ):: numeric / all_peers * 100, (
+	        SELECT count ("Peer")
+	        FROM
+	            both_blocks_users
+	    ):: numeric / all_peers * 100, (
+	        SELECT count ("Peer")
+	        FROM
+	            neither_block_users
+	    ):: numeric / all_peers * 100;
+	END $$ LANGUAGE
+plpgsql; 
+--TESTS--
+SELECT * FROM block_completion_percentage('A', 'B');
 
 -- 10) Определить процент пиров,
 -- которые когда - либо успешно проходили проверку в свой день рождения Также определите процент пиров,
@@ -176,15 +251,83 @@ SELECT * FROM s_f_pct();
 -- но не сдали задание 3 Параметры процедуры: названия заданий 1,
 -- 2 и 3. Формат вывода: список пиров
 
+CREATE OR REPLACE FUNCTION fnc_part3_task11(task1 VARCHAR
+, task2 VARCHAR, task3 VARCHAR) RETURNS SETOF VARCHAR 
+AS 
+	$$ BEGIN RETURN QUERY WITH success AS ( SELECT "Peer" , count ( "Peer" ) FROM ( SELECT "Peer" , "Task" FROM ( ( SELECT * FROM checks JOIN XP ON checks . "ID" = XP . "Check" WHERE "Task" = task1 ) UNION ( SELECT * FROM checks JOIN XP ON checks . "ID" = XP . "Check" WHERE "Task" = task2 ) ) t1 GROUP BY "Peer" , "Task" ) t2 GROUP BY "Peer" HAVING count ( "Peer" ) = 2 ) ( SELECT "Peer" FROM success ) EXCEPT ( SELECT success . "Peer" FROM success JOIN checks ON checks . "Peer" = success . "Peer" JOIN XP ON checks . "ID" = XP . "Check" WHERE "Task" = task3 ) ;
+	END;
+	$$ LANGUAGE
+plpgsql; 
+
+SELECT * FROM fnc_part3_task11('B1_Task1', 'B1_Task2', 'A1_Task2');
+
 -- 12) Используя рекурсивное обобщенное табличное выражение,
 -- для каждой задачи вывести кол - во предшествующих ей задач То есть сколько задач нужно выполнить,
 -- исходя из условий входа,
 -- чтобы получить доступ к текущей.Формат вывода: название задачи,
 -- количество предшествующих
 
+CREATE OR REPLACE FUNCTION fnc_part3_task12() RETURNS 
+TABLE("Task" VARCHAR, "PrevCount" INT) AS 
+	$$ BEGIN RETURN QUERY WITH RECURSIVE parent AS ( SELECT ( SELECT "Title" FROM tasks WHERE "ParentTask" IS NULL ) AS Task , 0 AS PrevCount UNION ALL SELECT tasks . "Title" , PrevCount + 1 FROM parent JOIN tasks ON tasks . "ParentTask" = parent . Task ) SELECT * FROM parent;
+	END;
+	$$ LANGUAGE
+plpgsql; 
+
+SELECT * FROM fnc_part3_task12();
+
 -- 13) Найти "удачные" для проверок дни.День считается "удачным",
 -- если в нем есть хотя бы N идущих подряд успешных проверки Параметры процедуры: количество идущих подряд успешных проверок N.Временем проверки считать время начала P2P этапа.Под идущими подряд успешными проверками подразумеваются успешные проверки,
 -- между которыми нет неуспешных.При этом кол - во опыта за каждую из этих проверок должно быть не меньше 80 % от максимального.Формат вывода: список дней
+
+create or replace procedure prcdr_checks_lucky_days
+(ref refcursor, N numeric) as 
+	$$ begin open ref for with cte_previous_state as ( select * , lag ( resume , 1 , '-' ) over ( partition by checks_date order by checks_id ) as l from v_all_passing_checks1 ) , cte_successful_count as ( select checks_date , count ( * ) over ( partition by checks_date ) from cte_previous_state join Tasks on cte_previous_state . task = Tasks . Title join XP on cte_previous_state . checks_id = XP . "Check" where resume = 'S' and ( l = 'S' or l = '-' ) and XP . XPAmount > = Tasks . MaxXP * 0 . 8 ) select checks_date from ( select checks_date , count ( * ) from cte_successful_count group by checks_date ) as finale_count where count > ( N - 1 ) ;
+	end;
+	$$ language
+plpgsql; 
+
+select * from prcdr_checks_lucky_days(2)
+
+CREATE OR REPLACE FUNCTION fnc_part3_task13(n int) 
+RETURNS SETOF DATE AS 
+	$$ DECLARE l RECORD;
+	l2 RECORD;
+	i INT := 0;
+	 BEGIN FOR l IN SELECT "Date" FROM checks GROUP BY "Date" ORDER BY "Date" LOOP FOR l2 IN SELECT * FROM ( SELECT "Peer" , p2p . "State" , xp . "XPAmount" , tasks . "MaxXP" , p2p . "Time" , "Date" FROM checks JOIN p2p ON checks . "ID" = p2p . "Check" LEFT JOIN verter ON checks . "ID" = verter . "Check" JOIN tasks ON checks . "Task" = tasks . "Title" JOIN xp ON checks . "ID" = xp . "Check" WHERE p2p . "State" ! = 'Start' AND xp . "XPAmount" > = tasks . "MaxXP" * 0 . 8 AND ( verter . "State" = 'Success' OR verter . "State" IS NULL ) ORDER BY 6 , 5 ) AS tmp WHERE l . "Date" = tmp . "Date" LOOP IF l2 . "State" = 'Success' THEN i := i + 1;
+	IF i = n THEN RETURN NEXT l2."Date";
+	EXIT;
+	END IF;
+	ELSE i := 0;
+	END IF;
+	END LOOP;
+	i := 0;
+	END LOOP;
+	END;
+	$$ LANGUAGE
+plpgsql; 
+
+select * from fnc_part3_task13(1);
+
+DROP PROCEDURE
+    IF EXISTS successful_day(rc5 refcursor, streak integer);
+CREATE OR REPLACE PROCEDURE successful_day(rc5 refcursor, streak integer) AS $$ 
+    BEGIN 
+        OPEN rc5 FOR WITH temp AS 
+            (SELECT * FROM Checks 
+                JOIN P2P ON Checks."ID" = P2P."Check" 
+                LEFT JOIN Verter ON Checks."ID" = Verter."Check" 
+                JOIN Tasks ON Tasks."Title" = Checks."Task" 
+                JOIN XP ON Checks."ID" = XP."Check" 
+            WHERE P2P."State" = 'Success' AND (Verter."State" = 'Success' OR Verter."State" IS NULL)) 
+            SELECT "Date" FROM temp WHERE temp."MaxXP" * 0.8 <= temp."XPAmount" GROUP BY temp."Date" HAVING COUNT ("Date") >= streak;
+	END;
+$$ LANGUAGE plpgsql; 
+
+BEGIN;
+CALL successful_day('r', 1);
+FETCH ALL IN "r";
+END;
 
 -- 14) Определить пира с наибольшим количеством XP Формат вывода: ник пира,
 -- количество XP
