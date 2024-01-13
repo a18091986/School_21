@@ -280,35 +280,6 @@ SELECT * FROM fnc_part3_task12();
 -- если в нем есть хотя бы N идущих подряд успешных проверки Параметры процедуры: количество идущих подряд успешных проверок N.Временем проверки считать время начала P2P этапа.Под идущими подряд успешными проверками подразумеваются успешные проверки,
 -- между которыми нет неуспешных.При этом кол - во опыта за каждую из этих проверок должно быть не меньше 80 % от максимального.Формат вывода: список дней
 
-create or replace procedure prcdr_checks_lucky_days
-(ref refcursor, N numeric) as 
-	$$ begin open ref for with cte_previous_state as ( select * , lag ( resume , 1 , '-' ) over ( partition by checks_date order by checks_id ) as l from v_all_passing_checks1 ) , cte_successful_count as ( select checks_date , count ( * ) over ( partition by checks_date ) from cte_previous_state join Tasks on cte_previous_state . task = Tasks . Title join XP on cte_previous_state . checks_id = XP . "Check" where resume = 'S' and ( l = 'S' or l = '-' ) and XP . XPAmount > = Tasks . MaxXP * 0 . 8 ) select checks_date from ( select checks_date , count ( * ) from cte_successful_count group by checks_date ) as finale_count where count > ( N - 1 ) ;
-	end;
-	$$ language
-plpgsql; 
-
-select * from prcdr_checks_lucky_days(2)
-
-CREATE OR REPLACE FUNCTION fnc_part3_task13(n int) 
-RETURNS SETOF DATE AS 
-	$$ DECLARE l RECORD;
-	l2 RECORD;
-	i INT := 0;
-	 BEGIN FOR l IN SELECT "Date" FROM checks GROUP BY "Date" ORDER BY "Date" LOOP FOR l2 IN SELECT * FROM ( SELECT "Peer" , p2p . "State" , xp . "XPAmount" , tasks . "MaxXP" , p2p . "Time" , "Date" FROM checks JOIN p2p ON checks . "ID" = p2p . "Check" LEFT JOIN verter ON checks . "ID" = verter . "Check" JOIN tasks ON checks . "Task" = tasks . "Title" JOIN xp ON checks . "ID" = xp . "Check" WHERE p2p . "State" ! = 'Start' AND xp . "XPAmount" > = tasks . "MaxXP" * 0 . 8 AND ( verter . "State" = 'Success' OR verter . "State" IS NULL ) ORDER BY 6 , 5 ) AS tmp WHERE l . "Date" = tmp . "Date" LOOP IF l2 . "State" = 'Success' THEN i := i + 1;
-	IF i = n THEN RETURN NEXT l2."Date";
-	EXIT;
-	END IF;
-	ELSE i := 0;
-	END IF;
-	END LOOP;
-	i := 0;
-	END LOOP;
-	END;
-	$$ LANGUAGE
-plpgsql; 
-
-select * from fnc_part3_task13(1);
-
 DROP PROCEDURE
     IF EXISTS successful_day(rc5 refcursor, streak integer);
 CREATE OR REPLACE PROCEDURE successful_day(rc5 refcursor, streak integer) AS $$ 
@@ -325,7 +296,7 @@ CREATE OR REPLACE PROCEDURE successful_day(rc5 refcursor, streak integer) AS $$
 $$ LANGUAGE plpgsql; 
 
 BEGIN;
-CALL successful_day('r', 1);
+CALL successful_day('r', 3);
 FETCH ALL IN "r";
 END;
 
