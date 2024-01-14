@@ -50,7 +50,7 @@ CREATE OR REPLACE FUNCTION peers_not_walking(current_day Date DEFAULT CURRENT_DA
     END;
 $$ LANGUAGE plpgsql;
 
-SELECT * FROM peers_not_walking('2020-01-01');
+SELECT * FROM peers_not_walking('2023-01-01');
 
 -- 4) Посчитать изменение в количестве пир поинтов каждого пира по таблице TransferredPoints 
 -- Результат вывести отсортированным по изменению числа поинтов.Формат вывода: ник пира,
@@ -130,7 +130,9 @@ SELECT * FROM end_block('C');
 -- т.е.нужно найти пира, проверяться у которого рекомендует наибольшее число друзей.Формат вывода: ник пира,
 -- ник найденного проверяющего
 
-CREATE OR REPLACE FUNCTION get_rec() RETURNS TABLE (peer VARCHAR,  recommendedpeer VARCHAR) AS $$
+DROP FUNCTION IF EXISTS get_rec();
+
+CREATE OR REPLACE FUNCTION get_rec() RETURNS TABLE ("Peer" VARCHAR,  "RecommendedPeer" VARCHAR) AS $$
     BEGIN RETURN QUERY 
         WITH af AS (SELECT "Nickname",
                            (CASE WHEN "Nickname" = f."Peer1" THEN f."Peer2" ELSE f."Peer1" END) AS friends
@@ -163,65 +165,26 @@ SELECT * FROM Recommendations;
 -- процент приступивших к обоим,
 -- процент не приступивших ни к одному
 
-CREATE OR REPLACE FUNCTION block_completion_percentage ("block1" VARCHAR, "block2" VARCHAR) 
+CREATE OR REPLACE FUNCTION start_block ("b1" VARCHAR, "b2" VARCHAR) 
 RETURNS TABLE("StartedBlock1" NUMERIC, "StartedBlock2" NUMERIC, "StartedBothBlocks" NUMERIC, "DidntStartAnyBlock" NUMERIC) AS $$ 
-    DECLARE "block1_prefix" VARCHAR := "block1" || '%';
-	        "block2_prefix" VARCHAR := "block2" || '%';
-	        "all_peers" BIGINT;
-	BEGIN all_peers := ( SELECT count ("Nickname") FROM Peers );
+    DECLARE "b1p" VARCHAR := "b1" || '%';
+	        "b2p" VARCHAR := "b2" || '%';
+	        "peers" BIGINT;
+	BEGIN 
+		peers := (SELECT count("Nickname") FROM Peers);
 	RETURN QUERY
-	WITH block1_users AS (
-	        SELECT DISTINCT "Peer"
-	        FROM Checks
-	        WHERE
-	            "Task" LIKE block1_prefix
-	    ),
-	    block2_users AS (
-	        SELECT DISTINCT "Peer"
-	        FROM Checks
-	        WHERE
-	            "Task" LIKE block2_prefix
-	    ),
-	    both_blocks_users AS (
-	        SELECT "Peer"
-	        FROM block1_users
-	        INTERSECT
-	        SELECT "Peer"
-	        FROM
-	            block2_users
-	    ),
-	    neither_block_users AS (
-	        SELECT "Nickname" AS "Peer"
-	        FROM Peers
-	        EXCEPT (
-	            SELECT "Peer"
-	            FROM block1_users
-	            UNION DISTINCT
-	            SELECT "Peer"
-	            FROM block2_users
-	        )
-	    )
-	SELECT (
-	        SELECT count ("Peer")
-	        FROM
-	            block1_users
-	    ):: numeric / all_peers * 100, (
-	        SELECT count ("Peer")
-	        FROM
-	            block2_users
-	    ):: numeric / all_peers * 100, (
-	        SELECT count ("Peer")
-	        FROM
-	            both_blocks_users
-	    ):: numeric / all_peers * 100, (
-	        SELECT count ("Peer")
-	        FROM
-	            neither_block_users
-	    ):: numeric / all_peers * 100;
-	END $$ LANGUAGE
-plpgsql; 
---TESTS--
-SELECT * FROM block_completion_percentage('A', 'B');
+	WITH b1u AS (SELECT DISTINCT "Peer" FROM Checks WHERE "Task" LIKE b1p),
+	     b2u AS (SELECT DISTINCT "Peer" FROM Checks WHERE "Task" LIKE b2p),
+	     b12u AS (SELECT "Peer" FROM b1u INTERSECT SELECT "Peer" FROM b2u),
+	     nbu AS (SELECT "Nickname" AS "Peer" FROM Peers EXCEPT (SELECT "Peer" FROM b1u UNION DISTINCT SELECT "Peer" FROM b2u))
+	SELECT  (SELECT count ("Peer") FROM b1u)::numeric / peers * 100, 
+	        (SELECT count ("Peer") FROM b2u)::numeric / peers * 100, 
+	        (SELECT count ("Peer") FROM b12u)::numeric / peers * 100,
+	        (SELECT count ("Peer") FROM nbu)::numeric / peers * 100;
+END 
+$$ LANGUAGE plpgsql; 
+
+SELECT * FROM start_block('A', 'B');
 
 -- 10) Определить процент пиров,
 -- которые когда - либо успешно проходили проверку в свой день рождения Также определите процент пиров,
@@ -230,7 +193,9 @@ SELECT * FROM block_completion_percentage('A', 'B');
 -- процент пиров,
 -- проваливших проверку в день рождения
 
-CREATE OR REPLACE FUNCTION s_f_pct() RETURNS TABLE(SuccessfulChecks INT, UnsuccessfulChecks INT) AS $$ 
+DROP FUNCTION IF EXISTS success_fail_birthday_pct();
+
+CREATE OR REPLACE FUNCTION success_fail_birthday_pct() RETURNS TABLE("SuccessfulChecks" NUMERIC, "UnsuccessfulChecks" NUMERIC) AS $$ 
     BEGIN RETURN QUERY 
         WITH counts AS 
             (SELECT 
@@ -239,27 +204,34 @@ CREATE OR REPLACE FUNCTION s_f_pct() RETURNS TABLE(SuccessfulChecks INT, Unsucce
             FROM Checks LEFT JOIN Peers ON Checks."Peer" = Peers."Nickname" JOIN P2P ON Checks."ID" = P2P."Check" 
             WHERE (EXTRACT (MONTH FROM Checks."Date" ) = EXTRACT  (MONTH FROM Peers."Birthday")) AND (EXTRACT (DAY FROM Checks."Date") = EXTRACT( DAY FROM Peers."Birthday" ))) 
         
-        SELECT ( s::NUMERIC / NULLIF ( s + f , 0 )::NUMERIC * 100 )::INT "SuccessfulChecks" , 
-               ( f::NUMERIC / NULLIF ( s + f , 0 )::NUMERIC * 100 )::INT "UnsuccessfulChecks" FROM counts;
+        SELECT ROUND((s::NUMERIC / NULLIF ( s + f , 0 )::NUMERIC * 100 )::NUMERIC, 2) "SuccessfulChecks" , 
+               ROUND((f::NUMERIC / NULLIF ( s + f , 0 )::NUMERIC * 100 )::NUMERIC, 2) "UnsuccessfulChecks" FROM counts;
     END 
 $$ LANGUAGE plpgsql; 
 
-SELECT * FROM s_f_pct();
+SELECT * FROM success_fail_birthday_pct();
 
 -- 11) Определить всех пиров,
 -- которые сдали заданные задания 1 и 2,
 -- но не сдали задание 3 Параметры процедуры: названия заданий 1,
 -- 2 и 3. Формат вывода: список пиров
 
-CREATE OR REPLACE FUNCTION fnc_part3_task11(task1 VARCHAR
-, task2 VARCHAR, task3 VARCHAR) RETURNS SETOF VARCHAR 
-AS 
-	$$ BEGIN RETURN QUERY WITH success AS ( SELECT "Peer" , count ( "Peer" ) FROM ( SELECT "Peer" , "Task" FROM ( ( SELECT * FROM checks JOIN XP ON checks . "ID" = XP . "Check" WHERE "Task" = task1 ) UNION ( SELECT * FROM checks JOIN XP ON checks . "ID" = XP . "Check" WHERE "Task" = task2 ) ) t1 GROUP BY "Peer" , "Task" ) t2 GROUP BY "Peer" HAVING count ( "Peer" ) = 2 ) ( SELECT "Peer" FROM success ) EXCEPT ( SELECT success . "Peer" FROM success JOIN checks ON checks . "Peer" = success . "Peer" JOIN XP ON checks . "ID" = XP . "Check" WHERE "Task" = task3 ) ;
+CREATE OR REPLACE FUNCTION t1t2t3(t1 VARCHAR, t2 VARCHAR, t3 VARCHAR) RETURNS SETOF VARCHAR AS	$$ 
+BEGIN 
+	RETURN QUERY WITH 
+			t1t2 AS 
+			(SELECT "Peer" , count ("Peer") FROM 
+			(SELECT "Peer" , "Task" FROM 
+			((SELECT * FROM Checks JOIN XP ON Checks."ID" = XP."Check" WHERE "Task" = t1) 
+			UNION 
+			(SELECT * FROM Checks JOIN XP ON Checks."ID" = XP."Check" WHERE "Task" = t2 )) tbl1 GROUP BY "Peer" , "Task" ) tbl2 
+			GROUP BY "Peer" HAVING COUNT("Peer") = 2 ) 
+			(SELECT "Peer" FROM t1t2) 
+			EXCEPT (SELECT t1t2."Peer" FROM t1t2 JOIN Checks ON Checks."Peer" = t1t2."Peer" JOIN XP ON Checks."ID" = XP."Check" WHERE "Task" = t3) ;
 	END;
-	$$ LANGUAGE
-plpgsql; 
+$$ LANGUAGE plpgsql; 
 
-SELECT * FROM fnc_part3_task11('B1_Task1', 'B1_Task2', 'A1_Task2');
+SELECT * FROM t1t2t3('B1_Task1', 'B1_Task2', 'A1_Task2');
 
 -- 12) Используя рекурсивное обобщенное табличное выражение,
 -- для каждой задачи вывести кол - во предшествующих ей задач То есть сколько задач нужно выполнить,
@@ -267,36 +239,40 @@ SELECT * FROM fnc_part3_task11('B1_Task1', 'B1_Task2', 'A1_Task2');
 -- чтобы получить доступ к текущей.Формат вывода: название задачи,
 -- количество предшествующих
 
-CREATE OR REPLACE FUNCTION fnc_part3_task12() RETURNS 
-TABLE("Task" VARCHAR, "PrevCount" INT) AS 
-	$$ BEGIN RETURN QUERY WITH RECURSIVE parent AS ( SELECT ( SELECT "Title" FROM tasks WHERE "ParentTask" IS NULL ) AS Task , 0 AS PrevCount UNION ALL SELECT tasks . "Title" , PrevCount + 1 FROM parent JOIN tasks ON tasks . "ParentTask" = parent . Task ) SELECT * FROM parent;
-	END;
-	$$ LANGUAGE
-plpgsql; 
+CREATE OR REPLACE FUNCTION tasks_before() RETURNS TABLE("Task" VARCHAR, "PrevCount" INT) AS	$$ 
+BEGIN 
+	RETURN QUERY WITH RECURSIVE 
+		parent AS 
+			   (SELECT (SELECT "Title" FROM Tasks WHERE "ParentTask" IS NULL) "Task" , 
+			   0 PrevCount 
+			   UNION ALL 
+			   SELECT Tasks."Title", PrevCount + 1 FROM parent JOIN tasks ON tasks."ParentTask" = parent."Task") 
+	SELECT * FROM parent;
+END;
+$$ LANGUAGE plpgsql; 
 
-SELECT * FROM fnc_part3_task12();
+SELECT * FROM tasks_before();
 
 -- 13) Найти "удачные" для проверок дни.День считается "удачным",
 -- если в нем есть хотя бы N идущих подряд успешных проверки Параметры процедуры: количество идущих подряд успешных проверок N.Временем проверки считать время начала P2P этапа.Под идущими подряд успешными проверками подразумеваются успешные проверки,
 -- между которыми нет неуспешных.При этом кол - во опыта за каждую из этих проверок должно быть не меньше 80 % от максимального.Формат вывода: список дней
 
-DROP PROCEDURE
-    IF EXISTS successful_day(rc5 refcursor, streak integer);
-CREATE OR REPLACE PROCEDURE successful_day(rc5 refcursor, streak integer) AS $$ 
+DROP PROCEDURE IF EXISTS good_days(r refcursor, cnt INT);
+CREATE OR REPLACE PROCEDURE good_days(r refcursor, cnt INT) AS $$ 
     BEGIN 
-        OPEN rc5 FOR WITH temp AS 
+        OPEN r FOR WITH temp AS 
             (SELECT * FROM Checks 
                 JOIN P2P ON Checks."ID" = P2P."Check" 
                 LEFT JOIN Verter ON Checks."ID" = Verter."Check" 
                 JOIN Tasks ON Tasks."Title" = Checks."Task" 
                 JOIN XP ON Checks."ID" = XP."Check" 
             WHERE P2P."State" = 'Success' AND (Verter."State" = 'Success' OR Verter."State" IS NULL)) 
-            SELECT "Date" FROM temp WHERE temp."MaxXP" * 0.8 <= temp."XPAmount" GROUP BY temp."Date" HAVING COUNT ("Date") >= streak;
+            SELECT "Date" FROM temp WHERE temp."MaxXP" * 0.8 <= temp."XPAmount" GROUP BY temp."Date" HAVING COUNT ("Date") >= cnt;
 	END;
 $$ LANGUAGE plpgsql; 
 
 BEGIN;
-CALL successful_day('r', 3);
+CALL successful_day('r', 2);
 FETCH ALL IN "r";
 END;
 
@@ -305,7 +281,11 @@ END;
 
 CREATE OR REPLACE FUNCTION maxXP() RETURNS TABLE(Peer VARCHAR, XP INTEGER) AS $$ 
 BEGIN RETURN QUERY
-    (SELECT DISTINCT "Peer", SUM("XPAmount"):: INT "XP" FROM Checks JOIN XP ON Checks."ID" = XP."Check" GROUP BY "Peer" ORDER BY "XP" DESC LIMIT 1);
+    (SELECT 
+    	DISTINCT "Peer", 
+   		SUM("XPAmount")::INT "XP" 
+   	FROM Checks JOIN XP ON Checks."ID" = XP."Check" 
+   GROUP BY "Peer" ORDER BY "XP" DESC LIMIT 1);
 END;
 $$ LANGUAGE plpgsql; 
 
