@@ -1,0 +1,6 @@
+Title,ParentTask,MaxXP
+A1_Task1,,100
+A1_Task2,A1_Task1,150
+B1_Task1,A1_Task2,150
+B1_Task2,B1_Task1,200
+C1_Task1,B1_Task2,300
