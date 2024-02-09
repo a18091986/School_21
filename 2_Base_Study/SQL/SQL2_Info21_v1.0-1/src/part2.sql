@@ -19,8 +19,8 @@ CREATE OR REPLACE PROCEDURE p2p_add(IN checked_peer VARCHAR, IN checkering_peer 
 	END;
 $$ LANGUAGE plpgsql; 
 
-CALL p2p_add( 'User5', 'User4', 'Task0', 'Start', '17:00:00');
-CALL p2p_add( 'User5', 'User4', 'Task0', 'Success', '17:12:00');
+CALL p2p_add( 'User1', 'User4', 'A1_Task2', 'Start', '17:00:00');
+CALL p2p_add( 'User1', 'User4', 'A1_Task2', 'Success', '17:12:00');
 select * from p2p;
 select * from checks;
 
@@ -40,8 +40,8 @@ CREATE OR REPLACE PROCEDURE verter_add(IN nickname VARCHAR, IN task VARCHAR, che
 	END 
 $$ LANGUAGE plpgsql;
 
-CALL verter_add('User5', 'Task0', 'Start', '17:15:00');
-CALL verter_add('User5', 'Task0', 'Success', '17:17:00');
+CALL verter_add('User1', 'A1_Task2', 'Start', '17:15:00');
+CALL verter_add('User1', 'A1_Task2', 'Success', '17:17:00');
 
 SELECT * FROM verter ORDER BY "ID" DESC LIMIT 3;
 
@@ -68,10 +68,9 @@ $$ LANGUAGE plpgsql;
 
 CREATE OR REPLACE TRIGGER t_TransferredPoints AFTER	INSERT ON P2P FOR EACH ROW EXECUTE FUNCTION trans_points_add();
 
-CALL p2p_add( 'User5', 'User4', 'Task0', 'Start', '17:20:00' );
+CALL p2p_add( 'User1', 'User4', 'A1_Task2', 'Start', '17:00:00');
 
-CALL p2p_add( 'User5', 'User4', 'Task0', 'Start', '17:32:00' );
-
+select * from transferredpoints t ;
 
 -- 4) Написать триггер: перед добавлением записи в таблицу XP,проверить корректность добавляемой записи Запись считается корректной,
 -- если: Количество XP не превышает максимальное доступное для проверяемой задачи.
@@ -89,9 +88,11 @@ $$ LANGUAGE plpgsql;
 
 CREATE TRIGGER t_XP BEFORE INSERT ON xp FOR EACH ROW EXECUTE FUNCTION XP_add(); 
 
--- select * from verter;
--- select * from XP;
--- select * from p2p;
+
 INSERT INTO XP VALUES(6, 8, 300);
-INSERT INTO XP VALUES(7, 3, 90);
+INSERT INTO XP VALUES(10, 3, 90);
 INSERT INTO XP VALUES(8, 4, 90);
+
+--select * from verter;
+--select * from XP;
+--select * from p2p;

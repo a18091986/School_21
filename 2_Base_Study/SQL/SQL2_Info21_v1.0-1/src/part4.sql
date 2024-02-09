@@ -1,52 +1,50 @@
-DROP TRIGGER IF EXISTS t_Friends ON Friends;
-
-DROP TRIGGER IF EXISTS t_Verter ON Verter;
-
-DROP TRIGGER IF EXISTS t_P2P ON P2P;
-
-DROP TRIGGER IF EXISTS t_Tasks ON Tasks;
-
-DROP TRIGGER IF EXISTS t_TransferredPoints ON TransferredPoints;
-
-DROP TRIGGER IF EXISTS t_XP ON XP;
-
-DROP FUNCTION IF EXISTS pair_friends();
-
-DROP FUNCTION IF EXISTS verter_check_is_allowed();
-
-DROP FUNCTION IF EXISTS one_p2p_check_started();
-
-DROP FUNCTION IF EXISTS check_parent_task();
-
-DROP PROCEDURE IF EXISTS p2p_add();
-
-DROP PROCEDURE IF EXISTS verter_add();
-
-DROP FUNCTION IF EXISTS XP_add();
-
-DROP FUNCTION IF EXISTS trans_points_add();
-
-DROP TABLE IF EXISTS P2P;
-
-DROP TABLE IF EXISTS Verter;
-
-DROP TABLE IF EXISTS XP;
-
-DROP TABLE IF EXISTS Checks;
-
-DROP TABLE IF EXISTS Tasks;
-
-DROP TABLE IF EXISTS TransferredPoints;
-
-DROP TABLE IF EXISTS Friends;
-
-DROP TABLE IF EXISTS Recommendations;
-
-DROP TABLE IF EXISTS TimeTracking;
-
-DROP TABLE IF EXISTS Peers;
-
-DROP TYPE IF EXISTS CheckStatus;
+--DROP TRIGGER IF EXISTS t_Friends ON Friends;
+--
+--DROP TRIGGER IF EXISTS t_Verter ON Verter;
+--
+--DROP TRIGGER IF EXISTS t_P2P ON P2P;
+--
+--DROP TRIGGER IF EXISTS t_Tasks ON Tasks;
+--
+--DROP TRIGGER IF EXISTS t_TransferredPoints ON TransferredPoints;
+--
+--DROP TRIGGER IF EXISTS t_XP ON XP;
+--
+--DROP FUNCTION IF EXISTS pair_friends();
+--
+--DROP FUNCTION IF EXISTS verter_check_is_allowed();
+--
+--DROP FUNCTION IF EXISTS one_p2p_check_started();
+--
+--DROP FUNCTION IF EXISTS check_parent_task();
+--
+--DROP PROCEDURE IF EXISTS p2p_add();
+--
+--DROP PROCEDURE IF EXISTS verter_add();
+--
+--DROP FUNCTION IF EXISTS XP_add();
+--
+--DROP TABLE IF EXISTS P2P;
+--
+--DROP TABLE IF EXISTS Verter;
+--
+--DROP TABLE IF EXISTS XP;
+--
+--DROP TABLE IF EXISTS Checks;
+--
+--DROP TABLE IF EXISTS Tasks;
+--
+--DROP TABLE IF EXISTS TransferredPoints;
+--
+--DROP TABLE IF EXISTS Friends;
+--
+--DROP TABLE IF EXISTS Recommendations;
+--
+--DROP TABLE IF EXISTS TimeTracking;
+--
+--DROP TABLE IF EXISTS Peers;
+--
+--DROP TYPE IF EXISTS CheckStatus;
 
 -----tables creation-------
 --Таблица Peers
@@ -207,26 +205,6 @@ CREATE TABLE
         CONSTRAINT ch_TimeTrackingState check ("State" in ('1', '2'))
     );
 
-CREATE OR REPLACE FUNCTION check_parent_task() RETURNS 
-TRIGGER AS 
-	$$ BEGIN IF NEW . "ParentTask" IS NULL THEN IF EXISTS ( SELECT * FROM Tasks WHERE "ParentTask" IS NULL ) THEN RETURN NULL;
-	-- THEN RAISE EXCEPTION 'Task WITH NULL PARENT TASK ALREADY EXISTS';
-	END IF;
-	END IF;
-	IF NEW."ParentTask" IS NOT NULL THEN IF NOT EXISTS (
-	    SELECT *
-	    FROM Tasks
-	    WHERE
-	        "ParentTask" IS NULL
-	) THEN RETURN NULL;
-	-- THEN RAISE EXCEPTION 'NULL PARENT TASK NOT EXISTS YET';
-	END IF;
-	END IF;
-	RETURN NEW;
-	END;
-	$$ LANGUAGE
-plpgsql; 
-
 CREATE OR REPLACE FUNCTION one_p2p_check_started() 
 RETURNS TRIGGER AS 
 	$$ BEGIN IF NEW . "State" = 'Start' THEN IF EXISTS ( SELECT * FROM P2P WHERE "Check" = NEW . "Check" AND "CheckingPeer" = New . "CheckingPeer" AND "State" = 'Start' ) THEN RETURN NULL;
@@ -263,122 +241,36 @@ CREATE OR REPLACE TRIGGER
 	EXECUTE FUNCTION pair_friends ()
 ; 
 
-CREATE OR REPLACE TRIGGER 
-	t_Verter BEFORE
-	INSERT OR
-	UPDATE ON Verter FOR EACH ROW
+CREATE OR REPLACE PROCEDURE restore_from_csv(IN table_name VARCHAR, IN file_name VARCHAR, IN sep CHAR) AS 
+$$ DECLARE dir text;
+	BEGIN dir := '/tmp/CSV/';
 	EXECUTE
-	    FUNCTION verter_check_is_allowed ()
-; 
+	    FORMAT (
+	        'COPY %s FROM ''%s'' DELIMITER ''%s'' CSV HEADER;', table_name, dir || file_name, sep);
+	END;
+$$ LANGUAGE plpgsql; 
 
-CREATE OR REPLACE TRIGGER 
-	t_P2P BEFORE
-	INSERT OR
-	UPDATE ON P2P FOR EACH ROW
-	EXECUTE
-	    FUNCTION one_p2p_check_started ()
-; 
-
-CREATE OR REPLACE TRIGGER 
-	t_Tasks BEFORE
-	INSERT OR
-	UPDATE ON Tasks FOR EACH ROW
-	EXECUTE
-	    FUNCTION check_parent_task ()
-; 
-
-INSERT INTO public.tasks ("Title","ParentTask","MaxXP") VALUES
-	 ('Task0',NULL,100),
-	 ('Task1','Task0',150),
-	 ('Task2','Task0',150),
-	 ('Task3','Task1',200),
-	 ('Task4','Task2',300);
-
-INSERT INTO public.peers ("Nickname","Birthday") VALUES
-	 ('User1','1990-01-01'),
-	 ('User2','1991-01-01'),
-	 ('User3','1992-01-01'),
-	 ('User4','1993-01-01'),
-	 ('User5','1994-01-01');
-INSERT INTO public.friends ("Peer1","Peer2") VALUES
-	 ('User1','User2'),
-	 ('User3','User4'),
-	 ('User2','User1'),
-	 ('User4','User3'),
-	 ('User1','User3'),
-	 ('User3','User1');
+CALL restore_from_csv('Peers', 'Peers.csv', ',');
+CALL restore_from_csv('TimeTracking', 'TimeTracking.csv', ',');
+CALL restore_from_csv('Recommendations', 'Recommendations.csv', ',');
+CALL restore_from_csv('Friends', 'Friends.csv', ',');
+CALL restore_from_csv('TransferredPoints', 'TransferredPoints.csv', ',');
+CALL restore_from_csv('Tasks', 'Tasks.csv', ',');
+CALL restore_from_csv('Checks', 'Checks.csv', ',');
+CALL restore_from_csv('XP', 'XP.csv', ',');
+CALL restore_from_csv('P2P', 'P2P.csv', ',');
+CALL restore_from_csv('Verter', 'Verter.csv', ',');
 	
-INSERT INTO public.checks ("Peer","Task","Date") VALUES
-	 ('User1','Task0','2020-01-01'),
-	 ('User2','Task1','2020-01-01'),
-	 ('User3','Task2','2020-01-01'),
-	 ('User2','Task1','2020-01-01'),
-	 ('User5','Task1','2020-01-01'),
-	 ('User4','Task0','2020-01-01'),
-	 ('User2','Task1','2020-01-01');
-INSERT INTO public.p2p ("Check","CheckingPeer","State","Time") VALUES
-	 (1,'User2','Start','10:03:00'),
-	 (2,'User3','Start','10:05:00'),
-	 (1,'User2','Success','10:20:00'),
-	 (2,'User3','Failure','10:30:00'),
-	 (3,'User1','Start','11:00:00'),
-	 (3,'User1','Success','11:15:00'),
-	 (4,'User1','Start','12:00:00'),
-	 (4,'User1','Success','12:30:00'),
-	 (5,'User4','Start','13:00:00'),
-	 (5,'User4','Success','14:00:00'),
-	 (6,'User3','Start','14:05:00'),
-	 (6,'User3','Success','14:15:00'),
-	 (7,'User3','Start','14:20:00'),
-	 (7,'User3','Success','14:45:00');
-
-INSERT INTO public.recommendations ("Peer","RecommendedPeer") VALUES
-	 ('User1','User2'),
-	 ('User2',NULL),
-	 ('User3','User1'),
-	 ('User2','User1'),
-	 ('User5','User4'),
-	 ('User4','User3'),
-	 ('User2','User3');
-
-INSERT INTO public.timetracking ("Peer","Date","Time","State") VALUES
-	 ('User1','2020-01-01','08:00:00','1'),
-	 ('User1','2020-01-01','09:00:00','2'),
-	 ('User2','2020-01-01','09:30:00','1'),
-	 ('User3','2020-01-01','09:35:00','1'),
-	 ('User4','2020-01-01','09:45:00','1'),
-	 ('User5','2020-01-01','09:55:00','1'),
-	 ('User1','2020-01-01','10:00:00','1'),
-	 ('User3','2020-01-01','15:35:00','2'),
-	 ('User2','2020-01-01','17:30:00','2'),
-	 ('User1','2020-01-01','20:00:00','2'),
-	 ('User4','2020-01-01','21:45:00','2'),
-	 ('User5','2020-01-01','22:55:00','2');
-INSERT INTO public.transferredpoints ("CheckingPeer","CheckedPeer","PointsAmount") VALUES
-	 ('User2','User1',1),
-	 ('User3','User2',2),
-	 ('User1','User3',1),
-	 ('User1','User2',1),
-	 ('User4','User5',1),
-	 ('User3','User4',1);
-INSERT INTO public.verter ("Check","State","Time") VALUES
-	 (1,'Start','10:21:00'),
-	 (1,'Success','10:22:00'),
-	 (4,'Start','12:32:00'),
-	 (4,'Failure','12:35:00'),
-	 (5,'Start','14:02:00'),
-	 (5,'Success','14:05:00'),
-	 (6,'Start','14:16:00'),
-	 (6,'Success','14:17:00'),
-	 (7,'Start','14:46:00'),
-	 (7,'Success','14:47:00');
-INSERT INTO public.xp ("Check","XPAmount") VALUES
-	 (1,90),
-	 (3,150),
-	 (5,120),
-	 (6,100),
-	 (7,150);
-	
+-- SELECT * FROM P2P;
+-- SELECT * FROM Verter;
+-- SELECT * FROM XP;
+-- SELECT * FROM Checks;
+-- SELECT * FROM Tasks;
+-- SELECT * FROM TransferredPoints;
+-- SELECT * FROM Friends;
+-- SELECT * FROM Recommendations;
+-- SELECT * FROM TimeTracking;
+-- SELECT * FROM Peers;
 
 --1) Создать хранимую процедуру, которая, не уничтожая базу данных, 
 --уничтожает все те таблицы текущей базы данных, 
@@ -395,7 +287,8 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
-CALL delete_tables_by_names('tasks');
+CALL delete_tables_by_names('transf');
+
 
 	
 --2) Создать хранимую процедуру с выходным параметром, 
@@ -443,7 +336,7 @@ $$ LANGUAGE PLPGSQL;
 DO $$
 DECLARE counter int := 0;
 BEGIN
-  CALL all_functions(counter);
+  CALL scalar_funcs_with_params(counter);
   RAISE NOTICE 'counter = %', counter;
 END;
 $$;

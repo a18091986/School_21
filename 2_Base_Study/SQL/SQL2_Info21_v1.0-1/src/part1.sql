@@ -341,6 +341,17 @@ CALL restore_from_csv('XP', 'XP.csv', ',');
 CALL restore_from_csv('P2P', 'P2P.csv', ',');
 CALL restore_from_csv('Verter', 'Verter.csv', ',');
 
+--CALL backup_to_csv('Peers', 'Peers.csv', ',');
+--CALL backup_to_csv('TimeTracking', 'TimeTracking.csv', ',');
+--CALL backup_to_csv('Recommendations', 'Recommendations.csv', ',');
+--CALL backup_to_csv('Friends', 'Friends.csv', ',');
+--CALL backup_to_csv('TransferredPoints', 'TransferredPoints.csv', ',');
+--CALL backup_to_csv('Tasks', 'Tasks.csv', ',');
+--CALL backup_to_csv('Checks', 'Checks.csv', ',');
+--CALL backup_to_csv('XP', 'XP.csv', ',');
+--CALL backup_to_csv('P2P', 'P2P.csv', ',');
+--CALL backup_to_csv('Verter', 'Verter.csv', ',');
+
 
 -- SELECT * FROM P2P;
 -- SELECT * FROM Verter;
