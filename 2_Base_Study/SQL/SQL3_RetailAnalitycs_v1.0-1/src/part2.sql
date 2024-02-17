@@ -1,4 +1,10 @@
---2.1
+
+--Создай скрипт part2.sql, в котором напиши представления, описанные выше в разделе выходные данные. 
+--Также внеси в скрипт тестовые запросы для каждого представления. 
+--Допустимо для каждого представления создавать отдельный скрипт, начинающийся с part2_.
+--Более подробную информацию для получения каждого поля можно найти в папке materials.
+
+--2.1 customers
 
 DROP FUNCTION IF EXISTS checks_cte () CASCADE;
 
@@ -180,11 +186,11 @@ WITH
     FROM last_segment JOIN (SELECT * FROM stores_cte ()) q_last ON last_segment.customer_id = q_last.customer_id)
 SELECT * FROM fin;
 --
---SELECT COUNT(*) FROM customers;
+--SELECT * FROM customers;
 --
 --select * from temp_table tt ;
 
---2.2
+--2.2 purchase_history
 
 DROP MATERIALIZED VIEW IF EXISTS main CASCADE;
 CREATE MATERIALIZED VIEW main AS
@@ -196,8 +202,6 @@ FROM transactions
     JOIN goods_grid ON goods_grid.sku_id = checks.sku_id
     JOIN stores ON stores.transaction_store_id = transactions.transaction_store_id AND stores.sku_id = goods_grid.sku_id;
    
-   
---select * from main;
 
 DROP VIEW IF EXISTS purchase_history;
 CREATE VIEW purchase_history AS
@@ -205,9 +209,9 @@ SELECT customer_id AS "Customer_ID", transaction_id AS "Transaction_ID", transac
      ROUND(SUM(sku_cost), 2) AS "Group_Cost", ROUND(SUM(sku_summ), 2) AS "Group_Summ", ROUND(SUM(sku_summ_paid), 2) AS "Group_Summ_Paid"
 FROM main GROUP BY customer_id, transaction_id, transaction_datetime, group_id;
 
---select * from purchase_history
+-- select * from purchase_history
 
---2.3
+-- 2.3 periods
 
 DROP VIEW IF EXISTS periods CASCADE;
 CREATE VIEW periods AS 
@@ -218,9 +222,9 @@ CREATE VIEW periods AS
                               WHEN sku_discount = 0 THEN NULL ELSE sku_discount / sku_summ END), 0), 2) AS "Group_Min_Discount"
 FROM main GROUP BY customer_id, group_id;
 
---select * from periods;
+-- select * from periods;
 
---2.4
+-- 2.4 groups
 
 DROP MATERIALIZED VIEW IF EXISTS affinity_index;
 CREATE MATERIALIZED VIEW affinity_index AS SELECT p."Customer_ID" AS customer_id, p."Group_ID" AS group_id, 
@@ -308,7 +312,7 @@ CREATE VIEW groups AS
          JOIN group_average_discount AS gad ON gad.customer_id = gm.customer_id AND gad.group_id = gm.group_id;
         
 
- select * from groups;
+select * from groups;
 select * from periods p ;
 select * from purchase_history ph ;
 select * from customers;
