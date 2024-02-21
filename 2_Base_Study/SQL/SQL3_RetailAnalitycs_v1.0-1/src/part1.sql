@@ -64,13 +64,9 @@ CREATE TABLE IF NOT EXISTS checks (
 );
 
 COMMENT ON COLUMN checks.Transaction_ID IS 'For all products in the check';
-
 COMMENT ON COLUMN checks.SKU_Amount IS 'Quantity of the purchased product';
-
 COMMENT ON COLUMN checks.SKU_Summ IS 'The purchase sum (without discounts and bonuses)';
-
 COMMENT ON COLUMN checks.SKU_Summ_Paid IS 'paid for the product not including the discount';
-
 COMMENT ON COLUMN checks.SKU_Discount IS 'discount value in rubles';
 
 -- stores
@@ -109,9 +105,9 @@ END;
 $$ LANGUAGE plpgsql; 
 CALL import_from_file ('personal_data', 'Personal_Data_Mini.tsv');
 CALL import_from_file ('cards', 'Cards_Mini.tsv');
-CALL import_from_file ( 'transactions', 'Transactions_Mini.tsv' );
-CALL import_from_file ( 'sku_groups', 'Groups_SKU_Mini.tsv' );
-CALL import_from_file ( 'goods_grid', 'SKU_Mini.tsv' );
+CALL import_from_file ('transactions', 'Transactions_Mini.tsv' );
+CALL import_from_file ('sku_groups', 'Groups_SKU_Mini.tsv' );
+CALL import_from_file ('goods_grid', 'SKU_Mini.tsv' );
 CALL import_from_file ('checks', 'Checks_Mini.tsv');
 CALL import_from_file ('stores', 'Stores_Mini.tsv');
 CALL import_from_file ('analysis_form_date', 'Date_Of_Analysis_Formation.tsv');
@@ -133,9 +129,9 @@ $$ LANGUAGE plpgsql;
 
 CALL export_to_file ('personal_data', 'Personal_Data_Mini.tsv');
 CALL export_to_file ('cards', 'Cards_Mini.tsv');
-CALL export_to_file ( 'transactions', 'Transactions_Mini.tsv' );
-CALL export_to_file ( 'sku_groups', 'Groups_SKU_Mini.tsv' );
-CALL export_to_file ( 'goods_grid', 'SKU_Mini.tsv' );
+CALL export_to_file ('transactions', 'Transactions_Mini.tsv' );
+CALL export_to_file ('sku_groups', 'Groups_SKU_Mini.tsv' );
+CALL export_to_file ('goods_grid', 'SKU_Mini.tsv' );
 CALL export_to_file ('checks', 'Checks_Mini.tsv');
 CALL export_to_file ('stores', 'Stores_Mini.tsv');
 CALL export_to_file ('analysis_form_date', 'Date_Of_Analysis_Formation.tsv');
