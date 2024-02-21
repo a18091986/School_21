@@ -1,7 +1,6 @@
 FLAGS = -pedantic -Wall -Werror -Wextra 
 FLAGS_TEST = -lgtest -lgmock -pthread 
-# MAIN_COMPILATION = $(FLAGS) calculator/tests.cc calculator/Model/model.cpp calculator/Model/validation.cpp $(FLAGS_TEST)
-MAIN_COMPILATION = $(FLAGS) tests.cc Model/model.cpp Model/validation.cpp $(FLAGS_TEST)
+MAIN_COMPILATION = $(FLAGS) calculator/tests.cc calculator/Model/model.cpp calculator/Model/validation.cpp $(FLAGS_TEST)
 
 # OS = $(shell uname)
 
@@ -16,7 +15,7 @@ MAIN_COMPILATION = $(FLAGS) tests.cc Model/model.cpp Model/validation.cpp $(FLAG
 all: test gcov_report install 
 
 install: clean
-	mkdir build; cd build; qmake ../s21_calculator_2.0.pro; build/make; ./s21_calculator_2 
+	mkdir build; cd build; qmake ../calculator/s21_calculator_2.0.pro; build/make; ./s21_calculator_2 
 
 uninstall: 
 	rm -rf build
