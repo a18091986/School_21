@@ -15,7 +15,7 @@ MAIN_COMPILATION = $(FLAGS) calculator/tests.cc calculator/Model/model.cpp calcu
 all: test gcov_report install 
 
 install: clean
-	mkdir build; cd build; qmake ../calculator/s21_calculator_2.0.pro; build/make; ./s21_calculator_2 
+	mkdir build; cd build; qmake ../calculator/s21_calculator_2.0.pro; make; ./s21_calculator_2 
 
 uninstall: 
 	rm -rf build
