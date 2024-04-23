@@ -1,0 +1,6 @@
+INFO:__main__:{'metadata': {'from': 7347859685, 'to': 2015902442}, 'amount': 835}
+INFO:producer:{'metadata': {'from': 7347859685, 'to': 2015902442}, 'amount': 835}
+INFO:__main__:{'metadata': {'from': 7047977212, 'to': 1630288940}, 'amount': 934}
+INFO:producer:{'metadata': {'from': 7047977212, 'to': 1630288940}, 'amount': 934}
+INFO:__main__:{'metadata': {'from': 3441143583, 'to': 5978018745}, 'amount': 248}
+INFO:producer:{'metadata': {'from': 3441143583, 'to': 5978018745}, 'amount': 248}
