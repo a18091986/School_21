@@ -1,19 +1,9 @@
-# def test_blocks():
-#     with open('for_tests/ex01/data_hashes_10lines.txt', 'r') as f:
-#         line = f.readline().strip()
-#         while line:
-#             print(line)
-#             line = f.readline().strip()
-#
-#
-# if __name__ == 'main':
-#     test_blocks()
 import pytest
 import subprocess
 
 
 def test_1_blocks():
-    command = r"cat for_tests/ex01/1.txt | python blocks.py 20"
+    command = r"cat for_tests/ex00/1.txt | python blocks.py 20"
     result = subprocess.run(command, capture_output=True, text=True, shell=True)
     correct = """00000254b208c0f43409d8dc00439896
 0000085a34260d1c84e89865c210ceb4
@@ -23,14 +13,14 @@ def test_1_blocks():
     assert result.stdout == correct
 
 def test_2_blocks():
-    command = r"cat for_tests/ex01/1.txt | python blocks.py"
+    command = r"cat for_tests/ex00/1.txt | python blocks.py"
     result = subprocess.run(command, capture_output=True, text=True, shell=True)
     correct = """Incorrect command line arg
 """
     assert result.stdout == correct
 
 def test_3_blocks():
-    command = r"cat for_tests/ex01/1.txt | python blocks.py 10"
+    command = r"cat for_tests/ex00/1.txt | python blocks.py 10"
     result = subprocess.run(command, capture_output=True, text=True, shell=True)
     correct = """00000254b208c0f43409d8dc00439896
 0000085a34260d1c84e89865c210ceb4
@@ -39,7 +29,7 @@ def test_3_blocks():
     assert result.stdout == correct
 
 def test_4_blocks():
-    command = r"cat for_tests/ex01/2.txt | python blocks.py 12"
+    command = r"cat for_tests/ex00/2.txt | python blocks.py 12"
     result = subprocess.run(command, capture_output=True, text=True, shell=True)
     correct = """00000254b208c0f43409d8dc00439896
 0000085a34260d1c84e89865c210ceb4
@@ -48,7 +38,7 @@ def test_4_blocks():
     assert result.stdout == correct
 
 def test_5_blocks():
-    command = r"cat for_tests/ex01/2.txt | python blocks.py 10"
+    command = r"cat for_tests/ex00/2.txt | python blocks.py 10"
     result = subprocess.run(command, capture_output=True, text=True, shell=True)
     correct = """00000254b208c0f43409d8dc00439896
 0000085a34260d1c84e89865c210ceb4
@@ -56,7 +46,7 @@ def test_5_blocks():
     assert result.stdout == correct
 
 def test_1_decypher():
-    with open ('for_tests/ex02/1.txt', 'r') as f:
+    with open ('for_tests/ex01/1.txt', 'r') as f:
         text = f.read()
     command = f"python3 decypher.py '{text}'"
     correct = "towerbridge\n"
@@ -64,7 +54,7 @@ def test_1_decypher():
     assert result.stdout == correct
 
 def test_2_decypher():
-    with open ('for_tests/ex02/2.txt', 'r') as f:
+    with open ('for_tests/ex01/2.txt', 'r') as f:
         text = f.read()
     command = f"python3 decypher.py '{text}'"
     correct = "bigben\n"
@@ -72,7 +62,7 @@ def test_2_decypher():
     assert result.stdout == correct
 
 def test_3_decypher():
-    with open ('for_tests/ex02/3.txt', 'r') as f:
+    with open ('for_tests/ex01/3.txt', 'r') as f:
         text = f.read()
     command = f"python3 decypher.py '{text}'"
     correct = "hydepark\n"
@@ -88,6 +78,6 @@ def test_mfinder_1():
                            ('6.txt', 'False\n'),
                            ('7.txt', 'True\n')
                            ]:
-         command = rf"cat for_tests/ex03/{text} | python mfinder.py"
+         command = rf"cat for_tests/ex02/{text} | python mfinder.py"
          result = subprocess.run(command, capture_output=True, text=True, shell=True)
          assert result.stdout == correct
