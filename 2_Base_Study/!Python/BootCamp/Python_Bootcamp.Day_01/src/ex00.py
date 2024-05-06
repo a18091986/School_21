@@ -57,7 +57,7 @@ def empty(purse: Optional[Dict[str, int]] = dict()):
         return Exception
 
 if __name__ == "__main__":
-    print(add_ingot(dict(gold_ingots="1")))
-    print(add_ingot(get_ingot(empty())))
+    # print(add_ingot(dict(gold_ingots="1")))
+    # print(add_ingot(get_ingot(empty(purse=dict(gold_ingots=10)))))
     print(empty(dict(gold_ingots=-1)))
 

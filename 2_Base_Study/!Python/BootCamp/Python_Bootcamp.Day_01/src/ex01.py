@@ -27,4 +27,4 @@ def split_booty(*purse: Dict[str, int]) -> tuple[Dict[str, int], ...]:
 
 
 if __name__ == '__main__':
-    print(split_booty(dict(gold_ingots=0), dict(gold_ingots=6), dict()))
+    print(split_booty(dict(gold_ingots=2), dict(gold_ingots=8, apples=10), dict()))
