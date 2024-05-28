@@ -117,7 +117,8 @@ class Game(object):
 
 if __name__ == '__main__':
     g = Game()
-    for p1, p2 in list(combinations([Cheater(), Cooperator(), Copycat(), Detective(), Grudjer(), My()], 2)):
+    for idx, (p1, p2) in enumerate(list(combinations([Cheater(), Cooperator(), Copycat(), Detective(), Grudjer(), My()], 2))):
+        print(f"{idx}: {p1.__name__} vs {p2.__name__}")
         g.play(p1, p2)
     g.top3()
 
