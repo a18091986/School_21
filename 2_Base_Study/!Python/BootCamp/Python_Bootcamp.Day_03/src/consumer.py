@@ -3,6 +3,7 @@ import redis
 import json
 import logging
 
+
 def check_sender_reciever(s_or_r: str):
     try:
         s_or_r = int(s_or_r)
@@ -18,15 +19,16 @@ def check_sender_reciever(s_or_r: str):
 logger = logging.getLogger(__name__)
 logging.basicConfig(level=logging.INFO, filename='log.txt')
 
+
 def process_message(message: bytes, recievers: list):
     transaction = json.loads(message)
     if recievers:
         if transaction.get('metadata').get('to') in recievers:
             if transaction.get('amount') >= 0:
                 msg = dict(
-                    metadata={"from":transaction.get('metadata').get('to'),
-                            "to":transaction.get('metadata').get('from')}
-                            ,amount=transaction.get('amount'))
+                    metadata={"from": transaction.get('metadata').get('to'),
+                              "to": transaction.get('metadata').get('from')}
+                    , amount=transaction.get('amount'))
                 print(msg)
                 logger.info(str(msg))
             else:
@@ -53,4 +55,3 @@ if __name__ == "__main__":
             transaction = ps.get_message()
             if transaction and isinstance(transaction.get('data'), bytes):
                 process_message(transaction.get('data'), recievers)
-    

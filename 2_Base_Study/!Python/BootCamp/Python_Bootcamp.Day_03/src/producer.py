@@ -7,34 +7,37 @@ import logging
 logger = logging.getLogger(__name__)
 logging.basicConfig(level=logging.INFO, filename='log.txt')
 
-def generate_transaction(sender: Optional[str] = None, 
-                         reciever: Optional[str] = None, 
+
+def generate_transaction(sender: Optional[str] = None,
+                         reciever: Optional[str] = None,
                          amount: Optional[int] = None):
     if sender and reciever and amount:
         data = {
-                "metadata": 
-                    {
+            "metadata":
+                {
                     "from": sender,
                     "to": reciever
-                    },
-                 "amount": amount
-                 }
+                },
+            "amount": amount
+        }
     else:
         data = {
-                "metadata": 
-                    {
+            "metadata":
+                {
                     "from": random.randint(1000000000, 9999999999),
                     "to": random.randint(1000000000, 9999999999)
-                    },
-                 "amount": random.randint(-1000, 1000)
-                 }
+                },
+            "amount": random.randint(-1000, 1000)
+        }
 
     return data
 
+
 def insert_transaction(data: dict):
     with redis.Redis() as rc:
-        rc.publish('some_channel', 
-                json.dumps(data))
+        rc.publish('some_channel',
+                   json.dumps(data))
+
 
 def check_sender_reciever(s_or_r: str):
     try:
@@ -47,9 +50,10 @@ def check_sender_reciever(s_or_r: str):
         print(e)
         return False
 
+
 def check_amount(amount: str):
     try:
-        amount = int(amount)
+        int(amount)
         return True
     except Exception as e:
         print(e)
@@ -59,8 +63,8 @@ def check_amount(amount: str):
 def get_data_for_transaction():
     while True:
         answer = input(f"Сгенерировать транзакцию автоматически - 1\n"
-                    f"Ввести данные для транзакции вручную - 2\n"
-                    f"Закончить - 0\n")
+                       f"Ввести данные для транзакции вручную - 2\n"
+                       f"Закончить - 0\n")
         if answer == '1':
             data = generate_transaction()
             print(data)
@@ -71,11 +75,11 @@ def get_data_for_transaction():
                 sender = input("Введите номер отправителя: ")
                 reciever = input("Введите номер получателя: ")
                 amount = input("Введите сумму: ")
-                if all([check_sender_reciever(sender), 
-                    check_sender_reciever(reciever),
-                    check_amount(amount)]):
-                    data = generate_transaction(int(sender), 
-                                                int(reciever), 
+                if all([check_sender_reciever(sender),
+                        check_sender_reciever(reciever),
+                        check_amount(amount)]):
+                    data = generate_transaction(int(sender),
+                                                int(reciever),
                                                 int(amount))
                     print(data)
                     logger.info(data)
@@ -83,13 +87,7 @@ def get_data_for_transaction():
                     break
         elif answer == '0':
             break
-        
 
 
 if __name__ == "__main__":
     get_data_for_transaction()
-        
-    
-
-
-    
