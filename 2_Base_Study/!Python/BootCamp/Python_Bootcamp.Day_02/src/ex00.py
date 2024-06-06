@@ -52,4 +52,8 @@ class Key:
     
 
 if __name__ == "__main__":
-    key = Key(key_len='1000')
+    key = Key()
+    print(key[404])
+    print(key > 9000)
+    print(key.passphrase)
+    print(str(key))
